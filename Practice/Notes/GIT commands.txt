@@ -1,0 +1,69 @@
+rm -rf .git
+git init
+git add .
+git commit -m "/*anything*/"
+git remote add origin /*URL*/
+git push -f origin master
+
+
+-------------------------------------------------------
+
+->Generate SSH key: it's used as password. For pull or push request, it's used.
+
+-ssh-keygen -t rsa -C "username or email"
+-cat ~/.ssh/id_rsa.pub
+-Now goto https://github.com/settings/ssh/new to add SSH key. Past your key and click on “Add SSH key” 
+
+---> My SSH Key : ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCxPAKy5paF+iQ4vwlD76PKwW2Q4BbMQIaA7SOFNigjLg4AhFHsu9KK0sA1144ZkiXm3+0EfLkL/xhXBn6eYQLb2qDweyxJRTDVqHuoytyP3S+dknE1JvjHbFvR5SmY1KOPTxzMZmslyGGjSdib3Y4VCRCNzQdHvizDHCDbtlTTnbP3Cs/vI3eHJKxDsQ0G+us4aW+Cq9vIW4XEdg4VA0HNvRm0OFEimH2kjz4svy1SDBNV2IVeyGgAM0WYgBmBGOrfeT/2mDclGyeyVBU0Adt7zMuDFIYNRqSgXQmVikws8jqTWNVnUmNBcVK3MGUUyeN1ulyfYL7XISs5CUAw+jECMFmscd/nyKc2+V8mnYKStXcQw5T3iv3z0XonmiAiZVGhu06F/LJ8MaPfEM3g5zitLI2YCQTxKWlWE6r7bppfNtM6gsP3HKnAfvPy7bZ5VjrxzuK43+Y684tLXUEd0ySDmg+s6fNaX5JEFATEM4JD/DTMLVYgEyFrvR18WWorclk= hiral-mashru
+
+
+---------------------------------------------------------------
+//to upload your project to github 
+
+- create new repo in github
+
+- Go to folder and go to Git Bash
+
+- mkdir example
+
+- git clone /*url*/ repository/
+
+- cd repository
+
+- git remote -v //check nickname of ur repo
+
+- git fetch origin //to fetch latest update, it adds to .git folder in local system
+
+- git checkout -b newBranch origin/main //to create new branch, 'main' is default branch
+
+- git status //to check modified or new files
+
+- git add . //to add new file or folder in github from local system
+
+- git commit -m "add" //
+
+- git push origin newBranch //push files/folders to the particular branch
+
+//added folders/files to particular branch in github.
+
+--------------------------------------------------------------------------------
+//to merge branches
+
+- git checkout main //to switch the branch
+
+- git fetch origin
+
+- git merge --no-ff origin/newBranch //ff=fast forward,use of --no-ff is to merge all the files/folders and then push them.
+/* ':q' to come out from vim editor */
+
+--------------------------------------------------------------------------------
+//get some folders/files (that are not in local system) from github to local system
+
+- git pull origin newBranch //write it in 'main' branch
+
+- query : in newBranch if I write this command then it won't gonna work. why? 
+
+-----------------------------------------------------------------------------------
+-staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.
+
+  
