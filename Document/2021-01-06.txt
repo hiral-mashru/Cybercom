@@ -1,0 +1,4 @@
+Today, I did practice of pull the request and push the request, what if we skip staging area then what command we should use,     
+difference between staging-unstaging area, observe the git status at every step,the difference between fetch and pull request when to use them,     
+difference between CVCS and DVCS, what is SVN, difference between tracked and untracked files, commands performed on git branches, git rebase.  
+Also checked different cases like if we create the directory and push it to github and then delete from system then how to recover that directory, etc...     
