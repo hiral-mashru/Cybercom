@@ -18,7 +18,7 @@ git push -f origin master
 
 
 ---------------------------------------------------------------
-//to upload your project to github 
+//to upload your project in github in particular branch
 
 - create new repo in github
 
@@ -64,6 +64,13 @@ git push -f origin master
 - query : in newBranch if I write this command then it won't gonna work. why? 
 
 -----------------------------------------------------------------------------------
--staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.
+-staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.  
+------------------------------------------------------------------------------------------------
+
+//upload updated things into github
+
+- git pull origin (branchName)
+
+- git push origin (branchName)
 
   
