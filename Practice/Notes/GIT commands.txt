@@ -7,6 +7,9 @@ git push -f origin master
 
 
 -------------------------------------------------------
+https://www.atlassian.com/git/glossary
+https://www.youtube.com/watch?v=gwWKnnCMQ5c
+-------------------------------------------------------
 
 ->Generate SSH key: it's used as password. For pull or push request, it's used.
 
@@ -38,11 +41,15 @@ git push -f origin master
 
 - git status //to check modified or new files
 
-- git add . //to add new file or folder in github from local system
+- git add . //it makes changed file staging
 
-- git commit -m "add" //
+(A staging step in git allows you to continue making changes to the working directory, and when you decide you wanna interact with version control, it allows you to record changes in small commits.)
 
-- git push origin newBranch //push files/folders to the particular branch
+- git commit -m "add" //it changes in local .git repository
+
+(- git commit -a => git add . + git commit -m "")
+
+- git push origin newBranch //push files/folders to the particular branch, it changes the remote repo, to add new file or folder in github from local system
 
 //added folders/files to particular branch in github.
 
@@ -64,6 +71,50 @@ git push -f origin master
 - query : in newBranch if I write this command then it won't gonna work. why? 
 
 -----------------------------------------------------------------------------------
--staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.
+- staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.
 
-  
+------------------------------------------------------------------------------------------------
+
+//upload updated things into github
+
+- git pull origin (branchName)
+
+- git push origin (branchName)
+
+----------------------------------------------------------------------------------------------------
+
+- git fetch : Fetching downloads a branch from another repository, along with all of its associated commits and files. But, it doesn't try to integrate anything into your local repository. This gives you a chance to
+inspect changes before merging them with your project.
+
+- git pull : Pulling is the automated version of git fetch. It downloads a branch from a remote repository, 
+then immediately merges it into the current branch. This is the Git equivalent of svn update.
+
+- git stash : git stash temporarily shelves (or stashes) changes you've made to your working copy so you can work on something else, and then come back and re-apply them later on.
+
+----------------------------------------------------------------------------------------------
+
+// create new file in git.
+
+- git status //new file is untracked file.
+
+- git add . //it will add new file to staged area
+
+- git status //new file is going to commit
+
+- git restore --staged newFile //it will take new file from the staged area.
+
+- git status //new file is untracked file.
+
+- git commit //it will open vim editor, press i to enter a msg (if u don't write msg hen commit will be
+abbort) then press Esc+':wq' to go out.
+  OR
+  git commit -m 'msg' //to commit changes in .git folder
+
+- git status //everything is committed and use git push to publish local commits.
+
+- git restore --staged newFile //nothing is there in staging area
+
+(if want to skip staging area then write git commit -a -m 'msg', it will commit all the files with msg, msg
+is compulsory to write)
+
+ 
