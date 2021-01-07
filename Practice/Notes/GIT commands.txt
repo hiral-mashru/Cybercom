@@ -21,7 +21,7 @@ https://www.youtube.com/watch?v=gwWKnnCMQ5c
 
 
 ---------------------------------------------------------------
-//to upload your project to github 
+//to upload your project in github in particular branch
 
 - create new repo in github
 
@@ -71,8 +71,12 @@ https://www.youtube.com/watch?v=gwWKnnCMQ5c
 - query : in newBranch if I write this command then it won't gonna work. why? 
 
 -----------------------------------------------------------------------------------
+<<<<<<< HEAD
 - staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.
 
+=======
+-staging and unstaging : Untracked changes are not in Git. Unstaged changes are in Git but not marked for commit. Staged changes are in Git and marked for commit.  
+>>>>>>> 0dd28403dc841ce130ebcb97d21583e7f3eb8542
 ------------------------------------------------------------------------------------------------
 
 //upload updated things into github
@@ -80,6 +84,7 @@ https://www.youtube.com/watch?v=gwWKnnCMQ5c
 - git pull origin (branchName)
 
 - git push origin (branchName)
+<<<<<<< HEAD
 
 ----------------------------------------------------------------------------------------------------
 
@@ -116,5 +121,47 @@ abbort) then press Esc+':wq' to go out.
 
 (if want to skip staging area then write git commit -a -m 'msg', it will commit all the files with msg, msg
 is compulsory to write)
+
+----------------------------------------------------------------------------------------------
+// to set nameand mail in git
+
+- git config --global user.name hiral
+
+- git config --global user.email heerrr
+
+// to see that
+
+- git config --global user.name
+
+- git config --global user.email  
+
+// to see all hidden folders and unhidden
+
+- ls -lart
+
+// to create a file 
+
+- touch x.xyz
+
+// to add all files at a time
+
+- git add -A
+
+//u add one file and commit it, then if u loose data of that file then to recover data
+
+- git checkout fileName
+
+//to recover all files
+
+- git checkout -f
+
+//to know what things are committed
+
+- git log
+
+//to see last 5 commits
+
+- git log -p -5
+
 
  
