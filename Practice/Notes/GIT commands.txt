@@ -163,5 +163,8 @@ is compulsory to write)
 
 - git log -p -5
 
+//to compare working directory and staging area
+
+
 
  
