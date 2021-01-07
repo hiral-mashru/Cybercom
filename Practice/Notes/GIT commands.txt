@@ -209,3 +209,38 @@ is compulsory to write)
 
 - git checkout -b branchName
 
+// to add url with local git
+
+- git remote add origin //url
+
+// to get repo name
+
+- git remote 
+
+// to get repo name with url
+
+- git remote -v
+
+// when you create private repo, you can't push files on github. At that time SSH key is used.
+
+// to unstage all the files 
+
+- git reset HEAD *
+
+- git reset HEAD xyz.xyz
+
+- git reset HEAD~1/2/...
+
+- git reset --mixed HEAD~1 //it affects last commit
+
+- git reset --soft HEAD~2 //it affects last 2 commits 
+
+// to discard changes in working directory
+
+- git restore fileName
+
+//Reverting undoes a commit by creating a new commit. 
+
+- git revert HEAD~2
+
+// the rebase command integrates changes from one branch into another. It is an alternative to the better known "merge" command. Most visibly, rebase differs from merge by rewriting the commit history in order to produce a straight, linear succession of commits.
