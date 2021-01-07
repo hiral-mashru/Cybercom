@@ -123,7 +123,7 @@ abbort) then press Esc+':wq' to go out.
 is compulsory to write)
 
 ----------------------------------------------------------------------------------------------
-// to set nameand mail in git
+// to set name and mail in git
 
 - git config --global user.name hiral
 
@@ -165,6 +165,47 @@ is compulsory to write)
 
 //to compare working directory and staging area
 
+- git diff 
 
+//to compare staging area and last commit
 
- 
+- git diff --staged
+
+//to remove committed file from staging area
+
+- git rm --cached fileName
+
+//to remove committed file from staging area and system 
+
+- git rm fileName
+
+//to see small status
+
+- git status -s
+
+//never want to track files, ignore files
+
+- touch .gitignore
+
+//write fileName which is going to be ignored in this file, if want to ignore all log file, write '*.log', to ignore folder, write 'folderName/'
+
+// to create branch
+
+- git branch branchName
+
+// to see branches
+
+- git branch
+
+// to switch branch
+
+- git checkout branchName
+
+//to merge branches, go to default branch
+
+- git merge branchName
+
+// to make new branch and switch to that branch
+
+- git checkout -b branchName
+

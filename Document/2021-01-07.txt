@@ -1,0 +1,6 @@
+Today I learned about git config, how to recover particular file and all files, git log,   
+how to see last few commits, how to compare working directory and staging area, how to compare  
+staging area and last commit, how to remove committed file from only staging area and also staging area   
+and local system both, how to see small status, about .gitignore file, git rebase, git reset, git mirror,    
+git reset --soft/hard, git restore, git revert, fork, etc...
+ 
