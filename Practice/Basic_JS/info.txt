@@ -1,0 +1,44 @@
+** JS -> inline
+-> After body part(it's easy to load page from browser), use <script></script>
+
+** to write down in console in browser
+-> console.log('');
+
+** JS -> external
+-> create xyz.js file and write JS code there and in html file, write 
+   <script src="xyz.js></script>
+
+** JS 
+-> lightweight(doesn't need much memory of computer and relatively simple syntax), 
+   cross-platform (used in multiple platforms) object oriented (JS based on object).
+
+** Three core languages in web development : HTML(for content like text, images, 
+   etc..), CSS(presentation, styling), JS (dynamic effects, programming)
+
+** JS in client-side : traditionally used in browser. To make pages attractive, 
+   dynamic effects, interactivity,modern web application
+
+** JS in server side : NodeJS.
+
+** JS version: ES5,ES6(2015),ES7(2016), ES8(2017)
+
+** ';' is not important
+
+** case sensitive
+
+** 5 Data-types - JS has dynamic typing (datatypes automatically assigned to variables)
+1) Number : float, decimal, integer
+2) String : sequence of chars, used for text
+3) Boolean : Logical data-type, true or false
+4) Undefined : Varible that doesn't have a value yet
+5) Null : non-existent
+** use Camel words in JS 
+** can't start variable names with numbers or symbols except $ and _
+** can't use reserved js words as a variableName
+
+** comments -> '//' one line comment, '/* */' multi line comments
+
+** Oprtator Precedence
+-> ()  >  !..,++..,--..(right to left)  >  **(right to left)  >  *,/,%  >  +,-  >
+  <<,>>,<<<  >  <,<=,>,>=,instanceof  >  ==,!=  >  &  >  ^  >  |  >  &&  >  ||  >
+  ..?..:..(right to left)  >  =,+=,-=,**=,*=,/=,etc..(right to left)  >   
