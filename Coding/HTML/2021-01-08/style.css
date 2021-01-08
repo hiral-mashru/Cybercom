@@ -1,0 +1,33 @@
+body{
+    text-align: center;
+}
+.img {
+    background-color: black;
+    height: 315px;
+    width: 215px;
+}
+.container {
+    margin-top: 25px;
+    height: 45px;
+    width: 215px;
+}
+p {
+    align-content: center;
+}
+.card, .paragraph {
+    margin-left: 7%;
+    float: left;
+    align-items: center;
+}
+.pics {
+    margin-top: 3%;
+}
+.paragraph {
+    margin-right: 8%;
+    margin-top: 1%;
+    text-decoration: wavy;
+}
+h3 {
+    color: white;
+    padding-top: 65%;
+}
