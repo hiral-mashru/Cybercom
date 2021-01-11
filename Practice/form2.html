@@ -5,13 +5,19 @@
 function validateForm() {
   var x = document.forms["myForm"]["fname"].value;
   var y = document.forms["myForm"]["file"].value;
-  if (x == "") {
-    alert("Name must be filled out");
-    return false;
+  var z = y.slice(-3)
+  console.log("z",z)
+  if (z == "pdf") {
+    alert(x);
   } else {
-      console.log(y)
-  alert(y)
+      alert("enter correct file")
+      return false;
   }
+}
+function change(){
+    var random = Math.random().toString(36).slice(-8)//Generate random number,Convert  to base-36 : "0.4fzyo82mvyr",Cut off last 8 characters : "yo82mvyr"
+    console.log(random)
+    return random;
 }
 </script>
 </head>
@@ -20,7 +26,7 @@ function validateForm() {
 <form name="myForm" action="" onsubmit="return validateForm()" method="post">
   Name: <input type="text" name="fname">
   <input type="file"name="file" accept=".pdf">
-  <input id="password" name="password"/>
+  <input id="password" name="password" onchange="return change()"/>
   <input type="submit" value="Submit">
 </form>
 
