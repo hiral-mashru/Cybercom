@@ -1,0 +1,7 @@
+name and id atributes are should be same and unique.
+
+'for'atribute in label is used for saying that it's only for this input. And it's 
+also used for bootstrap for proper alignment
+
+we can used id in option tag but we should not do it bcz in select tag we can id 
+there.

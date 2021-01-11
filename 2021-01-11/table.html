@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table,th,tr, td {
+            text-align: center;
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 50px;
+        }
+        td,th,tr {
+            padding: 5px 8px 5px 5px;;
+        }
+        .t {
+            border-collapse: separate;
+        }
+        .table {
+            text-align: center;
+            width: 26.8%;
+            height: 100%;
+        }
+    </style>
+    <title>Table</title>
+</head>
+<body><center>
+    <div class="table">
+        <p>Example: Nested</p>
+    <table style="width:26.80%; height: 100%">
+        <tr>
+            <th rowspan="2" colspan="2">CI</th>
+            <th rowspan="2">All Genders</th>
+            <th>By Gender</th>
+        </tr>
+        <tr><td>
+            <table class="t">
+                <tr class="t">
+                    <th class="t">Males</th>
+                    <th class="t">Females</th>
+                </tr>
+                <tr class="t">
+                    <td class="t">9215604</td>
+                    <td class="t">4512358</td>
+                </tr>
+            </table></td>
+        </tr>
+        <tr>
+            <th>Rural</th>
+            <td>6521458</td>
+            <td>4215389</td>
+            <td>4152348</td>
+        </tr>
+    </table>
+    </div>
+    </center>
+</body>
+</html>

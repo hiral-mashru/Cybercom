@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function validateForm() {
+  var x = document.forms["myForm"]["fname"].value;
+  var y = document.forms["myForm"]["file"].value;
+  if (x == "") {
+    alert("Name must be filled out");
+    return false;
+  } else {
+      console.log(y)
+  alert(y)
+  }
+}
+</script>
+</head>
+<body>
+
+<form name="myForm" action="" onsubmit="return validateForm()" method="post">
+  Name: <input type="text" name="fname">
+  <input type="file"name="file" accept=".pdf">
+  <input id="password" name="password"/>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        function form(){
+            var file = document.forms["form"]["fille"].value;
+            alert(file)
+        }
+    </script>
+    <title>FORM</title>
+</head>
+<body>
+    <form action="" name="form" method="post" onsubmit="return form()">
+        <label for="name">Name</label>
+        <input type="text" name="name" value="hm" id="name"/><br> <!--By default it will take type="text"-->
+        <input type="color" name="color"/><br>
+        <input type="date"/><br>
+        <input type="datetime-local"/><br>
+        <input type="image"/><br>
+        Hidden : <input type="hidden"/><br>
+        <input type="month"/><br>
+        <input type="number" value="4"/><br>
+        <input type="datetime"/><br>
+        <input type="range"/><br>
+        <input type="search" value="hm"/><br>
+        <input type="tel"/><br>
+        <input type="time"/><br>
+        <input type="url"/><br>
+        <input type="week"/><br>
+        <select name="array">
+            <option>H</option>
+            <option selected>Y</option>
+        </select><br>
+        <input type="file" name="fille" accept=".pdf"/><br>
+        <input type="submit"/><br>
+        <input type="reset"/><br>
+    </form>
+</body>
+</html>
