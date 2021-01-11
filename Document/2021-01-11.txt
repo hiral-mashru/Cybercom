@@ -1,0 +1,4 @@
+Today I learned if-else statements in js, difference between function declaration and    
+expression, boolean logics, difference between truthy falsy values, ternary operators,     
+arrays and its methods, form and its different inputs. defference between name and id    
+attributes in HTML, textarea etc...  

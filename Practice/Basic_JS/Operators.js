@@ -32,15 +32,15 @@ var obj;
 console.log(typeof obj)//undefined
 var obj = null
 console.log(typeof obj) //object
-
-//query: how to get null in typeof operator
+console.log(typeof null)//object
+//null is value so we can't get output value 'null' using typeof operator 
 
 //Operator Precedence
 var a = 2000
 var b = 1998
 var c = 20
 
-//multiple operatoes
+//multiple operators
 var x = a - b >= c
 console.log(x)
 
