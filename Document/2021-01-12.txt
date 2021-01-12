@@ -1,0 +1,3 @@
+Today I learned about how JS executes. I learned about Execution context vs Global execution  
+context, Execution context object and its 2 phases, Hoisting, Scope chain, this keyword, Object and  
+properties, object-methods, for loops, while loops, meaning of PWA, css, browser local storage and   session storage, etc...
