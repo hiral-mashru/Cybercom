@@ -72,3 +72,116 @@
      scope; let variables can be updated but not re-declared; const variables can 
      neither be updated nor re-declared. They are all hoisted to the top of their 
      scope.
+
+  ** Execution of JS
+  -> our code ->(JavaScript Engine) parser(if there is any syntax error,it will 
+     return to the code,won't go ahead) -(Abstract Syntax Tree)->Conversion to 
+     machine code -(Machine code)-> Code runs
+
+  ** Execution context 
+  -> A container that store variables and a piece of code that is evaluated or executed.
+
+  ** Global Execution context
+  -> code that is not inside the function..associated with global object. If u 
+     write globalpropert then it will automatically become property of window 
+     object.
+     ex. name === window.name //true
+     To know more watch the video (12-01-2021)
+
+  ** Execution context object
+  -> Variable object
+  -> Scope chain 
+  -> This variable
+  And also it has 2 phases
+  -> Creation Phase
+  -> Execution phase
+
+  1) Variable object:
+  -> Argument object is created which contains all the argument that are passed in 
+     the functions.
+  -> Code scanned for FUNCTION DECLARATION, property is created for each function, 
+     pointing to the function. (Hoisting)
+  -> code scanned for VARIABLE DECLARATION, propert is created for each variable 
+     and set to Undefined. (Hoisting)
+
+  ** Hoisting
+  -> functions or variables are available before the execution phase starts.
+     Ex. function fn(year){
+            console.log(2020-year)
+         }
+         fn(2000)
+         -> here 1st we define the function then we call(declare) it but if 1st we 
+            call the function and in next line if we define it then, calling the 
+            function is stored in variable object means function is not executed 
+            yet but it is hoisted. It only works for function declarations,not for 
+            function expression.
+
+     Ex. fn(year)
+         var fn = function(year) {
+            console.log(2020-year)
+         }
+         -> it will give error. fn(year) is not going to store in variable object or
+            it is not hoisted. so it will give error that there is no 'fn' function.
+
+     Ex. console.log(age) //output : undefined
+         age = 20
+         console.log(age) //output: 20
+         -> it won't give error, bcz age is stored in variable object, it's hoisted 
+            and set to undefined. and when it defines, it will update the value from
+            undefined to value.
+      
+     Ex. console.log(age)
+     ->  it will give error that there is no age defined.
+
+     Ex. console.log(age) //output : undefined
+         age = 20 //it's stored in variable object of global executed context
+
+         function foo(){
+            console.log(age) //output: undefined
+            var age = 32 //it's stored in variable object of execution context of foo function
+            console.log(age) //output: 32
+         }
+         console.log(age) //output: 20
+         -> these two variables (age) are not same.
+         
+  ** Scope chain
+  -> Each new function creates scope, in which variables it defines are accessible.
+  -> Lexical scoping: a function that is laxically within another function gets 
+     access to the scope of the outer function. 
+   Ex. var a ="hello"  //---------------------------->global scope        ^
+       first();        //---------------------------->global scope        |
+       function first(){                                                  |
+          var b="hi"   //---------------------------->1st scope           |scope
+          second();    //---------------------------->1st scope           |chain
+          function second(){                                              |
+             var c="hey" //-------------------------->2nd scope           |
+             console.log(a+b+c)//hellohihey //------->2nd scope           |
+          }
+       }
+
+  ** This keyword
+  -> Regular function call : this keyword points at the global object,(window object
+     in browser).
+  -> Method call : this variable points the object that is callig the method.
+  -> This keyword is not assigned a value until a function where it's defined is 
+     actually called.
+  Ex. console.log(this) //output: Window
+      age(2000)
+      function age(year){
+         console.log(2020-year); //20
+         console.log(this)       //Window //bcz this function is attached to window object
+      }
+
+  ** Object and Properties
+  -> object-> key-value pair
+     array ->orders matter a lot
+     object -> order doesn't matter
+
+  ** History
+  -> 1996: Changed name from Livescript to JavaScript to attract java developers
+  -> 1997: ES1 (ECMAScript1) - 1st version of JS standard
+     ECMAScript: the language standard
+  -> 2009: ES5 with new features -> fully supported in all browsers-> JS fundamentals,how language works,DOM manipulation,...
+  -> 2015: ES6/ES2015 - the biggest update ever -> well supported in modern browsers, not supported in old browsers.but can convert ES6 to ES5 -> Async JS, AJXand API calls, Webpack & Babel,...
+  -> 2015: changed to annual release cycle
+  -> 2016,2017,2018,...->ES7,ES8,...
