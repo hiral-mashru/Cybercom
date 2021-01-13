@@ -1,0 +1,4 @@
+Today I learned about DOM, HTML DOM, Events, events listener, how to connect HTML 
+and JS, Message queue, callback function, how to get values of attributes of tag 
+in html using JS, how to edit them, Anonymous function, Pollifilling, transsfilling,
+etc...
