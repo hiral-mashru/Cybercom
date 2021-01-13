@@ -20,6 +20,21 @@ function clickCounter() {
   } else {
     document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
   }
+
+  ///request for accessing the local storage data ////////////////////
+  if(localStorage && localStorage.getItem('thewholefrigginworld')){
+    render(JSON.parse(localStorage.getItem('thewholefrigginworld')));
+  } else {
+    $('#list').html(''+loading+''); 
+  var query = 'select centroid,woeid,name,boundingBox'+ ' from geo.places.children(0)'+ ' where parent_woeid=1 and placetype="country"'+ '| sort(field="name")'; 
+  var YQL = 'http://query.yahooapis.com/v1/public/yql?q='+ encodeURIComponent(query)+'&diagnostics=false&format=json'; 
+  $.getJSON(YQL,function(data){
+     if(localStorage){ 
+       localStorage.setItem('thewholefrigginworld',JSON.stringify(data)); 
+      } render(data);
+    }); }
+  //////////////////////////////////////////////////////////////////////
+  
 }
 </script>
 </head>
@@ -33,3 +48,27 @@ function clickCounter() {
 
 </body>
 </html>
+
+
+<!-- The following code (which uses jQuery) provides the main functionality for 
+  this. If local storage is supported and there is a key called thewholefrigginworld,
+   then call the render() method, which displays the information. 
+   Otherwise, show a loading message and make the call to the Geo API using 
+   getJSON(). Once the data has loaded, store it in thewholefrigginworld and 
+   call render() with the same data:
+
+if(localStorage && localStorage.getItem('thewholefrigginworld')){
+  render(JSON.parse(localStorage.getItem('thewholefrigginworld')));
+} else {
+  $('#list').html('
+Copy
+’+loading+’
+
+’); 
+var query = ‘select centroid,woeid,name,boundingBox’+ ‘ from geo.places.children(0)’+ ‘ where parent_woeid=1 and placetype=“country”‘+ ’ | sort(field=“name”)‘; 
+var YQL = ‘http://query.yahooapis.com/v1/public/yql?q='+ encodeURIComponent(query)+’&diagnostics=false&format=json’; 
+$.getJSON(YQL,function(data){
+   if(localStorage){ 
+     localStorage.setItem(‘thewholefrigginworld’,JSON.stringify(data)); 
+    } render(data);
+  }); } -->
