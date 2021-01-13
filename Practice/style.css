@@ -1,0 +1,28 @@
+
+.part1 {
+    background-color: darkkhaki;
+    float: left;
+    height: 500px;
+    width: 450px;
+}
+.part2 {
+    background-color: darkgray;
+    float: left;
+    height: 500px;
+    width: 450px;
+}
+.container {
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 900px;
+    background-color: bisque;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+img {
+    height: 50px;
+    width: 50px;
+}

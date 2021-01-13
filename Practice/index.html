@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Basic JS</title>
+    <title>Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 </head>
 <body>
-I am Heer
+<div class="container">
+    <div class="part1">
+        <h1 id="name-0">Player 1</h1>
+        <h1 id="score-0">0</h1>
+        <h4 style="float: bottom" id="current-0">0</h4>
+    </div>
+    <div class="part2">
+        <h1 id="name-1">Player 2</h1>
+        <h1 id="score-1">0</h1>
+        <h4 id="current-1">0</h4>
+    </div>
+</div>
+<img class="dice" src="dice-1.jpg">
+<button class="btn-roll">Roll</button>
 </body>
 <!-- Inline JS -->
-<script>
+<!-- <script>
     console.log('Inline JS')
-</script>
+</script> -->
 <!-- External JS -->
 <!-- <script src="Variables-Datatypes.js"></script> -->
 <!-- <script src="VarMutation-TypeCoercion.js"></script> -->
@@ -20,10 +34,11 @@ I am Heer
 <!-- <script src="Truthy-Falsy-equalityOperator.js"></script> -->
 <!-- <script src="Functions.js"></script> -->
 <!-- <script src="Arrays.js"></script> -->
-<!-- <script src="Hoisting.js"></script>
-<script src="ScopeChain.js"></script> -->
+<!-- <script src="Hoisting.js"></script> -->
+<!-- <script src="ScopeChain.js"></script> -->
 <!-- <script src="This.js"></script> -->
 <!-- <script src="Objects-Properties.js"></script> -->
-<!-- <script src="Object-Methods.js"></script> -->
-<script src="Loops.js"></script>
+<script src="Object-Methods.js"></script>
+<!-- <script src="Loops.js"></script> -->
+<script src="Game.js"></script>
 </html>

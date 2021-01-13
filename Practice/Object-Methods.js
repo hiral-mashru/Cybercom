@@ -11,4 +11,5 @@ var heer = {
 }
 // heer.age = heer.age()
 heer.age()
-console.log(heer)
+console.log(heer.age)
+

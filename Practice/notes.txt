@@ -106,6 +106,7 @@
 
   ** Hoisting
   -> functions or variables are available before the execution phase starts.
+     hoisting doesn't support const values.
      Ex. function fn(year){
             console.log(2020-year)
          }
@@ -185,3 +186,48 @@
   -> 2015: ES6/ES2015 - the biggest update ever -> well supported in modern browsers, not supported in old browsers.but can convert ES6 to ES5 -> Async JS, AJXand API calls, Webpack & Babel,...
   -> 2015: changed to annual release cycle
   -> 2016,2017,2018,...->ES7,ES8,...
+
+  ** DOM -> Document Object Model - structured representation of HTML document.
+  -> It is used to connect webpages to scripts like JS.
+  -> For each HTML box,there is an object in the DOM that we can access and interact with.
+  -> JS and DOM are different.
+
+  ** HTML
+  -> id attribute should be unique but class attribute can be written many times.
+  
+  ** Events
+  -> Notifications that are sent to notify the code that something happened on the 
+     webpage.
+  ** Event Listener
+  -> A function that performs an action based on a certain event. It waits for a 
+     specific event to happen.
+
+  ** Message Queue
+  -> where all messages are put.
+
+  ** callback function
+  -> a function that we pass as an argument in another function is called callback 
+     function.
+  
+  ** Anonymous function
+  -> we don't use function name, just directly write the function.
+
+  ** Pollifilling
+  -> modern method 
+
+  ** transfilling
+  -> 
+
+  ** Browser Local storage
+  -> there is key-value pair and value will be converted to string automatically. 
+     Key will be unique. Site vise and window (not os) vise local storage will be 
+     different. JSON data is stored. The data will be there until u don't delete it 
+     manually.
+
+  ** session storage
+  -> tab vise session data will be different. session data is good rather than 
+     local storage data bcz when tab is closed, the data will be gone. JSON data
+     is stored. Data will expire after closing the tab.
+
+  ** cookie data 
+  -> only values are stored in cookies and it has very small storage.
