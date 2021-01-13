@@ -223,11 +223,33 @@
      Key will be unique. Site vise and window (not os) vise local storage will be 
      different. JSON data is stored. The data will be there until u don't delete it 
      manually.
+  -> Syntax
+      window.localStorage
+  -> Syntax for SAVING data to localStorage:
+      localStorage.setItem("key", "value");
+  -> Syntax for READING data from localStorage:
+      var lastname = localStorage.getItem("key");
+  -> Syntax for REMOVING data from localStorage:
+      localStorage.removeItem("key");
+  -> Technical Details
+      Return Value:	A Storage object
 
   ** session storage
   -> tab vise session data will be different. session data is good rather than 
      local storage data bcz when tab is closed, the data will be gone. JSON data
      is stored. Data will expire after closing the tab.
+  -> Syntax:
+      window.sessionStorage
+  -> Syntax for SAVING data to sessionStorage:
+      sessionStorage.setItem("key", "value");
+  -> Syntax for READING data from sessionStorage:
+      var lastname = sessionStorage.getItem("key");
+  -> Syntax for REMOVING saved data from sessionStorage:
+      sessionStorage.removeItem("key");
+  -> Syntax for REMOVING ALL saved data from sessionStorage:
+      sessionStorage.clear();
+  -> Technical Details
+         Return Value:	A Storage object
 
   ** cookie data 
   -> only values are stored in cookies and it has very small storage.
