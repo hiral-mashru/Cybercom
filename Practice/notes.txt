@@ -5,3 +5,5 @@ also used for bootstrap for proper alignment
 
 we can used id in option tag but we should not do it bcz in select tag we can id 
 there.
+
+we can't get textarea's input directly like other inputs.
