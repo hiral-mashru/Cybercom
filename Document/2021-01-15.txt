@@ -1,0 +1,3 @@
+Today I learned about object oriented programming, prototype of object, inheritance, ways of     
+creating object:1)by using finction  and 2) using Object.create(). And also premitive and      
+non-premitive datatypes, constructor, first class functions, etc...
