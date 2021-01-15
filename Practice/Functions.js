@@ -7,7 +7,6 @@ console.log('age: '+calcAge(2000) /*or age */)
 console.log('age: '+calcAge(200))
 console.log('age: '+calcAge(2990))
 
-
 //function declaration
 function retirement(birthYr,fName){
     var age = calcAge(birthYr)
@@ -46,3 +45,14 @@ var fun = function(){
 }
 alert(fun)
 alert(fun())
+
+funn()
+function funn(){
+    var x = 5
+    function fun(){
+        x=6
+        return x
+    }
+    console.log(x)//5
+    console.log(fun()) //6
+}

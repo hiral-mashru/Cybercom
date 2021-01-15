@@ -38,8 +38,8 @@ function f(){
 
 const z = 1
 // var z = 0
-// console.log(z)//SyntaxError: Identifier 'z' has already been declared
+console.log(z)//SyntaxError: Identifier 'z' has already been declared
 
-let y = 1
-let y
+y = 1
 console.log(y)//SyntaxError: Identifier 'y' has already been declared
+const y //
