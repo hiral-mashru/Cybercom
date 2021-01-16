@@ -282,3 +282,11 @@
   -> A function behaves like any other object.
   -> We can pass a function as an argument to another function
   -> We can return a function from a function
+
+  ** Clausers 
+  -> An inner function has always access to the variables and parameters of its
+     outer function, even after the outer function has returned.
+     
+  ** Generic fuction
+
+  ** ES6/ES2015 
