@@ -1,0 +1,3 @@
+Today I learned about First class Functions, how we can return another function in a function,    
+clausers, blocks, IIFE (Anonymous function), bind,call,apply, variables of ES6 - how they are     
+diiferent from ES5's variables, Strings in ES6, etc...  
