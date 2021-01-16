@@ -15,13 +15,15 @@ function validateForm() {
   }
 }
 function change(){
-    var length = document.querySelector('#password').value.length
-    var random = Math.random().toString(36).slice(-length)//Generate random number,Convert  to base-36 : "0.4fzyo82mvyr",Cut off last 8 characters : "yo82mvyr"
-    console.log(random)
+    let length = document.querySelector('#password').value.length
+    if(length!==0){
+    let random = Math.random().toString(36).slice(-length)//Generate random number,Convert  to base-36 : "0.4fzyo82mvyr",Cut off last 8 characters : "yo82mvyr"
     document.querySelector('#password').value = random
     return random;
+    }
     //keyup event
 }
+
 </script>
 </head>
 <body>
