@@ -3,71 +3,107 @@
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <title>Form</title>
+<script>
+  function alertt(){
+    alert('Your request has been submitted !')
+  }
+</script>
 <style>
 
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
+    body {font-family: Arial;}
+    * {box-sizing: border-box;}
+    
+    .input-container {
+      display: -ms-flexbox; /* IE10 */
+      display: flex;
+      width: 80%;
+      margin-bottom: 15px;
+      outline: none;
+      border: 1px solid black;
+      border-radius: 40px;
+      border-radius: 2%;
+      margin-left: 10%;
+      margin-right: 10%;
+    }
+    
+    .icon {
+      padding: 10px;
+      background: white;
+      color: black;
+      min-width: 50px;
+      text-align: center;
+      height: 45px;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      border: 0px;
+      height: 45px;
+    }
+    .input-field2 {
+      width: 100%;
+      padding: 10px;
+      border: 0px;
+      height: 95px;
+    }
+    
+    /* Set a style for the submit button */
+    .btn {
+      background-color: purple;
+      border-radius: 12px;
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      cursor: pointer;
+      width: 20%;
+      height: 100%;
+      opacity: 0.9;
+    }
+    
+    .btn:hover {
+      opacity: 1;
+    }
+    .image { 
+      margin: 3%; 
+      position: relative; 
+  } 
 
-.input-container {
-  display: -ms-flexbox; /* IE10 */
-  display: flex;
-  width: 100%;
-  margin-bottom: 15px;
-}
-
-.icon {
-  padding: 10px;
-  background: wheat;
-  color: white;
-  min-width: 50px;
-  text-align: center;
-}
-
-.input-field {
-  width: 100%;
-  padding: 10px;
-  outline: none;
-}
-
-.input-field:focus {
-  border: 2px solid dodgerblue;
-}
-
-/* Set a style for the submit button */
-.btn {
-  background-color: purple;
-  color: white;
-  padding: 15px 20px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
-}
-
-.btn:hover {
-  opacity: 1;
-}
-    </style>
+  .txt { 
+      color: white;
+      position: absolute; 
+      top: 17px; 
+      left: 190px; 
+  } 
+</style>
 </head>
 <body>
-<form style="max-width:500px;margin:auto">
-  <h2>Register Form</h2>
+<form style="max-width:500px;margin:auto;margin-top:5%;height:530px;background-color:cornsilk">
+  <div class="image" style="max-width:500px;margin:auto;">
+  <img src="pic2.jpg" style="height: 100px; width:500px">
+  <h2 class="txt">CONTACT US</h2>
+  </div><br><br>
   <div class="input-container">
     <i class="fa fa-user icon"></i>
-    <input class="input-field" type="text" placeholder="Username" name="usrnm">
+    <input class="input-field" type="text" placeholder="Full Name" name="usrnm">
   </div>
 
   <div class="input-container">
     <i class="fa fa-envelope icon"></i>
-    <input class="input-field" type="text" placeholder="Email" name="email">
+    <input class="input-field" type="text" placeholder="Eg. hiral@gmail.com" name="email">
   </div>
   
   <div class="input-container">
-    <i class="fa fa-key icon"></i>
-    <input class="input-field" type="password" placeholder="Password" name="psw">
+    <i class="fa fa-mobile icon"></i>
+    <input class="input-field" type="password" placeholder="Eg. +91 94262 54816" name="psw">
   </div>
-
-  <button type="submit" class="btn">Register</button>
+  <div class="input-container">
+    <i class="fa fa-comment icon" style="height: 95px;"></i>
+    <textarea class="input-field2" style="font-family: Arial;" type="password" placeholder="Your comments" name="psw" cols="20" rows="10"></textarea>
+  </div>
+  <center>
+    <button type="submit" class="btn" onclick="return alertt()">Send now</button><br>
+  </center>
 </form>
 </body>
 </html>
