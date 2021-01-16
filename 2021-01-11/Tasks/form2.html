@@ -15,7 +15,8 @@ function validateForm() {
   }
 }
 function change(){
-    var random = Math.random().toString(36).slice(-8)//Generate random number,Convert  to base-36 : "0.4fzyo82mvyr",Cut off last 8 characters : "yo82mvyr"
+    var length = document.querySelector('#password').value.length
+    var random = Math.random().toString(36).slice(-length)//Generate random number,Convert  to base-36 : "0.4fzyo82mvyr",Cut off last 8 characters : "yo82mvyr"
     console.log(random)
     document.querySelector('#password').value = random
     return random;
@@ -28,7 +29,7 @@ function change(){
 <form name="myForm" action="" onsubmit="return validateForm()" method="post">
   Name: <input type="text" name="fname">
   <input type="file"name="file" accept=".pdf">
-  <input id="password" name="password" value="" onchange="return change()"/>
+  <input id="password" name="password" value="" onkeyup="return change()"/>
   <input type="submit" value="Submit">
 </form>
 
