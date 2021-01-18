@@ -1,0 +1,3 @@
+Today, I learned Arrow functions, Contructor, Destructuring, Inheritance, Object 
+constructor, Array in ES6,lexical this keyword with arrow functions, etc.... Did 
+practice on various examples of objects and functions..
