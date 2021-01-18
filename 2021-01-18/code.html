@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form</title>
+    <style>
+        .container{
+            width: 900px;
+            margin-left: 10%;
+            margin-top: 2%;
+        }
+        .c{
+            margin-top: 20px;
+            height:120px;
+            padding-top: 2%;
+            width:900px;
+            border:1px solid black;
+        }
+        p{
+            width:150px;
+            margin-top:-29px;
+            margin-left:10px;
+            margin-right: 700px;
+            background:white;
+        }
+        table{
+            margin-top: -4px;
+        }
+        tr{
+            padding-top: 10px;
+        }
+        th{
+            width: 230px;
+            float: left;
+            text-align: left;
+            margin-left: 4%;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+<form method="POST" action="success.html" class="container">
+    <div class="c">
+        <p style="width:90px;">Your Address</p>
+        <table>
+            <tr>
+                <th><label for="firstName">First Name</label></th>
+                <td><input type="text" id="firstName" name="firstName"></td>
+            </tr>
+            <tr>
+                <th><label for="lastName">Last Name</label></th>
+                <td><input type="text" id="lastName" name="lastName"></td>
+            </tr>
+            <tr>
+                <th><label for="street">Street</label></th>
+                <td><input type="text" id="street" name="street"></td>
+            </tr>
+            <tr>
+                <th><label for="city">City</label></th>
+                <td><input type="text" id="city" name="city"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="c" style="height: 130px;">
+        <p>Additional Information</p>
+        <table>
+            <tr>
+                <th><label for="biography">Biography</label></th>
+                <td><textarea type="text" id="biography" cols="35" rows="3" name="biography"></textarea></td>
+            </tr>
+            <tr>
+                <th><label for="image">Image</label></th>
+                <td><input type="file" id="image" name="image"></td>
+            </tr>
+            <tr>
+                <th><label for="age">Age Group</label></th>
+                <td>
+                    <select type="text" style="width: 120px;" id="age" name="age">
+                        <option selected>0 to 9 years</option>
+                        <option>10 to 19 years</option>
+                        <option>20 to 29 years</option>
+                        <option>30 to 39 years</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="c" style="height: 220px;">
+        <p style="width:58px;">Interests</p>
+        <table>
+            <tr>
+                <th><label for="biography">Hobbies</label></th>
+                <td>
+                    <div style="width: 120px; height:70px; border:1px solid; padding-left:2px;padding-top:2px;padding-bottom:4px;">
+                        Playing soccer<br>Dancing<br>Gardening<br>Watching movies
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="car">Favourite Color?</label></th>
+                <td>
+                    <select type="text" id="car" style="width: 120px;" name="car">
+                        <option selected>Volvo</option>
+                        <option>Tata</option>
+                        <option>Honda</option>
+                        <option>Toyota</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th><label for="image">Favourite public transport?</label></th>
+                <td>
+                    <div style="width: 120px; height:70px; border:1px solid; padding-left:2px;padding-top:2px;padding-bottom:4px;">
+                        
+                            <b>Ground</b><br>
+                            Train<br>
+                            Bus<br>
+                            <b>Water</b>
+                        
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <center>
+        <button style="margin-top: 2%;width: 90px;" type="submit">Submit</button>
+        <button style="margin-top: 2%;width: 90px;" type="reset">Reset</button>
+    </center>
+</form>
+</body>
+</html>
