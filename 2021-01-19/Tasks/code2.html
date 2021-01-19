@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table</title>
+</head>
+<body>
+<div id="box">
+</div>
+<script>
+    var o1 = {
+        name: 'hiral',
+        age: 20,
+        email: 'heer@gmail.com',
+        tel: 1234567890
+    }
+    var o2 = {
+        name: 'harsh',
+        age: 20,
+        email: 'harsh@gmail.com',
+        tel: 1234567809
+    }
+    var o3 = {
+        name: 'john',
+        age: 60,
+        email: 'john@gmail.com',
+        tel: 1234578690
+    }
+    
+    var rows = [o1,o2,o3]
+    var html = "<table border='1|1'>";
+        for (var i = 0; i < rows.length; i++) {
+            html+="<tr>";
+            html+="<td>"+rows[i].name+"</td>";
+            html+="<td>"+rows[i].age+"</td>";
+            html+="<td>"+rows[i].email+"</td>";
+            
+            html+="</tr>";
+        
+        }
+        html+="</table>";
+    document.getElementById("box").innerHTML = html;
+</script>
+</body>
+</html>
+
+
+
