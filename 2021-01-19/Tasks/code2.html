@@ -27,15 +27,15 @@
     }
     
     var rows = [o1,o2,o3]
+    var obj1 = []
     var html = "<table border='1|1'>";
         for (var i = 0; i < rows.length; i++) {
             html+="<tr>";
             html+="<td>"+rows[i].name+"</td>";
             html+="<td>"+rows[i].age+"</td>";
             html+="<td>"+rows[i].email+"</td>";
-            
             html+="</tr>";
-        
+            localStorage.setItem('rows',JSON.stringify(rows))
         }
         html+="</table>";
     document.getElementById("box").innerHTML = html;
