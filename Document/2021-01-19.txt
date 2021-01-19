@@ -1,0 +1,2 @@
+Today, I learned about classes, inheritance using class in ES6, and did practice 
+work. I also did practice on objects and properties.
