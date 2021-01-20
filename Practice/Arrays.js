@@ -35,3 +35,17 @@ console.log(data.indexOf('aaa'))
 var isThat = data.indexOf('aaaa') === -1 ? 'it\'s not aaa' : 'it\'s you'
 console.log(isThat)
 
+//The reduce method is a great way to loop through an array and get one single 
+//output based on the values inside the array.
+let values = [13, 2, 27, 90, 8, 57, 34]; 
+let sum = values.reduce((previous, current) => current += previous); 
+let avg = sum / values.length; 
+// avg = 33
+
+//Shorten an array using its length property
+let array = [0, 1, 2, 3, 4, 5, 6, 6, 8, 9]
+array.length = 4
+// Result: [0, 1, 2, 3]
+//Important to know though is that this is a destructive way of changing the array.
+//This means you lose all the other values that used to be in the array.
+

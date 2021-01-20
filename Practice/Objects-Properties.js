@@ -50,7 +50,49 @@ var obj = {
     }
 }
 
+///////////////////////////////////////////////////////////////
+//set key of object dynamically
+const dynamic = 'model'
+const objj = {
+    name: 'tiago',
+    [dynamic]: 'xz++'
+}
+console.log(objj)
 
+//Using the spread operator to combine objects
+const obj1 = {'a': 1, 'b': 2}
+const obj2 = {'c': 3}
+const obj3 = {'d': 4}
+// Combine them using the spread operator            
+const objCombined = {...obj1, ...obj2, ...obj3}
+// Result: {'a': 1, 'b': 2, 'c': 3, 'd': 4}
+//Something to keep in mind while using this is that whenever you update one of 
+//the objects, it doesn’t reflect those changes in the combined object.
 
-
-
+////////////////////////////////////////////////////////////////////////////////////
+function myFunc(theObject) {
+    theObject.brand = "Toyota";
+  }
+  
+  /*
+   * Declare variable 'mycar';
+   * create and initialize a new Object;
+   * assign reference to it to 'mycar'
+   */
+  var mycar = {
+    brand: "Honda",
+    model: "Accord",
+    year: 1998
+  };
+  
+  /* Logs 'Honda' */
+  console.log(mycar.brand);
+  
+  /* Pass object reference to the function */
+  myFunc(mycar);
+  
+  /*
+   * Logs 'Toyota' as the value of the 'brand' property
+   * of the object, as changed to by the function.
+   */
+  console.log(mycar.brand);

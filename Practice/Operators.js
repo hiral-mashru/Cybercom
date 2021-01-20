@@ -15,13 +15,14 @@ var year = yearH > yearM
 console.log(year) //true or false
 console.log(yearH < yearM)
 console.log(yearH != yearM)
-console.log(yearH = yearM) //query
-console.log(yearH == yearM) //query 
-console.log(yearH === yearM) //query
+console.log(yearH,yearM)//2001 20
+console.log(yearH = yearM) //20 bcz yearH becomes 20
+console.log(yearH == yearM) //20 == 20
+console.log(yearH === yearM) //20 === 20
 
 //typeof operator
-console.log(typeof(year))
-console.log(typeof year)
+console.log(typeof(year)) //boolean
+console.log(typeof year) //boolean
 console.log(typeof NaN) //number
 console.log(typeof undefined) //undefined
 console.log(typeof null) //object
@@ -62,3 +63,14 @@ console.log(2**2**3)
 a=2
 console.log(a++)
 console.log(a)
+
+//Convert truthy/falsy values to boolean
+!!"" //false
+!!0 //false
+!!null //false
+!!undefined //false
+!!NaN //false
+!!'hello' //true
+!!1 //true
+!!{} //true
+!![] //true

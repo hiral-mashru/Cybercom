@@ -53,7 +53,7 @@
 
   ** Falsy values: Undefined,null,0,'',NaN
   ** Truthy values: NOT falsy values
-  ** == -> values muxt be same
+  ** == -> values must be same
   -> eg. : 23 == '23' => 'true'
   ** === -> values and datatypes must be same 
   -> eg. : 23 === '23' => false

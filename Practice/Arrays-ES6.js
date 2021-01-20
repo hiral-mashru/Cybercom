@@ -49,3 +49,6 @@ console.log(ages[full.indexOf(true)])//19 //returns first value that is>=18
 console.log(ages.findIndex(cur => cur>=18))//2 //returns index first value that is>=18
 console.log(ages.find(cur => cur>=18))//19 //returns first value that is>=18
 
+//Create an array with unique values using the “Set” object
+const arrayWithUniqueItems = [...new Set([1, 2, 3, 3,4,4,4,0])]
+//  [1, 2, 3, 4, 0]

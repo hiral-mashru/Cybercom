@@ -20,3 +20,14 @@ if(console.log('')){
 } else {
     console.log('ohh')
 }
+
+//Shorten your “if” statements
+// Instead of using this                                      
+if (iAmHungry) {
+    bakeAnEgg()
+ }
+ // You can use this
+ if (iAmHungry) bakeAnEgg()
+ // Or this
+ iAmHungry? bakeAnEgg() : 0
+

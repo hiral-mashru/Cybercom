@@ -14,7 +14,7 @@
     console.log(score >= 5)
 })(); //what's inside a '()' , cannot be a statement -> it's an expression, not declaration
 
-// console.log(score)
+console.log(score)
 
 (function(goodluck){
     var score = Math.random() * 10
