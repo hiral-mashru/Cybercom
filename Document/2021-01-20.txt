@@ -1,0 +1,3 @@
+Today, I revised the topics of array, objects , its properties, methods, 
+inheritance, clausers, boolean logic, for loops, array's methods, classes, 
+Object.create(), constructor, bind-call-apply functions, destruction,etc...
