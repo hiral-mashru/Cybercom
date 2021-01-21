@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  background-color: #ffa500;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+.rect {
+  width: 320px;
+  padding: 10px;
+  margin: 0;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+<script type="text/javascript">
+    
+</script>
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="">Hello, <div id="name" style="float:inline-start;"></div></a></li><br><br>
+  <li><a href="AdminDashboard.html">Dashboard</a></li>
+  <li><a href="Users.html">Users</a></li>
+  <li><a href="LoginSession.html">Login Session</a></li>
+  <li><a href="Login.html" onclick="logout()">Logout</a></li>
+</ul>
+
+<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+  <h2>Add User</h2>
+        <form method="POST" onsubmit="verifyNull();">
+            <input type="text" name="name" id="namme" placeholder="Name" required>
+            <input type="text" name="email" id="email" placeholder="Email" required>
+            <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" name="password" id="password" placeholder="Password" required>
+            <input type="date" name="date" id="date" placeholder="Birthdate" required><br>
+            <input type="submit" onsubmit="verifyNull();" value="Add User">
+        </form><br>
+    <div class="rect" id="rect">
+    </div>
+</div>
+
+</body>
+<script type="text/javascript">
+    var email = JSON.parse(sessionStorage.getItem("loggedin"))['email']
+    var name = JSON.parse(localStorage.getItem(email))['name']
+    document.getElementById('name').textContent = name
+    
+    var rows = JSON.parse(localStorage.getItem('users'))
+    var html = "<table border='1|1'>";
+        html+="<tr>";
+        html+="<th>Name</th>";
+        html+="<th>Email</th>";
+        html+="<th>Password</th>";
+        html+="<th>Birthdate</th>";
+        html+="<th>Age</th>";
+        html+="<th>Actions</th>";
+        html+="</tr>";
+        for (var i = 0; i < rows.length; i++) {
+            html+="<tr>";
+            html+="<td>"+rows[i].name+"</td>";
+            html+="<td>"+rows[i].email+"</td>";
+            html+="<td>"+rows[i].password+"</td>";
+            html+="<td>"+rows[i].birthdate+"</td>";
+            html+="<td>"+(new Date().getFullYear()-rows[i].birthdate.split("-",1))+"</td>";
+            html+="<td><button onclick='"+editt(i)+"'>Actions</button><button onclick='"+delett(i)+"'>Delete</button></td>";
+            html+="</tr>";
+        }
+        html+="</table>";
+    document.getElementById("rect").innerHTML = html;
+
+
+    function verifyNull() {
+        var obj = {
+            name: document.getElementById('namme').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            birthdate: document.getElementById('date').value
+        }
+        rows.push(obj)
+        console.log(rows)
+        localStorage.setItem('users',JSON.stringify(rows))  
+    }
+    function editt(i){ 
+        console.log(i)  
+        document.getElementById('namme').value = rows[i].name
+        document.getElementById('email').value = rows[i].email
+        document.getElementById('password').value = rows[i].password
+        document.getElementById('date').value = rows[i].birthdate
+    }
+    function delett(i){
+      var rows = JSON.parse(localStorage.getItem('users'))
+      console.log("i",i)
+      rows.splice(i,1)
+      localStorage.setItem('users',JSON.stringify(rows))
+    }
+    function logout(){
+      sessionStorage.removeItem("loggedin")
+    }
+    
+</script>
+</html>

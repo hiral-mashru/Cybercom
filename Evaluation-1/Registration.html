@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Form</title>
+    <style>
+        .container{
+            border: 1px solid black;
+            width: 700px;
+            height: 850px;
+            margin-left: 20%;
+            margin-top: 2%;
+        }
+        table{
+            margin-top: -7px;
+        }
+        tr{
+            padding-top: 10px;
+            height: 40px;
+        }
+        td {
+            width: 500px;
+        }
+        th{
+            width: 150px;
+            float: left;
+            text-align: right;
+            padding-right: 10%;
+            padding-top: 5px;
+        }
+        td {
+            padding-left: 3%;
+        }
+        input,select {
+            margin-left: 1%;
+            width: 90%;
+            height: 30px;
+            padding-left: 2%;
+        }
+        button{
+            width: 87%;
+            height: 40px;
+            background-color: orange;
+        }
+        .c{
+            padding-top: 2%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            width: 550px;
+            margin-left: 30%;
+            height: 500px;
+        }
+    </style>
+    <script type="text/javascript">
+        function verifyNull() {
+            if (!document.getElementById('name').value.trim().length) {
+                alert('Please enter name');
+                return false;
+            }
+            else if (!document.getElementById('email').value.trim().length) {
+                alert('Please enter email');
+                return false;
+            }
+            else if (!document.getElementById('password').value.trim().length) {
+                alert('Please enter password');
+                return false;
+            }
+            else if (!document.getElementById('city').value.trim().length) {
+                alert('Please enter city');
+                return false;
+            }
+            else if (!document.getElementById('state').value.trim().length) {
+                alert('Please enter state');
+                return false;
+            }
+            else if(document.getElementById('password').value !== document.getElementById('rePassword').value){
+                alert('Password and Confirm Password must be same.');
+                return false;
+            }
+        }
+        function register() {
+            var x = document.getElementById('email').value;
+            var atpos = x.indexOf("@");
+            var dotpos = x.lastIndexOf(".");
+            if (atpos< 1 || dotpos<atpos+2 || dotpos+2>=x.length) {
+                alert("Not a valid e-mail address");
+                return false;
+            } else if(document.getElementById('password').value !== document.getElementById('rePassword').value){
+                alert('Password and Confirm Password must be same.');
+                return false;
+            } else if(!document.getElementById('conditions').checked) {
+                alert('check the conditions')
+                return false;
+            }
+            else {
+                var obj = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value,
+                    city: document.getElementById('city').value,
+                    state: document.getElementById('state').value
+                }
+                if(!localStorage.getItem(document.getElementById('email').value)){
+                    localStorage.setItem(document.getElementById('email').value,JSON.stringify(obj))
+                    document.location.href = 'Login.html',true
+                }
+                
+            }
+        }
+    </script>
+</head>
+<body>
+<form method="POST">
+    <div class="c"><center>
+        <h2>Register</h2>
+        <table>
+            <tr>
+                <td>
+                    <input type="text" name="name" id="name" placeholder="Name" required><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="email" name="email" id="email" placeholder="Email" required><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="Password" name="password" id="password" required><br>
+                    (Min & characters, 1 number, case-sensitive)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="password" name="rePassword" id="rePassword" placeholder="Confirm Password" required><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select style="height: 35px; width: 93%;" name="city" id="city" required>
+                        <option value="" selected>Select City</option>
+                        <option value="Rajkot">Rajkot</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Kachha">Kachha</option>
+                        <option value="Gandhinagar">Gandhinagar</option>
+                        <option value="Surat">Surat</option>
+                    </select><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <select style="height: 35px; width: 93%;" name="state" id="state" required>
+                        <option value="" selected>Select State</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Karnatak">Karnatak</option>
+                        <option value="Madhyapradesh">Madhyapradesh</option>
+                    </select><br>
+                </td>
+            </tr>
+            <tr>
+                <td><input style="height: 15px; margin-left: -200px" type="checkbox" name="conditions" id="conditions" checked required><label style="margin-left: -200px;" for="conditions">Terms & Conditions</label></td>
+            </tr>
+        </table><br>
+    <button type="submit" id="registerr" onclick="verifyNull(); register();">Register</button>
+   </center>    
+
+</div>
+</form>
+<script>
+    if(localStorage.getItem('admin@gmail.com')){
+        document.getElementById('registerr').style.display = 'none'
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body {
+  margin: 0;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 25%;
+  background-color: #ffa500;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  display: block;
+  color: #000;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #555;
+  color: white;
+}
+.rect {
+  width: 320px;
+  padding: 10px;
+  border: 1px solid black;
+  margin: 0;
+}
+</style>
+
+</head>
+<body>
+
+<ul>
+  <li><a class="active" href="">Hello, <div id="name" style="float:inline-start;"></div></a></li><br><br>
+  <li><a href="AdminDashboard.html">Dashboard</a></li>
+  <li><a href="Users.html">Users</a></li>
+  <li><a href="LoginSession.html">Login Session</a></li>
+  <li><a href="Login.html" onclick="logout()">Logout</a></li>
+</ul>
+
+<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+  <h2>Dashboard</h2>
+    <div class="rect"></div>
+  <p>Some text..</p>
+  <p>Some text..</p>
+</div>
+
+</body>
+<script type="text/javascript">
+    var email = JSON.parse(sessionStorage.getItem("loggedin"))['email']
+    var name = JSON.parse(localStorage.getItem(email))['name']
+    document.getElementById('name').textContent = name
+
+    function logout(){
+      sessionStorage.removeItem("loggedin")
+    }
+</script>
+</html>
