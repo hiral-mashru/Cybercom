@@ -65,39 +65,36 @@ table {
 
 
 </body>
+<div id="rect"></div>
 <script type="text/javascript">
     var email = JSON.parse(sessionStorage.getItem("loggedin"))['email']
     var name = JSON.parse(localStorage.getItem(email))['name']
     document.getElementById('name').textContent = name
     
-    var rows = JSON.parse(localStorage.getItem('users'))
-    var html = "<table border='1|1'>";
+    var rows = JSON.parse(localStorage.getItem('loggedin'))
+    var html = "<table border='1|1' style='float:left'>";
         html+="<tr>";
         html+="<th>Name</th>";
-        html+="<th>Email</th>";
-        html+="<th>Password</th>";
-        html+="<th>Birthdate</th>";
-        html+="<th>Age</th>";
-        html+="<th>Actions</th>";
+        html+="<th>Login Date time</th>";
+        html+="<th>Logout Date time</th>";
         html+="</tr>";
         for (var i = 0; i < rows.length; i++) {
             html+="<tr>";
             html+="<td>"+rows[i].name+"</td>";
-            html+="<td>"+rows[i].email+"</td>";
-            html+="<td>"+rows[i].password+"</td>";
-            html+="<td>"+rows[i].birthdate+"</td>";
-            html+="<td>"+(new Date().getFullYear()-rows[i].birthdate.split("-",1))+"</td>";
-            html+="<td><button onclick='"+editt(i)+"'>Actions</button><button onclick='"+delett(i)+"'>Delete</button></td>";
+            html+="<td>"+rows[i].login+"</td>";
+            html+="<td>"+rows[i].logout+"</td>";
             html+="</tr>";
         }
         html+="</table>";
-    document.getElementById("rect").innerHTML = html;
-    function logout(){
         
-            var obj = {
-                email: document.getElementById('email').value,
-                logout: new Date().getDate()+ "-"+(new Date().getMonth()+1)+ "-"+new Date().getFullYear()+" "+new Date().getHours()+ ":"+new Date().getMinutes()+ ":"+new Date().getSeconds(),
+    function logout(){
+        alert("logout")
+        var rows = JSON.parse(localStorage.getItem("loggedin"))
+        for(let i = 0; i<rows.length; i++){
+            if(rows[i].email === JSON.parse(sessionStorage.getItem('loggedin')).email){
+                rows[i].logout = new Date().getDate()+ "-"+(new Date().getMonth()+1)+ "-"+new Date().getFullYear()+" "+new Date().getHours()+ ":"+new Date().getMinutes()+ ":"+new Date().getSeconds()
             }
+        }
             
         if(!localStorage.setItem("logout")){
             var arrr = []

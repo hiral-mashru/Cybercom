@@ -61,6 +61,15 @@ li a:hover:not(.active) {
     document.getElementById('name').textContent = name
 
     function logout(){
+        
+    if(!localStorage.setItem("logout")){
+        var arrr = []
+        arrr.push(obj)
+        localStorage.setItem("logout",JSON.stringify(arrr))
+    } else {
+        var arr = JSON.parse(localStorage.getItem("logout"))
+        localStorage.setItem("logout",JSON.stringify(arr))
+    }
       sessionStorage.removeItem("loggedin")
     }
 </script>

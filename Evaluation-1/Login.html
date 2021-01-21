@@ -62,14 +62,17 @@
         function clickk(){
             
             var obj = {
+                name: JSON.parse(localStorage.getItem(document.getElementById('email').value))['name'],
                 email: document.getElementById('email').value,
                 login: new Date().getDate()+ "-"+(new Date().getMonth()+1)+ "-"+new Date().getFullYear()+" "+new Date().getHours()+ ":"+new Date().getMinutes()+ ":"+new Date().getSeconds(),
+                logout: 'running'
             }
             
             if(JSON.parse(localStorage.getItem("admin@gmail.com")).email=== 'admin@gmail.com'  && JSON.parse(localStorage.getItem('admin@gmail.com')).password === document.getElementById('password').value){
                 sessionStorage.setItem("loggedin",JSON.stringify(obj))
                 document.location.href = 'AdminDashboard.html',true
             } else if(JSON.parse(localStorage.getItem("users")).email === document.getElementById('email').value && JSON.parse(localStorage.getItem("users")).password === document.getElementById('password').value){
+                alert('user')
                 sessionStorage.setItem("loggedin",JSON.stringify(obj))
                 if(!localStorage.setItem("loggedin")){
                     var arrr = []

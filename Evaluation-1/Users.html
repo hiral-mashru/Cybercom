@@ -131,6 +131,19 @@ table {
       localStorage.setItem('users',JSON.stringify(rows))
     }
     function logout(){
+      var obj = {
+        email: document.getElementById('email').value,
+        logout: new Date().getDate()+ "-"+(new Date().getMonth()+1)+ "-"+new Date().getFullYear()+" "+new Date().getHours()+ ":"+new Date().getMinutes()+ ":"+new Date().getSeconds(),
+    }
+        
+    if(!localStorage.setItem("logout")){
+        var arrr = []
+        arrr.push(obj)
+        localStorage.setItem("logout",JSON.stringify(arrr))
+    } else {
+        var arr = JSON.parse(localStorage.getItem("logout"))
+        localStorage.setItem("logout",JSON.stringify(arr))
+    }
       sessionStorage.removeItem("loggedin")
     }
     
