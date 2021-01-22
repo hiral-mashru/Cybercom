@@ -1,0 +1,3 @@
+Today, I learned about primary-foreign key, strong-weak relationships, index key, unique key,                       
+identifying-non identifying relationships, etc.. Also I learned about NodeJS, its introduction,               
+how to install libraries, why NodeJS is required, how it works, etc....
