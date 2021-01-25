@@ -1,0 +1,3 @@
+Today I learned about inner join, left join, right join, IN and NOT IN commands and did practice in mysql.                     
+Also learned about how to create node server, lifecycleevent loop, how to send the request and response,                 
+routing requests and redirecting requests.
