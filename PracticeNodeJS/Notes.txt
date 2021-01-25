@@ -1,0 +1,8 @@
+core modules : 
+1) http : launch a server, send requests
+2) https: launch a SSL server
+3) fs, 
+4) path, 
+5) os.
+http : hyper text transfer protocol
+https: hyper text transfer protocol secure

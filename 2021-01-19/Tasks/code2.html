@@ -26,8 +26,12 @@
         tel: 1234578690
     }
     
-    var rows = [o1,o2,o3]
-    var obj1 = []
+    var rows = []
+    rows.push(o1)
+    var r = rows.indexOf(0)
+    console.log(r)
+    rows.push(o2)
+    console.log(rows)
     var html = "<table border='1|1'>";
         for (var i = 0; i < rows.length; i++) {
             html+="<tr>";
@@ -39,6 +43,8 @@
         }
         html+="</table>";
     document.getElementById("box").innerHTML = html;
+
+    console.log(localStorage.getItem('admin@gmail.com'))
 </script>
 </body>
 </html>

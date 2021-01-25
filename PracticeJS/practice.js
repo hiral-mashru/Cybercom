@@ -61,3 +61,13 @@ function myFunc(theObject) {
    * of the object, as changed to by the function.
    */
   console.log(mycar.brand);
+
+  sessionStorage.setItem('key','value')
+
+console.log(JSON.parse(localStorage.getItem('admin@gmail.com'))['email'] === 'admin@gmail.com')
+console.log(localStorage.getItem('admin@gmail.com') === 'admin@gmail.com')
+
+console.log(new Date().getDate()+ "/"+new Date().getMonth()+ "/"+new Date().getFullYear()+ "-"+new Date().getHours()+ ":"+new Date().getMinutes()+ ":"+new Date().getSeconds())
+
+
+
