@@ -1,9 +1,0 @@
-SELECT p.title as 'Product Title', c.title as 'Category Title' from practice.product p
-left join practice.product_category pc on pc.productId = p.id  
-left join practice.category c on c.id = pc.categoryId;
-
-SELECT p.title as 'Product Title', pc.categoryId as 'Category Title' from practice.product p
-right join practice.product_category pc on pc.productId = p.id;
-
-SELECT * from practice.product
-WHERE product.id NOT IN (SELECT productId from practice.product_category);
