@@ -17,3 +17,7 @@ select product_tag.productId, tag.title from product_tag RIGHT JOIN tag ON produ
 select firstName, middleName, lastName from cart where country NOT IN ('Pakistan');
 
 select firstName, middleName, lastName from cart where country IN ('Pakistan');
+
+SELECT * FROM practice.order LEFT JOIN user ON order.userId = user.id WHERE user.firstName NOT LIKE ('Hiral');
+
+SELECT * (SELECT title FROM product WHERE id = 1) FROM order

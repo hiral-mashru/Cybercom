@@ -1,0 +1,3 @@
+Today, I learned about parsing request bodies, event driven code execution, blocking-non blocking code,                    
+work behind nodeJS, node modules system. And also did practice on left,right, inner joins, use of LIKE,                      
+IN, '=', max, min, count, order by, etc.. keywords.
