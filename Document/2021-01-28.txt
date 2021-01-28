@@ -1,0 +1,2 @@
+Today I did practice on examples of various types of join, group by, avg, count, etc.. 
+keywords. I learned about module introduction, NPM scripts.

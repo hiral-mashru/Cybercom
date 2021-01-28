@@ -96,7 +96,11 @@ select j.* from job_history j JOIN employees e using (employee_id) where e.salar
 select d.department_name, e.first_name, e.last_name, e.hire_date, e.salary from employees join departments on e.manager_id=d.employee_id where datediff(now(),e.hire_date)/365 > 15
 
 
+Ex. https://www.w3resource.com/mysql-exercises/subquery-exercises/index.php#PracticeOnline
 
+select e.first_name,e.last_name, e.salary from employees e join employees em on em.last_name = 'Bull' where e.salary > em.salary;
+
+select first_name, last_name from employees where depart
 
 
 
