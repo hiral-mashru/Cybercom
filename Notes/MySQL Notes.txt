@@ -1,0 +1,114 @@
+** JOIN : -
+When we need to select data from more than one table then we can use joins in SQL Server.                   
+We can join two or more tables on the basis of common column between these tables.
+
+** INNER JOIN : - 
+When we need to select the common data from more than one table then we will use inner join.                               
+It will select only those data which will be common in these two tables.                       
+- Inner join is the also known as Default join. We can use this join also using JOIN keywords.
+
+** OUTER JOIN : -
+When we need to select all data from one table including common data from Second table then                                
+we use outer join. It includes NULL value where it does not find data in second column.
+
+** LEFT OUTER JOIN INCLUSIVE: -
+When we need to find the all data from left table including common data from right table then we                            
+use left outer join.
+Ex. select emp_record.eid, emp_record.ename, emp_record.email, emp_sal.salary, emp_sal.ispermanent
+from emp_record left outer join emp_sal on emp_record.eid=emp_sal.eid
+
+** LEFT OUTER JOIN EXCLUSIVE : -
+When we need to select data only from left table excluding common data from right table then we will                                            
+use query in following manner
+Ex. select emp.eid, emp.ename, emp.email
+from emp_record emp left outer join emp_sal es on emp.eid=es.eid where es.salary is null
+
+** RIGHT OUTER JOIN INCLUSIVE : -
+When we need to find the all data from right table including common data from left table then we use                                     
+right outer join.
+EX. select emp.eid, emp.ename, emp.email, es.salary, es.ispermanent
+from emp_sal es right outer join  emp_record emp on emp.eid=es.eid
+
+** RIGHT OUTER JOIN EXCLUSIVE : -
+When we need to select data only from right table excluding common data from left table then we will                            
+use query in following manner
+Ex. select emp.eid, emp.ename, emp.email
+from emp_record emp right outer join emp_sal es on emp.eid=es.eid where es.salary is null
+
+** FULL OUTER JOIN : - 
+When we need to select all data from all tables whether it is common or uncommon then we use full outer join.
+Ex. select emp.eid, emp.ename, emp.email, es.salary, es.ispermanent
+from Emp_Record emp full outer join  emp_sal es on emp.eid=es.eid
+
+** CROSS JOIN : -
+Cross join is used to find Cartesian product between two tables. It will simply joins each row from one table                                         
+to each row in second tables. In genral language we will say it will multiply each row of first table with each                                         
+row of second table. We need not to implement any key column in cross join.
+Ex. select emp.eid, emp.ename, emp.email, es.salary, es.ispermanent
+from Emp_Record emp cross join  emp_sal es
+
+** SELF JOIN : -
+When we need to join a table with itself then it is known as Self join. We joins same table by creating their alias.                      
+Self-join is not any keyword. We use existing joins in self-join but difference is that we use only one table.
+Ex. select distinct e.eid, e.ename, e.email
+from Emp_data e inner join Emp_data ed on e.eid=ed.emphead
+
+
+** NATURAL JOIN : -
+A Natural Join is where 2 tables are joined on the basis of all common columns.
+EX: SELECT location_id, street_address, city, state_province, country_name FROM locations NATURAL JOIN countries; 
+
+** INNER JOIN : -
+A Inner Join is where 2 tables are joined on the basis of common columns mentioned in the ON clause.
+EX: SELECT location_id, street_address, city, state_province, country_name FROM locations JOIN countries  USING (country_id); OR
+    SELECT first_name, last_name, departments.department_id, department_name from employees INNER JOIN departments ON         
+       employees.department_id = departments.department_id;
+
+The difference is in natural join no need to specify condition but in inner join condition is obligatory.
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+EX: https://www.w3resource.com/mysql-exercises/join-exercises/#PracticeOnline
+
+select employees.first_name, employees.last_name, employees.job_id, departments.department_id, departments.department_name                        
+from employees INNER JOIN departments ON employees.department_id = departments.department_id INNER JOIN locations ON                                 
+locations.location_id = departments.location_id where LOWER(locations.city) = 'London';
+
+select e.employee_id, e.last_name, e.manager_id, em.last_name  from employees e JOIN employees em ON e.manager_id = em.manager_id;
+
+select e.first_name, e.last_name, e.hire_date from employees e JOIN employees em ON em.last_name= 'Jones' WHERE em.hire_date < e.hire_date;
+
+select d.department_name, count(e.employee_id) from employees e join departments d ON e.department_id = d.department_id GROUP BY                        
+e.department_id ORDER BY d.department_name; 
+
+select e.employee_id, j.job_title, e.end_date-e.start_date from job_history e join jobs j using (job_id) where e.department_id=90;
+
+select d.department_id, d.department_name, d.manager_id, e.first_name from departments d join employees e on d.manager_id = e.employee_id;
+
+select d.department_name, e.first_name, l.city from departments d join employees e ON (e.employee_id = d.manager_id) join locations l using (location_id)
+
+select e.job_id, avg(e.salary) from employees e group by e.job_id 
+
+select j.job_title, e.first_name, e.salary-j.min_salary from employees e join jobs j using (job_id)
+
+select j.* from job_history j JOIN employees e using (employee_id) where e.salary>10000;
+
+select d.department_name, e.first_name, e.last_name, e.hire_date, e.salary from employees join departments on e.manager_id=d.employee_id where datediff(now(),e.hire_date)/365 > 15
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
