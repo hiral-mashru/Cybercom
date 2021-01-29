@@ -1,0 +1,2 @@
+Today I did practice on various types of joins with using, on, avg, count, max, min,having    
+keywords and also did practice of subqueries.

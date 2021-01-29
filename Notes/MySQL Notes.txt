@@ -58,6 +58,10 @@ from Emp_data e inner join Emp_data ed on e.eid=ed.emphead
 A Natural Join is where 2 tables are joined on the basis of all common columns.
 EX: SELECT location_id, street_address, city, state_province, country_name FROM locations NATURAL JOIN countries; 
 
+** HAVING : - 
+A HAVING clause in SQL specifies that an SQL SELECT statement must only return rows where aggregate values meet the specified               
+conditions. After the aggregating operation, HAVING is applied, filtering out the rows that don't match the specified conditions.
+
 ** INNER JOIN : -
 A Inner Join is where 2 tables are joined on the basis of common columns mentioned in the ON clause.
 EX: SELECT location_id, street_address, city, state_province, country_name FROM locations JOIN countries  USING (country_id); OR
@@ -66,8 +70,21 @@ EX: SELECT location_id, street_address, city, state_province, country_name FROM 
 
 The difference is in natural join no need to specify condition but in inner join condition is obligatory.
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
+Here's a list of equivalent syntaxes:
 
+A LEFT JOIN B            A LEFT OUTER JOIN B
+A RIGHT JOIN B           A RIGHT OUTER JOIN B
+A FULL JOIN B            A FULL OUTER JOIN B
+A INNER JOIN B           A JOIN B
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- when u use 'using' keyword, must use () after that.
+- when u use multiple joins in one statement, must use ON keyword, not USING.
+- LIKE for matching a string and IN for matching numbers used in WHERE statement.
+- <> = NOT LIKE
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 EX: https://www.w3resource.com/mysql-exercises/join-exercises/#PracticeOnline
 
 select employees.first_name, employees.last_name, employees.job_id, departments.department_id, departments.department_name                        
@@ -100,7 +117,79 @@ Ex. https://www.w3resource.com/mysql-exercises/subquery-exercises/index.php#Prac
 
 select e.first_name,e.last_name, e.salary from employees e join employees em on em.last_name = 'Bull' where e.salary > em.salary;
 
-select first_name, last_name from employees where depart
+EX. https://www.w3resource.com/sql-exercises/sql-joins-exercises.php#SQLEDITOR
+
+select s.name, c.cust_name from salesman s join customer c using (city)
+
+select o.ord_no, o.purch_amt, c.cust_name, c.city from orders o join customer c using (customer_id) where purch_amt <2000 AND purch_amt >500;
+
+select c.cust_name, s.name from customer c join salesman s using (salesman_id);
+
+select c.cust_name, c.city, s.commission from customer c join salesman s using (salesman_id) where s.commission > 0.12;
+
+select c.cust_name, c.city,s.city, s.commission from customer c join salesman s using (salesman_id) where s.commission > 0.12 AND s.city NOT LIKE c.city;
+
+select o.ord_no, o.ord_date, o.purch_amt, s.commission from orders o natural join customer c join salesman s on c.salesman_id=s.salesman_id;
+
+select * from orders natural join customer natural join salesman;
+
+select c.cust_name, c.city, c.grade, s.name from customer c left join salesman s on (c.salesman_id = s.salesman_id) order by c.customer_id;
+
+select c.cust_name, c.city, c.grade, s.name from customer c left outer join salesman s on (c.salesman_id = s.salesman_id) where c.grade < 300 order by c.customer_id;
+
+select c.cust_name, c.city, o.ord_no,o.ord_date, o.purch_amt from orders o right join customer c using (customer_id) order by o.ord_date; 
+
+select c.cust_name, c.city, o.ord_no,o.ord_date, o.purch_amt, s.name, s.commission from orders o right join customer c using (customer_id) join salesman s on (c.salesman_id = s.salesman_id) order by o.ord_date; 
+
+select a.cust_name,a.city,a.grade, s.name, s.city, s.commission from salesman s left join customer a using (salesman_id) order by s.salesman_id;
+
+13) select c.cust_name, c.city, c.grade, o.ord_date, o.ord_no, o.purch_amt from salesman s left join customer c using (salesman_id) left join orders o using (customer_id);
+
+14) select c.cust_name,c.city,c.grade,s.name, s.city, o.ord_no, o.ord_date, o.purch_amt  
+from customer c 
+right join salesman s 
+on (c.salesman_id=s.salesman_id) 
+left join orders o 
+on o.customer_id=c.customer_id 
+where o.purch_amt >= 2000
+AND c.grade IS NOT NULL;
+
+15) select c.cust_name, c.city, o.ord_no, o.ord_date,o.purch_amt from customer c full outer join orders o using (customer_id);
+
+16) select c.cust_name, c.city, o.ord_no, o.ord_date,o.purch_amt from customer c full outer join orders o using (customer_id) where c.grade IS NOT NULL;
+
+17) select * from salesman cross join customer
+
+18) select * from salesman cross join customer where salesman.city IS NOT NULL
+
+19) select * from salesman s cross join customer c where s.city IS NOT NULL AND c.grade IS NOT NULL
+
+20) select * from salesman s cross join customer c where s.city IS NOT NULL AND c.grade IS NOT NULL AND c.city NOT LIKE s.city 
+
+21) select i.*, c.com_name from item_mast i join company_mast c ON i.pro_com=c.com_id 
+
+22) select i.pro_name, i.pro_price, c.com_name from item_mast i join company_mast c on i.pro_com = c.com_id 
+
+23) select c.com_name, avg(i.pro_price) from company_mast c join item_mast i on i.pro_com=c.com_id group by i.pro_com
+
+*24) select c.com_name, avg(i.pro_price) from company_mast c join item_mast i on i.pro_com=c.com_id group by i.pro_com having avg(i.pro_price) >= 350
+
+25) SELECT c.com_name, i.pro_name, i.pro_price FROM company_mast c JOIN item_mast i ON i.pro_com = c.com_id AND i.pro_price = (SELECT MAX(i.pro_price) FROM item_mast i WHERE i.pro_com=c.com_id)
+
+26) select * from emp_details e join emp_department ed on e.emp_dept=ed.dpt_code 
+
+27) select e.emp_fname,e.emp_lname, ed.dpt_name,ed.dpt_allotment from emp_details e join emp_department ed on e.emp_dept=ed.dpt_code 
+
+28) select e.emp_fname,e.emp_lname, ed.dpt_name,ed.dpt_allotment from emp_details e join emp_department ed on e.emp_dept=ed.dpt_code AND/where ed.dpt_allotment > 50000 
+
+29) select ed.dpt_name from emp_department ed join emp_details e on e.emp_dept=ed.dpt_code group by ed.dpt_name having count(e.emp_dept) > 2
+
+
+
+
+
+
+
 
 
 
