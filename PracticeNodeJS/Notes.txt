@@ -6,3 +6,11 @@ core modules :
 5) os.
 http : hyper text transfer protocol
 https: hyper text transfer protocol secure
+
+createServer() : event never finishes by default
+
+npm init : to create package.json
+
+in package.json : 
+"start": "node app.js",  //npm start
+"heer": "node app.js" //npm run heer
