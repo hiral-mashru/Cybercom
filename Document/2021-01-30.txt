@@ -1,0 +1,3 @@
+Today I learned about modules, NPM scripts,how to install 3rd party packages, use of nodemon             
+in nodeJS. Also did practice on subqueries, understood DDL and DML queries, stored procedure           
+and triggers
