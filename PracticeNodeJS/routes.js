@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { REPL_MODE_STRICT } = require('repl')
 
 const requstHandler = (req,res) => {
     // console.log(req.url, req.method, req.headers)//u can see it without loading localhost://3000 page.
