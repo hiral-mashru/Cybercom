@@ -1,0 +1,1 @@
+Today I learned about nodemon, different error types, how to fix syntax error, runtime error, logical errors, learned about debugger, express, middleware. Also did practice on mysql queries. 

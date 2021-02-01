@@ -76,6 +76,81 @@ A LEFT JOIN B            A LEFT OUTER JOIN B
 A RIGHT JOIN B           A RIGHT OUTER JOIN B
 A FULL JOIN B            A FULL OUTER JOIN B
 A INNER JOIN B           A JOIN B
+
+** A primary key of one table can be referenced by foreign key of another table. Unique key constraints
+also identifies an individual tuple uniquely in a relation or table. A table can have more than one 
+unique key unlike primary key. Unique key constraints can accept only one NULL value for column.
+a primary key column doesn't accept null values, while unique key columns can contain one null value 
+each. And finally, the primary key column has a unique clustered index while a unique key column has a
+unique non-clustered index.
+Foreign keys do not create indexes. Only alternate key constraints(UNIQUE) and primary key constraints 
+create indexes. This is true in Oracle and SQL Server.
+
+A foreign key containing null values cannot match the values of a parent key, since a parent key by 
+definition can have no null values. However, a null foreign key value is always valid, regardless of the 
+value of any of its non-null parts. ... A foreign key value is null if any part is null.
+
+The DROP TABLE statement is used to drop an existing table in a database.
+DROP TABLE table_name;
+
+The TRUNCATE TABLE statement is used to delete the data inside a table, but not the table itself.
+TRUNCATE TABLE table_name;
+
+The ALTER TABLE statement is used to add, delete, or modify columns in an existing table.
+The ALTER TABLE statement is also used to add and drop various constraints on an existing table.
+ALTER TABLE Customers
+ADD Email varchar(255);
+
+To change the data type of a column in a table, use the following syntax:
+
+SQL Server / MS Access:
+ALTER TABLE table_name
+ALTER COLUMN column_name datatype;
+
+My SQL / Oracle (prior version 10G):
+ALTER TABLE table_name
+MODIFY COLUMN column_name datatype;
+
+Oracle 10G and later:
+ALTER TABLE table_name
+MODIFY column_name datatype;
+
+ALTER TABLE Persons
+DROP COLUMN DateOfBirth;
+
+** LIMIT : -
+The limit keyword is used to limit the number of rows returned in a query result. ... "LIMIT N" is the 
+keyword and N is any number starting from 0, putting 0 as the limit does not return any records in the 
+query.
+
+** 1 NF: -
+one column should have one value and of same type, column should have a unique name, order doesn't matter.
+
+** 2 NF : -
+should have 1 NF, and should not have partial dependancy.
+Dependancy :  when, to retrieve a value(row), we need to use primary key..that's called dependancy.
+Partial dependancy : when a column depends on half primary key of composite primary keys.
+Ex.: scoreId(primary key), studentId, subjectId(foreign keys - composite primary keys - prime attributes), subjectTeacher
+ (non prime attribute) -> subjectTeacher depends on subjectId (half primary key) -> To remove that, add subjectTeacher to subject table
+
+** 3 NF : -
+should have 2 NF, and should not have transitive dependancy.
+Transitive dependancy : when one column is dependent on non-prime attribute.
+Ex: scoreId(primary key), studentId, subjectId(foreign keys - composite primary keys - prime attributes),examName (non-prime attribute), totalMarks->  examName(practical, sessional, theory, engg field vise different) depends on subjectId 
+and studentId , totalMarks depends on examName. - > to remove that, make different table with columns of examname, total
+marks
+
+** BCNF : - boyce-codd
+should have 3 NF, and for dependancy A->B, A should be super key. A is not prime attribute, B is prime attribute.
+
+** 4NF : - 
+should be in BCNF, should not have multi-valued dependency
+
+** 5NF :- (PJNF)- Project join
+should be in 4NF, should not have join dependency.
+
+** super key:- combinations of all keys in table. Ex. A,B,C are keys. (A,B,C,A+B,B+C,A+c,A+B+C) are super keys.
+** candidate key:- minimal subset of super key. In above example: A,B,C are candidate keys. coz A+B,B+C,A+c,A+B+C behave like super key, so they are not candidate key.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - when u use 'using' keyword, must use () after that.
