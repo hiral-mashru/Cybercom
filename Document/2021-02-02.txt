@@ -1,0 +1,1 @@
+Today I learned about express, middleware, how middleware works, express and middleware behind the scenes, different routes, incoming parsing requests, express router, how to add 404 page, filtering paths, etc.. 
