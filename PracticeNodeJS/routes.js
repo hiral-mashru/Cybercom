@@ -2,7 +2,7 @@ const fs = require('fs')
 
 const requstHandler = (req,res) => {
     // console.log(req.url, req.method, req.headers)//u can see it without loading localhost://3000 page.
-    // process.exit()//u can see req afetr loading localhost://3000 page,not before that.
+    // process.exit() //u can see req afetr loading localhost://3000 page,not before that.
     const url = req.url
     if(url === '/'){
         res.write('<html>')
@@ -20,7 +20,7 @@ const requstHandler = (req,res) => {
         })//on allows us to listen certain events, here i want to listen data event. data event will be fired whenever new chunk is ready, 2nd argument is a function that should be executedfor every data
         return req.on('end',()=>{ //function expresssion=> async
             const parseBody = Buffer.concat(body).toString()
-            console.log(parseBody)//key-value pair
+            console.log(parseBody)//key-value pair //message=input
             const message = parseBody.split('=')[1]
             fs.writeFile('message.txt',message,(err)=>{ //it'll execute after 1st 2 arguments
                 res.statusCode = 302
