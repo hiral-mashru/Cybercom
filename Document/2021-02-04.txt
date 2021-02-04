@@ -1,0 +1,1 @@
+Today, I revised all the concepts of expressJS, and read the documentation of sequelize.
