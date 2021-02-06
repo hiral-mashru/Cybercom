@@ -17,6 +17,6 @@ module.exports = (Sequelize, DataTypes) => {
             },
         },
     })
-
+    console.log('userr',User)
     return User;
 }

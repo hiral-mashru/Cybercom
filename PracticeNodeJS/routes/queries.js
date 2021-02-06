@@ -2,7 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
-const {User} = require('../models/User')
+const {User} = require('../models')
 
 router.get('/select', (req,res) => {
     res.send('select')
