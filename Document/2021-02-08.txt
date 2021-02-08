@@ -1,0 +1,1 @@
+Today, I learned more about sequelize and express. and also did more practice on joins, truncate, insert, drop, select, etc.. queries.
