@@ -1,0 +1,2 @@
+Today, I learned about select, insert, update, delete, truncate, different type of joins,     
+etc... queries and gave test. I also did practice on sequelize and solved the errors.

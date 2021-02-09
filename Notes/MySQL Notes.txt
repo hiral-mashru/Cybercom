@@ -194,7 +194,7 @@ select e.first_name,e.last_name, e.salary from employees e join employees em on 
 
 EX. https://www.w3resource.com/sql-exercises/sql-joins-exercises.php#SQLEDITOR
 
-select s.name, c.cust_name from salesman s join customer c using (city)
+select s.name, c.cust_name from salesman s join customer c using (salesman_id) where s.city LIKE c.city;
 
 select o.ord_no, o.purch_amt, c.cust_name, c.city from orders o join customer c using (customer_id) where purch_amt <2000 AND purch_amt >500;
 
