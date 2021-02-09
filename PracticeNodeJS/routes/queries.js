@@ -2,6 +2,7 @@ const express = require('express')
 
 const router = express.Router()
 
+const models = require('../models/index')
 const {User} = require('../models/User')
 
 router.get('/select', (req,res) => {
@@ -9,8 +10,9 @@ router.get('/select', (req,res) => {
 })
 
 router.get('/insert', (req,res) => {
+    console.log('modelsss', models.people.findAll())
     console.log("user",User)
-    User.create({
+    models.people.create({
         firstName: "heer",
         age: 20 
     }).catch((err)=>{

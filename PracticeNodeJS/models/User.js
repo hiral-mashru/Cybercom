@@ -2,6 +2,7 @@
 
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define("people",{
+        freezeTableName: true,
         firstName: {
             type: DataTypes.STRING,
             allowNull: false,
