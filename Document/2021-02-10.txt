@@ -1,0 +1,1 @@
+Today, I learned about sequelize and queries using sequelize and learned about JWT token.
