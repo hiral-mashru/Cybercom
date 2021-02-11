@@ -1,0 +1,3 @@
+Today, I learned about jwt, how to create jwt token, how to implement jwt in authentication,          
+and how to specify expire time in jwt, etc... Also did select, insert , delete queries           
+through sequelize.  
