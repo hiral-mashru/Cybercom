@@ -6,3 +6,14 @@ npm install -g sequelize-cli
 npx sequelize-cli init //seeders and migrations folders are not necessory
 
 npm install fs path
+
+to make migrations:-
+npx sequelize-cli migration:create --name anyName
+to run migrations:-
+npx sequelize-cli db:migrate
+to undo:-
+npx sequelize-cli db:migrate:undo
+to undo all:-
+npx sequelize-cli db:migrate:undo:all
+
+npm install jsonwebtoken --save
