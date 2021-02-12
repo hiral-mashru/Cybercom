@@ -1,0 +1,2 @@
+Today, I did practice on sequelize and jwt, how to make tokens and how to verify whether           
+token is true, created models and did CRUD operations, did migrations. 
