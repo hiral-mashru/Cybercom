@@ -27,6 +27,7 @@ app.get('/api',(req,res)=>{
 })
 
 app.post('/api/posts',verifyToken, (req,res)=>{
+    //get token and verify it
     jwt.verify(req.token, 'secretkey',(err, authData)=>{
         if(err){
             console.log('err')
@@ -48,6 +49,7 @@ app.post('/api/login', (req,res)=>{
         email: 'hiral@gmail.com'
     }
     //async , to make it sync, we need to define jwt.sign() in a variable like const token = jwt.sign()
+    //to create token
     jwt.sign(/*payload:- {user} or*/{user: user}, 'secretkey',{ expiresIn: '30s'}, (err,token)=>{
         res.json({
             token: token //or: token //as in token:token, names are same.
