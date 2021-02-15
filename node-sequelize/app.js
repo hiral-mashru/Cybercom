@@ -138,6 +138,8 @@ sequelize.sync()
 
 // create some data to table
 app.post('/user', (req,res)=>{
+    // console.log(req.body); return false;
+
     // User.create({
     //     name: "heer mashru",
     //     email: "heer@gmail.com",
@@ -155,9 +157,9 @@ app.post('/user', (req,res)=>{
         res.status(200).json({
             status: 1,
             message: "User has been created"
-        }).catch(function(error){
-            console.log(error)
         })
+    }).catch(function(error){
+        console.log(error)
     })
 })
 
