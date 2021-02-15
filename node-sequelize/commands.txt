@@ -1,0 +1,35 @@
+run : 
+node filename.js
+
+global object : window
+
+local install:
+npm install <package-name>
+
+global install:
+npm install -g <package-name>
+
+update package:
+npm update <package-name>
+
+uninstall package:
+npm uninstall <package-name>
+
+for package.json:
+npm init 
+or
+npm init -y : to auto generate
+
+npm i express
+
+npm cache clean --force
+
+npm i nodemon
+
+after nodemon, run:
+nodemon app.js
+
+set ""start": "nodemon app.js"" in package.json, ans run:
+npm start
+
+npm i sequelize mysql2 body-parser
