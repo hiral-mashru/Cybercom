@@ -99,7 +99,7 @@ app.post('/employee', (req,res)=>{
         var atposition=req.body.email.indexOf("@");  
         var dotposition=req.body.email.lastIndexOf(".");    
         if(!(atposition<1 || dotposition<atposition+2 || dotposition+2>=req.body.email.length)){
-            if((req.body.contactNo.toString().length) == 10 && (req.body.altContactNo.toString().length) == 10 && (req.body.pinCode.toString().length) == 6 && (req.body.panNumber.toString().length) == 10 && (req.body.adharNumber.toString().length) == 12 && (req.body.passportNumber.length) == 8){
+            if((req.body.contactNo.toString().length) == 10 && (req.body.altContactNo.toString().length) == 10 && (req.body.pinCode.toString().length) == 6 && (req.body.panNumber.toString().length) == 10 && (req.body.adharNumber.toString().length) == 12 && (req.body.passportNumber.length) == 8 && req.method === 'POST'){
                 Employee.create(req.body).then(function(response){
                     res.status(200).json({
                         status: 1,
