@@ -5,5 +5,15 @@
   mobileRegex = /^(3|6|8|9)\d{7}$/; // 3, 6 , 8 , 9  for singapore 8 digit numbers.
   postalCodeRegex = "[0-9]{6}";
 
+
+A paranoid table is one that, when told to delete a record, it will not 
+truly delete it. Instead, a special column called deletedAt will have its 
+value set to the timestamp of that deletion request. This means that 
+paranoid tables perform a soft-deletion of records, instead of a 
+hard-deletion. To make a model paranoid, you must pass the paranoid: 
+true option to the model definition. Paranoid requires timestamps to work 
+(i.e. it won't work if you also pass timestamps: false).
+/////////////////////////////////////////////////////////////////////////////////
+
 npm init
 npm i express mysql2 nodemon sequelize body-parser

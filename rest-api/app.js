@@ -88,7 +88,10 @@ var Employee = sequelize.define("employee",{
     }
 },{
     modelName: "Employee",
-    timestamps: false
+    // timestamps: false
+    paranoid: true,
+    // If you want to give a custom name to the deletedAt column
+    deletedAt: 'destroyTime'
 })
 
 sequelize.sync()
@@ -99,7 +102,7 @@ app.post('/employee', (req,res)=>{
         var atposition=req.body.email.indexOf("@");  
         var dotposition=req.body.email.lastIndexOf(".");    
         if(!(atposition<1 || dotposition<atposition+2 || dotposition+2>=req.body.email.length)){
-            if((req.body.contactNo.toString().length) == 10 && (req.body.altContactNo.toString().length) == 10 && (req.body.pinCode.toString().length) == 6 && (req.body.panNumber.toString().length) == 10 && (req.body.adharNumber.toString().length) == 12 && (req.body.passportNumber.length) == 8 && req.method === 'POST'){
+            if((req.body.contactNo.toString().length) == 10 && (req.body.altContactNo.toString().length) == 10 && (req.body.pinCode.toString().length) == 6 && (req.body.panNumber.toString().length) == 10 && (req.body.adharNumber.toString().length) == 12 && (req.body.passportNumber.length) == 8){
                 Employee.create(req.body).then(function(response){
                     res.status(200).json({
                         status: 1,
@@ -130,22 +133,54 @@ app.post('/employee', (req,res)=>{
     // })
 })
 
+//soft-deletion
+app.delete('/soft-delete-employee',function(req,res){
+    Employee.destroy({
+        where: {
+            id: 3
+        }
+    }).then(function(success){
+        console.log("Employee has been deleted")
+    }) // UPDATE "posts" SET "deletedAt"=[timestamp] WHERE "deletedAt" IS NULL AND "id" = 3
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+//If you really want a hard-deletion and your model is paranoid, you can force it 
+//using the force: true option:
+//hard-deletion
+app.delete('/hard-delete-employee',function(req,res){
+    Employee.destroy({
+        where: {
+            id: 3
+        },
+        force: true
+    }).then(function(success){
+        console.log("Employee has been deleted")
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+
 app.listen(8000)
 
 
 // {
-// 	"firstName": "heer",
-// 	"lastName": "mashru",
+// 	"firstName": "harsh",
+// 	"lastname": "mashru",
 // 	"email": "h@gmail.com",
-// 	"contactNo": 9426254816,
-// 	"altContactNo": 8780802107,
+// 	"contactNo": 9426254817,
+// 	"altContactNo": 8780802117,
 // 	"designation": "CE",
-// 	"yearsOfExperience": 2,
+// 	"yearsOfExperience": 1,
 // 	"currentAddress": "dfgvbhnj",
 // 	"city": "rajkot",
 // 	"state": "gujarat",
 // 	"pinCode": 360005,
 // 	"panNumber": 1234567890,
-// 	"adharNumber": 0987654321,
-// 	"passportNumber": 2345678901
+// 	"adharNumber": 298765564321,
+// 	"passportNumber": "cfh34567"
 // }
