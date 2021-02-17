@@ -1,0 +1,2 @@
+Today I learned about how to perform update, delete, other raw queries using sequelize, what is paranoid             
+and how to use 'deletedAt' column and did practice on queries.
