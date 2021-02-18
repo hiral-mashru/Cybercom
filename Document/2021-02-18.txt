@@ -1,0 +1,3 @@
+Today I learned about how updatedAt column works, jwt introduction, how to install jwt, register login 
+apis using jwt.sign(), it's configurations, jwt.verify(), it's middleware, sequelize cli installation, 
+folder structure of it, create and drop database, modelMigration, rollback migration, seeder, etc...
