@@ -32,4 +32,14 @@ nodemon app.js
 set ""start": "nodemon app.js"" in package.json, ans run:
 npm start
 
-npm i sequelize mysql2 body-parser
+npm i sequelize mysql2 body-parser jsonwebtoken bcrypt
+
+token: 
+( header: {"alg":"HS256","typ":"JWT"} )
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.
+( payload : data )
+eyJlbWFpbCI6ImhAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTYxMzYzNzExMCwibmJmIjoxNjEzNjk3MTEwLCJleHAiOjE2MTQyMzcxMTAsImF1ZCI6InNpdGUtdXNlcnMifQ.
+( signature : header.payload.signature )
+o1KFAmsBqvcRsrOq7uWbuF4wtV48OpVjMF-JSe1YjzQ
+
+-> to use 'RS256' algo, we need to attach file.
