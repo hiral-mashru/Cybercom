@@ -43,3 +43,24 @@ eyJlbWFpbCI6ImhAZ21haWwuY29tIiwiaWQiOjEsImlhdCI6MTYxMzYzNzExMCwibmJmIjoxNjEzNjk3
 o1KFAmsBqvcRsrOq7uWbuF4wtV48OpVjMF-JSe1YjzQ
 
 -> to use 'RS256' algo, we need to attach file.
+
+
+npm i sequelize-cli 
+
+npx sequelize --help //to see all the sequelize command
+
+npx sequelize init // it will generate config, migrations, seeder, models folders
+
+npx sequelize init:config // it will generate config folder, it's for configuration like database connection, jwt middleware, etc...
+
+npx sequelize init:migrations // it will generate migrations folder, it's for table's structure or schema
+
+npx sequelize init:models // it will generate models folder, it's for crud operation
+
+npx sequelize init:seeders // it will generate seeders folder
+
+-> to create database: edit config.json
+npx sequelize db:create
+
+-> to drop database
+npx sequelize db:drop
