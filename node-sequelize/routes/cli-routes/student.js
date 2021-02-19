@@ -14,11 +14,6 @@ const router = express.Router()
 //profile api for student
 router.post('/profile',jwtMiddleware.checkToken,(req,res)=>{
     
-    // res.status(200).json({
-    //     status: 1,
-    //     userdata: req.user,
-    //     message: "Token value parsed"
-    // })
     let student_id = req.user.id;
     studentModel.findByPk(student_id).then(student => {
         if(student){
@@ -28,6 +23,10 @@ router.post('/profile',jwtMiddleware.checkToken,(req,res)=>{
                 data: student
             })
         }
+    }).catch(err=>{
+        res.status(500).json({
+            data: err
+        })
     })
 })
 
@@ -102,6 +101,10 @@ router.post("/student",(req,res)=>{
                 })
             })
         }
+    }).catch(data=>{
+        res.status(500).json({
+            data: data
+        })
     })
 })
 

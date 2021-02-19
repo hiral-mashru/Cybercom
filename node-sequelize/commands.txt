@@ -103,9 +103,14 @@ npx sequelize db:seed:undo --seed seederFileName
 -> faker package
 npm i faker
 
+///// pm2
 
-
-
+npm i pm2 -g
+npx pm2 start app.js
+npx pm2 stop app.js
+npx pm2 list
+npx pm2 descripe <idName of pm2>
+npx pm2 monit
 
 
 
