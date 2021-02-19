@@ -54,8 +54,7 @@ var User = sequelize.define("tbl_jwt_users",{
 sequelize.sync()
 
 // user profile data
-router.post("/profile",(req,res)=>{
-    jwtMiddleware.checkToken
+router.post("/profile",jwtMiddleware.checkToken,(req,res)=>{
     res.status(200).json({
         status: 1,
         userdata: req.user,

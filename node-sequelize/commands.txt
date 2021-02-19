@@ -64,3 +64,57 @@ npx sequelize db:create
 
 -> to drop database
 npx sequelize db:drop
+
+-> to generate a model file and  migration file 
+npx sequelize model:generate --name ModelName --attributes name:string,description:string,amount:integer OR
+npx sequelize model:generate --name=ModelName --attributes=name:string,description:string,amount:integer
+
+-> to save changes done in migration file: it will also add one table called 'sequelizemeta' which tracks all the migrations and save into the table
+npx sequelize db:migrate
+
+-> to delete table, to revert the latest migration
+npx sequelize db:migrate:undo
+
+-> to delete all tables, to revert all migrations
+npx sequelize db:migrate:undo:all 
+
+-> to get back all migrations
+npx sequelize db:migrate
+
+-> to see migration status
+npx sequelize db:migrate:status
+
+-> to insert the data, we need seeder file, we can insert the data in any table using seeder file
+npx sequelize seed:generate --name test-stuff
+
+-> run all seeder file
+npx sequelize db:seed:all
+
+-> run specific seeder
+npx sequelize db:seed --seed seederFileName
+
+-> to delete all the data from all table either it's entered by seed files or manually
+npx sequelize db:seed:undo:all
+
+-> to delete all the data from a specific table
+npx sequelize db:seed:undo --seed seederFileName
+
+
+-> faker package
+npm i faker
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
