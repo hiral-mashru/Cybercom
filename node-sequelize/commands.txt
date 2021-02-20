@@ -112,6 +112,7 @@ npx pm2 list
 npx pm2 descripe <idName of pm2>
 npx pm2 monit
 
+npm install --global pm2@latest
 
 
 

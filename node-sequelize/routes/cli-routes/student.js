@@ -23,9 +23,9 @@ router.post('/profile',jwtMiddleware.checkToken,(req,res)=>{
                 data: student
             })
         }
-    }).catch(err=>{
+    }).catch(data=>{
         res.status(500).json({
-            data: err
+            data: data
         })
     })
 })
@@ -69,13 +69,15 @@ router.post('/login',(req,res)=>{
                 message:"Student does not exist with  this email address"
             })
         }
-    }).catch(err=>{
-        console.log(err)    
+    }).catch(data=>{
+        res.status(500).json({
+            data: data
+        })
     })
 })
 
 //create student api
-router.post("/student",(req,res)=>{
+router.post('/student',(req,res)=>{
     studentModel.findOne({
         where: {
             email: {
@@ -101,9 +103,9 @@ router.post("/student",(req,res)=>{
                 })
             })
         }
-    }).catch(data=>{
-        res.status(500).json({
-            data: data
+    }).catch(error=>{
+        res.json({
+            data: error
         })
     })
 })
