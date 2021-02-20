@@ -12,7 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Actor.belongsToMany(models.Role, {
-        through: "ActorRoles"
+        through: "ActorRoles",
+        foreignKey: "actorId",
+        as: "actors"
       })
     }
   };

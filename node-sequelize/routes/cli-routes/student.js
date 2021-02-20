@@ -101,11 +101,17 @@ router.post('/student',(req,res)=>{
                     status: 1,
                     message: "Student created successfully"
                 })
+            }).catch(err=>{
+                res.status(500).json({
+                    status: 0,
+                    data: err
+                })
             })
         }
     }).catch(error=>{
-        res.json({
-            data: error
+        res.status(500).json({
+            status: 0,
+            data: [error]
         })
     })
 })
