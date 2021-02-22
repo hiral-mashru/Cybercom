@@ -1,0 +1,1 @@
+Today, I did practice on sequelize-cli commands, jwt token, migrations, undo migrations, etc... and learned about how to run migrations automatically.
