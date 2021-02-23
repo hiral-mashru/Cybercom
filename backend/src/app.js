@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const JWT = require('jsonwebtoken')
 const jwtConfig = require('../config/jwtConfig')
 const jwtMiddleware = require('../config/jwtMiddleware')
+require('../core/migration');
 const Op = Sequelize.Op
 
 const app = express()
