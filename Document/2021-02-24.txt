@@ -1,0 +1,1 @@
+Today I learned about how to do migrations after user's permission, the packages for changing font style, font size, did some operations using umzug.
