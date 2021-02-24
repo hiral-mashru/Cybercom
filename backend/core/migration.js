@@ -20,11 +20,33 @@ var umzug = new Umzug({
 // umzug.down({ to: '20210223113512-create-address' })
 umzug.pending().then(function (migrations) {
   if(migrations.length > 0){
-      umzug.up().then(function()  {
-        console.log('Migration complete!');
-      }).catch(err => {
-        throw `Unable to perform migration due to ${err}`;
-      });
+    console.log("migrations",migrations)
+    const readline = require('readline');
+
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout
+    });
+
+    rl.question('Do you wwant to run migration? ', (answer) => {
+      // TODO: Log the answer in a database
+      console.log(`Thank you for your valuable feedback: ${answer}`);
+      if(answer == 'y' || answer =='yes'){
+        umzug.up().then(function()  {
+          console.log('Migration complete!');
+        }).catch(err => {
+          throw `Unable to perform migration due to ${err}`;
+        });
+      }
+      rl.close();
+    });
+      // umzug.up().then(function()  {
+      //   console.log('Migration complete!');
+      // }).catch(err => {
+      //   throw `Unable to perform migration due to ${err}`;
+      // });
+  } else{
+    console.log("No migrations are pending...")
   }
 });
 
