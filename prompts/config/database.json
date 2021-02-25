@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "backend",
+    "database": "database_development",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -11,15 +11,13 @@
     "password": null,
     "database": "database_test",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging": false
+    "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": null,
     "database": "database_production",
     "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging": true
+    "dialect": "mysql"
   }
 }

@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
 const JWT = require('jsonwebtoken')
 const jwtConfig = require('../config/jwtConfig')
 const jwtMiddleware = require('../config/jwtMiddleware')
-console.log("migr",require('../core/migration'));
+require('../core/migration');
 require('dotenv').config()
 const chalk = require('chalk')
 const Op = Sequelize.Op
@@ -115,3 +115,6 @@ app.post('/user',(req,res)=>{
     })
 })
 
+app.listen(process.env.PORT, async () => {
+    console.log(chalk.green('listening on port '+process.env.PORT));
+});

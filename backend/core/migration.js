@@ -1,6 +1,5 @@
 /* For migrations */
 const path = require('path');
-const express = require('express')
 const Confirm = require('prompt-confirm');
 const chalk = require('chalk')
 const readline = require('readline');
@@ -24,12 +23,13 @@ var umzug = new Umzug({
   }
 });
 
-const app = express()
+var flag = true
 // umzug.down(/*{ to: '20210223113512-create-address' }*/)
 umzug.pending().then(function (migrations) {
 
   if(migrations.length > 0){
     migrations.map(a => console.log(a.file))
+    flag = false
     ////////////////////////////////////////////
     // const rl = readline.createInterface({
     //   input: process.stdin,
@@ -55,9 +55,7 @@ umzug.pending().then(function (migrations) {
       // console.log("ans",answer);
       umzug.up().then(function()  {
         console.log('Migration complete!');
-        // app.listen(process.env.PORT, async () => {
-        //   console.log(chalk.green('listening on port '+process.env.PORT));
-        // });
+        
       }).catch(err => {
         throw `Unable to perform migration due to ${err}`;
       });
@@ -74,9 +72,7 @@ umzug.pending().then(function (migrations) {
   } else {
 
     console.log(chalk.green("No migrations are pending..."))
-    // app.listen(process.env.PORT, async () => {
-    //   console.log(chalk.green('listening on port '+process.env.PORT));
-    // });
+
     /////////////////////////////////////////////////////////////////
     // function fn(){
     //   const response = prompts({
@@ -94,4 +90,4 @@ umzug.pending().then(function (migrations) {
 
 });
 
-module.exports = umzug 
+module.exports = umzug  
