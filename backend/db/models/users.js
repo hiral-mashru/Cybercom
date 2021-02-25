@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
+    address: {
+      type: DataTypes.STRING,
+    },
     email: {
       type: DataTypes.STRING,
       validate: {

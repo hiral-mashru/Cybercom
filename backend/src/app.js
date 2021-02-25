@@ -6,9 +6,10 @@ const bcrypt = require('bcrypt')
 const JWT = require('jsonwebtoken')
 const jwtConfig = require('../config/jwtConfig')
 const jwtMiddleware = require('../config/jwtMiddleware')
-require('../core/migration');
+console.log("migr",require('../core/migration'));
+require('dotenv').config()
+const chalk = require('chalk')
 const Op = Sequelize.Op
-
 const app = express()
 
 app.use(bodyParser.json())
@@ -114,7 +115,3 @@ app.post('/user',(req,res)=>{
     })
 })
 
-
-app.listen(8000,function(){
-    console.log("Application is running...")
-})

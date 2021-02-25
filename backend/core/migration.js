@@ -1,8 +1,14 @@
 /* For migrations */
 const path = require('path');
+const express = require('express')
+const Confirm = require('prompt-confirm');
+const chalk = require('chalk')
+const readline = require('readline');
+const prompts = require('prompts');
 var Umzug = require('umzug');
 let rootPath = path.resolve(__dirname, '../');
 const connection = require('./connection');
+
 var umzug = new Umzug({
   storage: 'sequelize',
     storageOptions: {
@@ -17,37 +23,75 @@ var umzug = new Umzug({
       path: path.join(rootPath, 'db/migrations/')
   }
 });
-// umzug.down({ to: '20210223113512-create-address' })
+
+const app = express()
+// umzug.down(/*{ to: '20210223113512-create-address' }*/)
 umzug.pending().then(function (migrations) {
+
   if(migrations.length > 0){
-    console.log("migrations",migrations)
-    const readline = require('readline');
+    migrations.map(a => console.log(a.file))
+    ////////////////////////////////////////////
+    // const rl = readline.createInterface({
+    //   input: process.stdin,
+    //   output: process.stdout
+    // });
+    // rl.question('Do you want to run migration? ', (answer) => {
+    //   console.log(chalk.red(`Thank you : ${answer}`));
+    //   if(answer == 'y' || answer =='yes'){
+    //     umzug.up().then(function()  {
+    //       console.log('Migration complete!');
+    //     }).catch(err => {
+    //       throw `Unable to perform migration due to ${err}`;
+    //     });
+    //   }
+    //   rl.close();
+    // });
+    /////////////////////////////////////
 
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout
-    });
+  const confirm = new Confirm('Wanna do migrations?')
+  .ask(function(answer) {
+    // console.log(answer);
+    if(answer){
+      // console.log("ans",answer);
+      umzug.up().then(function()  {
+        console.log('Migration complete!');
+        // app.listen(process.env.PORT, async () => {
+        //   console.log(chalk.green('listening on port '+process.env.PORT));
+        // });
+      }).catch(err => {
+        throw `Unable to perform migration due to ${err}`;
+      });
+    }
+  });
 
-    rl.question('Do you wwant to run migration? ', (answer) => {
-      // TODO: Log the answer in a database
-      console.log(`Thank you for your valuable feedback: ${answer}`);
-      if(answer == 'y' || answer =='yes'){
-        umzug.up().then(function()  {
-          console.log('Migration complete!');
-        }).catch(err => {
-          throw `Unable to perform migration due to ${err}`;
-        });
-      }
-      rl.close();
-    });
+    /////////////////////////////////////
       // umzug.up().then(function()  {
       //   console.log('Migration complete!');
       // }).catch(err => {
       //   throw `Unable to perform migration due to ${err}`;
       // });
-  } else{
-    console.log("No migrations are pending...")
+
+  } else {
+
+    console.log(chalk.green("No migrations are pending..."))
+    // app.listen(process.env.PORT, async () => {
+    //   console.log(chalk.green('listening on port '+process.env.PORT));
+    // });
+    /////////////////////////////////////////////////////////////////
+    // function fn(){
+    //   const response = prompts({
+    //     type: 'number',
+    //     name: 'value',
+    //     message: 'Do you want to run migration?',
+    //     validate: value => value == 'y' || value == 'yes' ? `Nightclub is 18+ only` : true
+    //   });
+     
+    //   console.log(response.value) // => { value: 24 }
+    // }
+    // fn()
+    ///////////////////////////////////////////////////////////////
   }
+
 });
 
-module.exports = umzug;
+module.exports = umzug 

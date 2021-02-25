@@ -1,0 +1,1 @@
+npm i express body-parser sequelize sequelize-cli jsonwebtoken umzug readline chalk prompts prompt-confirm env-cmd dotenv 
