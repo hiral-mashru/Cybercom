@@ -1,0 +1,1 @@
+Today I learned about routes, how to manage routes, show warnings with yellow font color, did given tasks.
