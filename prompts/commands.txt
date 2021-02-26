@@ -1,3 +1,0 @@
-npm i nodemon express body-parser sequelize sequelize-cli jsonwebtoken bcrypt mysql2 umzug chalk prompts prompt-confirm
-
-npx sequelize init

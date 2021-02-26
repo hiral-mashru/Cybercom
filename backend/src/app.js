@@ -114,7 +114,3 @@ app.post('/user',(req,res)=>{
         })
     })
 })
-
-app.listen(process.env.PORT, async () => {
-    console.log(chalk.green('listening on port '+process.env.PORT));
-});

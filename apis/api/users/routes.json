@@ -1,0 +1,14 @@
+[
+    {
+        "path" : "/findAll",
+        "method" : "get",
+        "action" : "Users.findAll",
+        "public" : true
+    },
+    {
+        "path" : "/insert",
+        "method" : "post",
+        "action" : "Users.insert",
+        "public" : false
+    }
+]

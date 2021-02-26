@@ -1,0 +1,15 @@
+[
+    {
+        "path": "/",
+        "method": "get",
+        "action": "Prompt.welcome",
+        "middleware": [""],
+        "public": true
+    },
+    {
+        "path": "/confirm",
+        "method": "get",
+        "action": "Prompt.confirm",
+        "public": true
+    }
+]
