@@ -1,9 +1,15 @@
 /* For migrations */
+const express = require('express')
 const path = require('path');
+const Confirm = require('prompt-confirm');
 const chalk = require('chalk')
+const readline = require('readline');
+const prompts = require('prompts');
 var Umzug = require('umzug');
 let rootPath = path.resolve(__dirname, '../');
 const connection = require('./connection');
+require('dotenv').config()
+const app = express()
 
 var umzug = new Umzug({
     storage: 'sequelize',
@@ -25,11 +31,31 @@ var umzug = new Umzug({
 // })
 
 umzug.pending().then(function (migrations) {
-    umzug.up().then(function()  {
-        console.log(chalk.greenBright('Migration complete!'));
-    }).catch(err => {
-        throw `Unable to perform migration due to ${err}`;
+    console.log("Pending migrations : ")
+    migrations.map(a => console.log(chalk.yellow(a.file)))
+    new Confirm('Wanna do migrations?')
+    .run()
+    .then(function(answer) {
+      if(answer){
+        if(migrations.length > 0){
+          umzug.up().then(function()  {
+            console.log(chalk.green('Migration complete!'));
+            onserver()
+          }).catch(err => {
+            throw `Unable to perform migration due to ${err}`;
+          });
+        } else {
+          console.log(chalk.green("No migrations are pending..."))
+          onserver()
+        }
+      }
     });
-});
-
+  });
+  
+  function onserver(){
+    app.listen(process.env.PORT, async () => {
+      console.log(chalk.green('listening on port '+process.env.PORT));
+    })
+  }
+  
 module.exports = umzug
