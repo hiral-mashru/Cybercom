@@ -1,0 +1,1 @@
+Today I did validations in routing, implimented middlewares, and did all the given tasks.
