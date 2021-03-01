@@ -1,6 +1,6 @@
 [
     {
-        "path" : "/findAll",
+        "path" : "/",
         "method" : "get",
         "action" : "Users.findAll",
         "public" : true
@@ -9,6 +9,7 @@
         "path" : "/insert",
         "method" : "post",
         "action" : "Users.insert",
+        "middleware": ["jwtMiddleware.checkToken","jwtMiddleware.token"],
         "public" : false
     }
 ]

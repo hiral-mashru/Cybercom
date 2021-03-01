@@ -10,7 +10,8 @@ require('../core/migration');
 require('dotenv').config()
 const chalk = require('chalk')
 const Op = Sequelize.Op
-const app = express()
+// const app = express()
+const app = require('../core/migration');
 
 app.use(bodyParser.json())
 

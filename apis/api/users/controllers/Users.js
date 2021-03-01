@@ -1,19 +1,29 @@
-const users = require('../../../db/models')
+const users = require('../../../db/models').User
 
 module.exports = {
     findAll: async (req, res) => {
-        res.json({
-            status: 1
+        users.findAll().then(data=> {
+            res.status(200).json({
+                status: 1,
+                data: data
+            })
         })
     },
     insert: async (req, res) => {
+        
         users.create({
-            "name" : "heer",
-            "email" : "heer@gmail.com"
-        }).then(()=>{
-            res.json({
+            name: "heer",
+            email: "h@gmail.com",
+        }).then(data=> {
+            res.status(200).json({
                 status: 1,
-                data: "inserted"
+                message: "User inserted successfully...",
+                data: data
+            })
+        }).catch(err=>{
+            res.status(500).json({
+                status: 0,
+                data: err
             })
         })
     }

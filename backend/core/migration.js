@@ -57,3 +57,5 @@ function onserver(){
     console.log(chalk.green('listening on port '+process.env.PORT));
   })
 }
+
+module.exports = app

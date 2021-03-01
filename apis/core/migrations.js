@@ -29,15 +29,15 @@ var umzug = new Umzug({
 // umzug.down(/*{ to: '20210223113512-create-address' }*/).then(()=>{
 //   console.log("downn")
 // })
-
+// offserver()
 umzug.pending().then(function (migrations) {
-    console.log("Pending migrations : ")
-    migrations.map(a => console.log(chalk.yellow(a.file)))
     new Confirm('Wanna do migrations?')
     .run()
     .then(function(answer) {
       if(answer){
         if(migrations.length > 0){
+          console.log("Pending migrations : ")
+          migrations.map(a => console.log(chalk.yellow(a.file)))
           umzug.up().then(function()  {
             console.log(chalk.green('Migration complete!'));
             onserver()
@@ -48,6 +48,8 @@ umzug.pending().then(function (migrations) {
           console.log(chalk.green("No migrations are pending..."))
           onserver()
         }
+      } else {
+        onserver()
       }
     });
   });
@@ -57,5 +59,9 @@ umzug.pending().then(function (migrations) {
       console.log(chalk.green('listening on port '+process.env.PORT));
     })
   }
-  
-module.exports = umzug
+
+module.exports = app
+// module.exports = {
+//   umzug: umzug,
+//   app: app
+// }
