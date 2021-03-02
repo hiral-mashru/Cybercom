@@ -3,13 +3,16 @@
         "path" : "/",
         "method" : "get",
         "action" : "Users.findAll",
-        "public" : true
+        "public" : true,
+        "root": false
     },
     {
         "path" : "/insert",
         "method" : "post",
         "action" : "Users.insert",
         "middleware": ["jwtMiddleware.checkToken","jwtMiddleware.token"],
-        "public" : false
+        "globalMiddleware": ["middleware1.middle"],
+        "public" : false,
+        "root": true
     }
 ]
