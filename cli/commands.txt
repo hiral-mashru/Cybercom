@@ -1,0 +1,5 @@
+npm init
+
+chmod +x ./cli.js
+
+npm install -g .

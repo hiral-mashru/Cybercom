@@ -2,7 +2,7 @@
   "name": "apis",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
   "dependencies": {
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
@@ -23,8 +23,15 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "framework": "node js.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "bin": {
+    "framework": "./js.js",
+    "folder": "./bin/global.js"
+  },
+  "preferGlobal": true
 }

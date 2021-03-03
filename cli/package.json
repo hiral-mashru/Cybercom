@@ -1,0 +1,19 @@
+{
+  "name": "cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "framework": "node cli.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "bin": {
+    "framework": "./cli.js"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "chalk": "^4.1.0"
+  }
+}
