@@ -10,11 +10,16 @@ const [,,...args] = process.argv // to parse command line arguments
 const[type,...modulle] = args
 const rootDir = process.cwd()
 
-if(type==='create-module') {
+if(type==='practice') {
     
     if(modulle){
         if (!fs.existsSync(String(modulle))) {
-            fs.mkdirSync(String(modulle));
+            fs.mkdir(path.join(rootDir, String(modulle)),{ recursive: true }, (err) => { 
+                if (err) { 
+                    return console.error(err); 
+                } 
+                console.log(chalk.green(`Directory ${modulle} created successfully!`)); 
+            });
         } else {
             console.log(chalk.black.bgYellowBright('WARNING:')+`${modulle} already exists`)
         }
@@ -60,26 +65,43 @@ if(type==='create-module') {
         } 
         console.log(chalk.green('Directory \'src\' created successfully!')); 
     });
-    fs.writeFile(path.join(rootDir, '.env'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
-    fs.writeFile(path.join(rootDir, 'core', 'connection.js'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
-    fs.writeFile(path.join(rootDir, 'core', 'migration.js'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
-    fs.writeFile(path.join(rootDir, 'core', 'routes.js'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
-    fs.writeFile(path.join(rootDir, 'core', 'models.js'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
-    fs.writeFile(path.join(rootDir, 'src', 'app.js'),'', function(err, result) {
-        if(err) console.log('error', err);
-    })
+    if(!fs.existsSync(rootDir+'/.env')) {
+        fs.writeFile(path.join(rootDir, '.env'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/core/connection.js')) {
+        fs.writeFile(path.join(rootDir, 'core', 'connection.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/core/migration.js')) {   
+        fs.writeFile(path.join(rootDir, 'core', 'migration.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/core/routes.js')) {
+        fs.writeFile(path.join(rootDir, 'core', 'routes.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/core/models.js')) {
+        fs.writeFile(path.join(rootDir, 'core', 'models.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/core/services.js')) {
+        fs.writeFile(path.join(rootDir, 'core', 'services.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
+    if(!fs.existsSync(rootDir+'/src/app.js')) {
+        fs.writeFile(path.join(rootDir, 'src', 'app.js'),'', function(err, result) {
+            if(err) console.log('error', err);
+        })
+    }
 
-} else if(type === 'api') {
+} else if(type === 'create-module') {
     
     for(let m of modulle){
         if(m) {
@@ -101,18 +123,18 @@ if(type==='create-module') {
                 } 
                 console.log(chalk.green(`Directory ${m}/services created successfully!`)); 
             });
-            fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'', function(err, result) {
-                if(err) console.log('error', err);
-            })
+            if(!fs.existsSync(rootDir+'/api/'+m+'/routes.json')) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'', function(err, result) {
+                    if(err) console.log('error', err);
+                })
+            }
         } else {
             console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module\'s name')
         }
     }
 
 } else {
-
     console.log(chalk.black.bgYellowBright('WARNING:')+' Type is not provided')
-
 }
 
 

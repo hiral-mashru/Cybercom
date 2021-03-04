@@ -1,5 +1,15 @@
 npm init
 
-chmod +x ./cli.js
+chmod +x cli.js
 
 npm install -g .
+
+run: C:\Users\Administrator\AppData\Roaming\npm\framework
+
+//to publish
+npm login 
+
+npm adduser --registry
+npm whoami --registry
+
+npm publish --access public

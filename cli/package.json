@@ -1,16 +1,15 @@
 {
-  "name": "cli",
+  "name": "@hiralmashru/folder-structure-with-cli",
   "version": "1.0.0",
   "description": "",
-  "main": "./cli.js",
+  "main": "cli.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "framework": "node cli.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Hiral Mashru",
   "license": "ISC",
   "bin": {
-    "framework": "./cli.js"
+    "framework": "cli.js"
   },
   "preferGlobal": true,
   "dependencies": {
