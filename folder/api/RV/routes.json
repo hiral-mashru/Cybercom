@@ -1,0 +1,16 @@
+[
+    {
+        "path": "/",
+        "method": "get",
+        "action": "RV.welcome",
+        "public": true,
+        "root": false
+    },
+    {
+        "path": "/global",
+        "method": "get",
+        "action": "RV.globall",
+        "public": true,
+        "root": false
+    }
+]

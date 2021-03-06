@@ -186,5 +186,11 @@ function createStructure(){
             console.log('exists '+fs.existsSync(rootDir+'/src/app.js'))
         })
     }
-    console.log(chalk.green('Boilerplate structure is created...'))
+    new Confirm('Do you want to setup db ')
 }
+
+
+function createJSON(){
+    
+}
+

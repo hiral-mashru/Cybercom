@@ -8,8 +8,6 @@ let rootPath = path.resolve(__dirname, '../');
 const connection = require('./connection');
 require('dotenv').config()
 const app = express()
-const http = require('http');
-const server = http.createServer()
 
 const config = {
   port: 8000,
@@ -45,21 +43,21 @@ umzug.pending().then(function (migrations) {
           migrations.map(a => console.log(chalk.yellow(a.file)))
           umzug.up().then(function()  {
             console.log(chalk.green('Migration complete!'));
-            serverListen(server, config.port);
+            serverListen();
           }).catch(err => {
             throw `Unable to perform migration due to ${err}`;
           });
         } else {
           console.log(chalk.green("No migrations are pending..."))
-          serverListen(server, config.port);
+          serverListen();
         }
       } else {
-        serverListen(server, config.port);
+        serverListen();
       }
     });
   });
 
-  function serverListen(server, port){
+  function serverListen(){
     // server.on('error', e => {
     //   console.log(`port ${config.port} is taken`)
     //   config.port +=1;

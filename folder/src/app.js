@@ -1,3 +1,10 @@
+global.setup = {}
+setup.functions = {}
+// setup.functions["funcFile"] = {}
+setup.functions.funcFile = {}
+
+require('../functions/funcFile')
+
 const bodyParser = require('body-parser')
 require('dotenv').config()
 global.framework={};
@@ -5,11 +12,10 @@ require('../core/migrations');
 const routes = require('../core/routes');
 const app = require('../core/migrations');
 app.use(bodyParser.json())
-global.setup = {}
-setup = { functions: {} }
 
 for(let key in routes.public){
-    app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);
+    console.log(routes.public[key].path)
+    app[routes.public[key].method](routes.public[key].path, routes.public[key].middleware, routes.public[key].globalMiddleware,routes.public[key].action);
 }
 
 for(let key in routes.protected){
