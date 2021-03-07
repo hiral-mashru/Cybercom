@@ -13,3 +13,6 @@ npm adduser --registry
 npm whoami --registry
 
 npm publish --access public
+
+
+@hiralmashru/boilerplate-structure-cli

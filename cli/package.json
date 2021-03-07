@@ -1,16 +1,17 @@
 {
-  "name": "@hiralmashru/cli",
+  "name": "@hiralmashru/boilerplate-structure-cli",
   "version": "1.0.0",
   "description": "",
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "HIral Mashru",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0",
     "download-git-repo": "^3.0.2",
+    "inquirer": "^8.0.0",
     "prompt-confirm": "^2.0.4"
   }
 }

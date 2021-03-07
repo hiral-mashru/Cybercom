@@ -9,6 +9,7 @@ const[type,...modulle] = args
 const rootDir = process.cwd()
 const download = require('download-git-repo')
 var flag = false
+const inquirer = require('inquirer')
 
 if(type==='create-folder') {
     
@@ -28,14 +29,14 @@ if(type==='create-folder') {
     }
 
 } else if(type === 'init') {
-    if(fs.existsSync(rootDir+'/.env')){
+    if(fs.existsSync(rootDir+'/src/app.js')){ // 1 doubt
         new Confirm('You have already done initialization. Do you want to do init?')
         .run()
         .then(function(answer){
             if(answer){
                 download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                     flag = true
-                    console.log(err ? 'Error' : 'Success '+flag)
+                    console.log(err ? 'Error' : 'Success')
                     if(!err){
                         createStructure()
                     }
@@ -99,56 +100,47 @@ function createStructure(){
     fs.mkdir(path.join(rootDir, 'api'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
-        } 
-        console.log(chalk.green('Directory \'api\' created successfully!')); 
+        }  
     });
     fs.mkdir(path.join(rootDir, 'config'), { recursive: true },(err) => { 
         if (err) { 
             return console.error(err); 
-        } 
-        console.log(chalk.green('Directory \'config\' created successfully!')); 
+        }  
     });
     fs.mkdir(path.join(rootDir, 'core'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'core\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'db'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'db\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'db','models'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'db/models\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'db','migrations'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'db/migrations\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'db','seeders'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'db/seeders\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'middlewares'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'middlewares\' created successfully!')); 
     });
     fs.mkdir(path.join(rootDir, 'src'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
-        console.log(chalk.green('Directory \'src\' created successfully!')); 
     });
     if(!fs.existsSync(rootDir+'/.env')) {
         fs.writeFile(path.join(rootDir, '.env'),'', function(err, result) {
@@ -186,11 +178,74 @@ function createStructure(){
             console.log('exists '+fs.existsSync(rootDir+'/src/app.js'))
         })
     }
-    new Confirm('Do you want to setup db ')
+    var setting;
+    new Confirm('Do you want to config db right now?')
+    .run()
+    .then(function(answer){
+        if(answer){
+            new Confirm('Do you want to setup development env?')
+            .run()
+            .then(function(answer){
+                if(!fs.existsSync(rootDir+'/config'+'/database.json')) {
+                    if(answer){
+                        setting = 'dev'
+                        createJSON(setting)
+                    } else {
+                        console.log("Go for production env setup...")
+                        setting = 'prod'
+                        createJSON(setting)
+                    }
+                }
+            })
+        }
+    })
 }
 
 
-function createJSON(){
-    
+function createJSON(setting){
+    var questions = [
+        {
+          type: 'input',
+          name: 'username',
+          message: "username: "
+        },
+        {
+            type: 'input',
+            name: 'password',
+            message: "password: "
+        },
+        {
+            type: 'input',
+            name: 'database',
+            message: "database: "
+        },
+        {
+            type: 'input',
+            name: 'host',
+            message: "host: "
+        },
+        {
+            type: 'input',
+            name: 'dialect',
+            message: "dialect: "
+        },
+        {
+            type: 'input',
+            name: 'logging',
+            message: "logging: "
+        }
+    ]
+    inquirer.prompt(questions).then(answers => {
+        if(setting === 'dev'){
+            fs.writeFile(path.join(rootDir, 'config','database.json'),"{\"development\":{\"username\":\""+answers['username']+"\",\"password\":\""+answers['password']+"\",\"database\":\""+answers['database']+"\",\"host\":\""+answers['host']+"\",\"dialect\":\""+answers['dialect']+"\",\"logging\":"+answers['logging']+"}}", function(err, result) {
+                if(err) console.log('error', err);
+            })
+        } 
+        else if(setting === 'prod'){
+            fs.writeFile(path.join(rootDir, 'config','database.json'),"{\"production\":{\"username\":\""+answers['username']+"\",\"password\":\""+answers['password']+"\",\"database\":\""+answers['database']+"\",\"host\":\""+answers['host']+"\",\"dialect\":\""+answers['dialect']+"\",\"logging\":"+answers['logging']+"}}", function(err, result) {
+                if(err) console.log('error', err);
+            })
+        }
+    })
 }
 

@@ -1,10 +1,9 @@
 global.setup = {}
 setup.functions = {}
+// setup.functions["funcFile"] = {}
 setup.functions.funcFile = {}
 
 require('../functions/funcFile')
-
-setup.services = {}
 
 const bodyParser = require('body-parser')
 require('dotenv').config()

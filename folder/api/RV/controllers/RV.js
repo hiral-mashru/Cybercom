@@ -2,9 +2,11 @@
 // const funn = setup.functions["funcFile"]["func1"]
 module.exports = {
     welcome: (req,res) => {
+        var params = "Hiral"
         res.status(200).json({
             status: 1,
-            message: "Welcome"
+            message: "Welcome",
+            data: setup.functions["funcFile"]["func2"](params)
         })
     },
     globall: setup.functions["funcFile"]["func1"]
