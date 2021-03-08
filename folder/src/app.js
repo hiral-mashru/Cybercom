@@ -1,16 +1,15 @@
 global.setup = {}
-setup.functions = {}
-setup.functions.funcFile = {}
+require('../core/functions')
+const routes = require('../core/routes');
+// require('../functions/funcFile')
 
-require('../functions/funcFile')
-
-setup.services = {}
+console.log("setup.func",setup.functions)
 
 const bodyParser = require('body-parser')
 require('dotenv').config()
 global.framework={};
 require('../core/migrations');
-const routes = require('../core/routes');
+require('../core/services')
 const app = require('../core/migrations');
 app.use(bodyParser.json())
 
