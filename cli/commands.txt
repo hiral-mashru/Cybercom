@@ -15,4 +15,4 @@ npm whoami --registry
 npm publish --access public
 
 
-@hiralmashru/boilerplate-structure-cli
+@hiralmashru/folder-structure-cli

@@ -1,12 +1,12 @@
 {
-  "name": "@hiralmashru/boilerplate-structure-cli",
+  "name": "@hiralmashru/folder-structure-cli",
   "version": "1.0.0",
   "description": "",
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "HIral Mashru",
+  "author": "Hiral Mashru",
   "license": "ISC",
   "dependencies": {
     "chalk": "^4.1.0",

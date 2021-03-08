@@ -29,29 +29,31 @@ if(type==='create-folder') {
     }
 
 } else if(type === 'init') {
-    if(fs.existsSync(rootDir+'/src/app.js')){ // 1 doubt
-        new Confirm('You have already done initialization. Do you want to do init?')
-        .run()
-        .then(function(answer){
-            if(answer){
-                download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
-                    flag = true
-                    console.log(err ? 'Error' : 'Success')
-                    if(!err){
-                        createStructure()
-                    }
-                })
-            }
-        })
-    } else {
-        download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
-            flag = true
-            console.log(err ? 'Error' : 'Success '+flag)
-            if(!err){
-                createStructure()
-            }
-        })
-    }
+    fs.readdir(__dirname, function(err, files){
+        if(files.length){ // 1 doubt
+            new Confirm('You have already done initialization. Do you want to do init?')
+            .run()
+            .then(function(answer){
+                if(answer){
+                    download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
+                        flag = true
+                        console.log(err ? 'Error' : 'Success')
+                        if(!err){
+                            createStructure()
+                        }
+                    })
+                }
+            })
+        } else {
+            download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
+                flag = true
+                console.log(err ? 'Error' : 'Success '+flag)
+                if(!err){
+                    createStructure()
+                }
+            })
+        }
+    })
 
 } else if(type === 'create-module') {
     
