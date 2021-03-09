@@ -29,9 +29,9 @@ if(type==='create-folder') {
     }
 
 } else if(type === 'init') {
-    fs.readdir(__dirname, function(err, files){
-        if(files.length){ // 1 doubt
-            new Confirm('You have already done initialization. Do you want to do init?')
+    fs.readdir(process.cwd(), function(err, files){
+        if(files.length){
+            new Confirm({message: 'You have already done initialization. Do you want to do init?', default: false})
             .run()
             .then(function(answer){
                 if(answer){
@@ -181,11 +181,11 @@ function createStructure(){
         })
     }
     var setting;
-    new Confirm('Do you want to config db right now?')
+    new Confirm({message: 'Do you want to config db right now?', default: false})
     .run()
     .then(function(answer){
         if(answer){
-            new Confirm('Do you want to setup development env?')
+            new Confirm({message:'Do you want to setup development env?',default: false})
             .run()
             .then(function(answer){
                 if(!fs.existsSync(rootDir+'/config'+'/database.json')) {
@@ -209,32 +209,33 @@ function createJSON(setting){
         {
           type: 'input',
           name: 'username',
-          message: "username: "
+          message: "Enter username: "
         },
         {
-            type: 'input',
+            type: 'password',
             name: 'password',
-            message: "password: "
+            message: "Enter password: "
         },
         {
             type: 'input',
             name: 'database',
-            message: "database: "
+            message: "Enter database: "
         },
         {
             type: 'input',
             name: 'host',
-            message: "host: "
+            message: "Enter host: "
         },
         {
             type: 'input',
             name: 'dialect',
-            message: "dialect: "
+            message: "Enter dialect: "
         },
         {
-            type: 'input',
+            type: 'confirm',
             name: 'logging',
-            message: "logging: "
+            message: "Enter logging: ",
+            default: false
         }
     ]
     inquirer.prompt(questions).then(answers => {
