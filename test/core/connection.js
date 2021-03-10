@@ -1,7 +1,11 @@
 const Sequelize = require('sequelize');
 var config = require('../config/database.json');
-console.log(config.development)
-config = config["development"];
+
+if(config.development){
+    config = config.development
+} else {
+    config = config.production
+}
 
 if(!config){
     console.log("Invalid Database Configuration");
@@ -26,7 +30,7 @@ sequelize.authenticate().then(() => {
     throw `Unable to connect to the database: ${err}`
 });
 
-framework = {connection : sequelize};
+// framework = {connection : sequelize};
   
 sequelize.sync();
 

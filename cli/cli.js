@@ -35,6 +35,7 @@ if(type==='create-folder') {
             .run()
             .then(function(answer){
                 if(answer){
+                    console.log(chalk.green("Loading..."))
                     download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                         flag = true
                         console.log(err ? 'Error' : 'Success')
@@ -45,9 +46,10 @@ if(type==='create-folder') {
                 }
             })
         } else {
+            console.log(chalk.green("Loading..."))
             download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                 flag = true
-                console.log(err ? 'Error' : 'Success '+flag)
+                console.log(err ? 'Error' : 'Success ')
                 if(!err){
                     createStructure()
                 }
@@ -134,6 +136,11 @@ function createStructure(){
             return console.error(err); 
         } 
     });
+    fs.mkdir(path.join(rootDir, 'functions'),{ recursive: true }, (err) => { 
+        if (err) { 
+            return console.error(err); 
+        } 
+    });
     fs.mkdir(path.join(rootDir, 'middlewares'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
@@ -188,7 +195,7 @@ function createStructure(){
             new Confirm({message:'Do you want to setup development env?',default: false})
             .run()
             .then(function(answer){
-                if(!fs.existsSync(rootDir+'/config'+'/database.json')) {
+                if(fs.existsSync(rootDir+'/config'+'/database.json')) {
                     if(answer){
                         setting = 'dev'
                         createJSON(setting)

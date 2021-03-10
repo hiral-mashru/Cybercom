@@ -1,9 +1,8 @@
 global.setup = {}
 require('../core/functions')
-const routes = require('../core/routes');
 // require('../functions/funcFile')
 
-console.log("setup.func",setup.functions)
+// console.log("setup.func",setup.functions)
 
 const bodyParser = require('body-parser')
 require('dotenv').config()
@@ -12,6 +11,7 @@ require('../core/migrations');
 require('../core/services')
 const app = require('../core/migrations');
 app.use(bodyParser.json())
+const routes = require('../core/routes');
 
 for(let key in routes.public){
     console.log(routes.public[key].path)

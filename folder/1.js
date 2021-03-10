@@ -1,26 +1,35 @@
-global.setup = {}
-setup.functions = {}
-// setup.functions["funcFile"] = {}
-setup.functions.funcFile = {}
+// setup.functions = {}
 
-require('../functions/funcFile')
+// // require('../functions/funcFile')
+// const fs = require('fs')
+// var files = fs.readdirSync(__dirname+'/../functions/');
+// console.log("files",files)
+// var stats;
+// if(files!== []){
+//     for (let i of files){
+//         stats = fs.statSync(__dirname+'/../functions/'+i);
+//         check(stats)
+//         // if(stats.isDirectory(i)){
+//         //     files = fs.readdirSync(__dirname+'/../functions/'+i);
+//         // }
 
-const bodyParser = require('body-parser')
-require('dotenv').config()
-global.framework={};
-require('../core/migrations');
-const routes = require('../core/routes');
-const app = require('../core/migrations');
-app.use(bodyParser.json())
 
-for(let key in routes.public){
-    console.log(routes.public[key].path)
-    app[routes.public[key].method](routes.public[key].path, routes.public[key].middleware, routes.public[key].globalMiddleware,routes.public[key].action);
-}
+//         // var fileName = i.split('.')[0]
+//         // setup.functions[fileName] = require(__dirname+'/../functions/'+fileName)
+//     }
+// }
 
-for(let key in routes.protected){
-    app[routes.protected[key].method](routes.protected[key].path, routes.protected[key].middleware, routes.protected[key].globalMiddleware, routes.protected[key].action);
-}
+// function directory(stats){
 
-/////////////////////////////////////////////////////////////
+// }
 
+// function check(stats){
+
+// }
+
+// function file(){
+//     var fileName = i.split('.')[0]
+//     setup.functions[fileName] = require(__dirname+'/../functions/'+fileName)
+// }
+
+// console.log("setup.func",setup.functions)

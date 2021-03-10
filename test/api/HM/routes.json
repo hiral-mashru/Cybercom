@@ -1,0 +1,5 @@
+{
+    "path": "/",
+    "method": "get",
+    "action": "HM.welcome"
+}
