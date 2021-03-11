@@ -7,10 +7,10 @@ if(config.development){
     config = config.production
 }
 
-if(!config){
-    console.log("Invalid Database Configuration");
+if(!config.database){
+    console.log("You have not done db configuration...");
 }
-
+else {
 const sequelize = new Sequelize(config.database, config.username, config.password, {
     host: config.host,
     dialect: config.dialect/* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
@@ -35,3 +35,5 @@ sequelize.authenticate().then(() => {
 sequelize.sync();
 
 module.exports = sequelize;
+}
+ 
