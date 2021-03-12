@@ -12,5 +12,17 @@
         "action": "RV.globall",
         "public": true,
         "root": false
+    },
+    {
+        "path": "/student",
+        "method": "get",
+        "action": "RV.getData"
+    },
+    {
+        "path": "/insert",
+        "method": "post",
+        "action": "RV.insert",
+        "root": false,
+        "middleware": ["middle.errorHandler"]
     }
 ]

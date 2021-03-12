@@ -8,13 +8,11 @@ let rootPath = path.resolve(__dirname, '../');
 const connection = require('./connection');
 require('dotenv').config()
 const app = express()
-const http = require('http');
-const server = http.createServer()
+var config = require('../config/database.json');
 
-const config = {
-  port: 8000,
-  launched: false,
-};
+// if(config.database){
+
+try{
 
 var umzug = new Umzug({
     storage: 'sequelize',
@@ -30,7 +28,9 @@ var umzug = new Umzug({
         path: path.join(rootPath, 'db/migrations/')
     }
 });
-
+} catch(err){
+  console.log("Error")
+}
 // umzug.down(/*{ to: '20210223113512-create-address' }*/).then(()=>{
 //   console.log("downn")
 // })
@@ -45,21 +45,28 @@ umzug.pending().then(function (migrations) {
           migrations.map(a => console.log(chalk.yellow(a.file)))
           umzug.up().then(function()  {
             console.log(chalk.green('Migration complete!'));
-            serverListen(server, config.port);
+            serverListen();
           }).catch(err => {
-            throw `Unable to perform migration due to ${err}`;
+            throw `Unable to perform migration due to`;
           });
         } else {
           console.log(chalk.green("No migrations are pending..."))
-          serverListen(server, config.port);
+          serverListen();
         }
       } else {
-        serverListen(server, config.port);
+        serverListen();
       }
     });
-  });
+  }).catch(err =>{
+    console.log("Errorrrrrrrrrrrrrrrrrrrrrrrrrr")
+    serverListen()
+  })
+// } else {
+//   serverListen()
+// }
 
-  function serverListen(server, port){
+
+  function serverListen(){
     // server.on('error', e => {
     //   console.log(`port ${config.port} is taken`)
     //   config.port +=1;
@@ -93,7 +100,7 @@ umzug.pending().then(function (migrations) {
           console.log("listening to "+parseInt(freePort))
         })
       }
-    });
+    })
   }
 
 module.exports = app

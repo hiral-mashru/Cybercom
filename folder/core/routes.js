@@ -1,4 +1,3 @@
-require('../core/functions')
 const { readdirSync } = require('fs')
 const chalk = require('chalk')
 const fs = require('fs')

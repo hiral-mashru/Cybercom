@@ -2,7 +2,7 @@ setup.functions = {}
 const chalk = require('chalk')
 const fs = require('fs')
 var root = __dirname + '/../functions'
-const glob = require("glob");
+// const glob = require("glob");
 
 var files = []
 var modules = fs.readdirSync(root);

@@ -73,6 +73,12 @@ if(type==='create-folder') {
                 } 
                 console.log(chalk.green(`Directory ${m}/controllers created successfully!`)); 
             });
+            fs.mkdir(path.join(rootDir, 'api', m,'middlewares'),{ recursive: true }, (err) => { 
+                if (err) { 
+                    return console.error(err); 
+                } 
+                console.log(chalk.green(`Directory ${m}/middlewares created successfully!`)); 
+            });
             fs.mkdir(path.join(rootDir, 'api', m,'services'),{ recursive: true }, (err) => { 
                 if (err) { 
                     return console.error(err); 
