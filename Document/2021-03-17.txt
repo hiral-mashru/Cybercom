@@ -1,0 +1,1 @@
+Today I did error handling for apis and handled all the errors like reference and type error so that app doesn't get crashed, implemented morgan for logs..
