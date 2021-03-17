@@ -3,19 +3,14 @@
 const studentModel = require('../../../db/models').students
 const Op = require('sequelize').Op
 module.exports = {
-    welcome: (req,res,next) => {
+    welcome: (req,res) => {
         var params = "Hiral"
-        if(res.status === 200){
-            res.status(200).json({
-                status: 1,
-                message: "Welcome",
-                data: setup.functions["funcFile"]["func2"](params),
-                service: setup.services["RV"]["serve"]["service1"](params)
-            })
-        } else {
-            next()
-        }
-        
+        res.status(200).json({
+            status: 1,
+            message: "Welcome",
+            data: setup.functions["funcFile"]["func2"](params),
+            service: setup.services["RV"]["serve"]["service1"](params)
+        })
     },
     globall: setup.functions["funcFile"]["func1"],
     getData: (req,res,next) => {
@@ -45,22 +40,13 @@ module.exports = {
                 status: 1,
                 message: "Student created successfully"
             })
-        }).catch(err=>{
-            // console.log("Error")
-            // res.locals.url = req.url
-            // res.locals.err = err
-            res.json({data: err.errors})
-            next(new Error(('provide required fields '+err+' enddd')))
+        }).catch(e=>{
+            const err = new Error(e.name+" : "+setup.findErr(e.errors,'message'))
+            err.status = 500
+            next(err)
+            // res.json({
+            //     e: e
+            // })
         })
     }
 }
-
-// function findObjectByKey(array, key, value) {
-//     for (var i = 0; i < array.length; i++) {
-//         if (array[i][key] === value) {
-//             return array[i];
-//         }
-//     }
-//     return null;
-// }
-// var obj = findObjectByKey(objArray, 'id', 3);

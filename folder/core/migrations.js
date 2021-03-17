@@ -1,4 +1,3 @@
-/* For migrations */
 const express = require('express')
 const path = require('path');
 const Confirm = require('prompt-confirm');
@@ -29,18 +28,18 @@ var umzug = new Umzug({
     }
 });
 } catch(err){
-  console.log("Error")
+  console.log(chalk.red("Error coming between sequelize and umzug connection..."))
 }
 // umzug.down(/*{ to: '20210223113512-create-address' }*/).then(()=>{
 //   console.log("downn")
 // })
 
 umzug.pending().then(function (migrations) {
+  if(migrations.length>0){
     new Confirm('Wanna do migrations?')
     .run()
     .then(function(answer) {
       if(answer){
-        if(migrations.length > 0){
           console.log("Pending migrations : ")
           migrations.map(a => console.log(chalk.yellow(a.file)))
           umzug.up().then(function()  {
@@ -48,17 +47,17 @@ umzug.pending().then(function (migrations) {
             serverListen();
           }).catch(err => {
             throw `Unable to perform migration due to`;
-          });
-        } else {
-          console.log(chalk.green("No migrations are pending..."))
-          serverListen();
-        }
+          }); 
       } else {
         serverListen();
       }
     });
+  } else {
+    console.log(chalk.green("No migrations are pending..."))
+    serverListen();
+  }
   }).catch(err =>{
-    console.log("Errorrrrrrrrrrrrrrrrrrrrrrrrrr")
+    console.log(chalk.red("Error coming in migrations..."))
     serverListen()
   })
 // } else {

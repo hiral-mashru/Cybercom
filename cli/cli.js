@@ -95,7 +95,9 @@ if(type==='create-folder') {
         }
     }
 
-} 
+} else if(type === 'db-config'){
+    dbConfig()
+}
 // else if(type === 'github'){
 //     download('hiral-mashru/boilerplate-structure', '', function (err) {
 //         console.log(err ? 'Error' : 'Success')
@@ -198,22 +200,26 @@ function createStructure(){
     .run()
     .then(function(answer){
         if(answer){
-            new Confirm({message:'Do you want to setup development env?',default: false})
-            .run()
-            .then(function(answer){
-                if(fs.existsSync(rootDir+'/config'+'/database.json')) {
-                    if(answer){
-                        setting = 'dev'
-                        createJSON(setting)
-                    } else {
-                        console.log("Go for production env setup...")
-                        setting = 'prod'
-                        createJSON(setting)
-                    }
-                }
-            })
+            dbConfig()
         }
     })
+}
+
+function dbConfig(){
+    new Confirm({message:'Do you want to setup development env?',default: false})
+        .run()
+        .then(function(answer){
+            if(fs.existsSync(rootDir+'/config'+'/database.json')) {
+                if(answer){
+                    setting = 'dev'
+                    createJSON(setting)
+                } else {
+                    console.log("Go for production env setup...")
+                    setting = 'prod'
+                    createJSON(setting)
+                }
+            }
+        })
 }
 
 
