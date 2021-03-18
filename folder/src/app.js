@@ -1,4 +1,6 @@
 global.setup = {}
+const app = require('../core/migrations');
+require('../config/config')
 
 function findErr(array, key) {
     var arr = []
@@ -11,25 +13,17 @@ function findErr(array, key) {
 }
 setup.findErr = findErr
 
+// require('../config/config')
 const bodyParser = require('body-parser')
+
+app.use(bodyParser.json())
 require('dotenv').config()
 // global.framework={};
 require('../core/migrations');
 require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
-const morgan=require('morgan');
 const routes = require('../core/routes');
-const app = require('../core/migrations');
-
-app.use(bodyParser.json())
-morgan.token('req-headers', function(req,res){
-    return JSON.stringify(req.headers)
-}) 
-morgan.token('req-body', function(req,res){
-    return JSON.stringify(req.body)
-})   
-app.use(morgan(':remote-addr - ":method :url HTTP/:http-version" :status :req-headers :req-body :res[content-length] [:date[clf]]'))
 
 for(let key in routes.public){
     app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);

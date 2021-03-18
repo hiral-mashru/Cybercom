@@ -52,12 +52,15 @@ umzug.pending().then(function (migrations) {
         serverListen();
       }
     });
+    // require('../config/config')['first']
   } else {
     console.log(chalk.green("No migrations are pending..."))
+    // require('../config/config')['first']
     serverListen();
   }
   }).catch(err =>{
     console.log(chalk.red("Error coming in migrations..."))
+    // require('../config/config')['first']
     serverListen()
   })
 // } else {
@@ -85,18 +88,18 @@ umzug.pending().then(function (migrations) {
     fp(parseInt(portt), function(err, freePort){
       if(parseInt(freePort) !== parseInt(portt)){
         console.log(chalk.black.bgYellowBright('WARNING:')+`${parseInt(portt)} is not free`)
-        new Confirm('Wanna run the server on nearer port?')
+        new Confirm('\nWanna run the server on nearer port?')
         .run()
         .then(function(answer) {
           if(answer){
             app.listen(parseInt(freePort),()=>{
-              console.log("listening to "+parseInt(freePort))
+              console.log("\nlistening to "+parseInt(freePort))
             })
           }
         })
       } else {
         app.listen(parseInt(freePort),()=>{
-          console.log("listening to "+parseInt(freePort))
+          console.log("\nlistening to "+parseInt(freePort))
         })
       }
     })
