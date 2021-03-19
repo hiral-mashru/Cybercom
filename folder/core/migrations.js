@@ -88,18 +88,18 @@ umzug.pending().then(function (migrations) {
     fp(parseInt(portt), function(err, freePort){
       if(parseInt(freePort) !== parseInt(portt)){
         console.log(chalk.black.bgYellowBright('WARNING:')+`${parseInt(portt)} is not free`)
-        new Confirm('\nWanna run the server on nearer port?')
+        new Confirm('Wanna run the server on nearer port?')
         .run()
         .then(function(answer) {
           if(answer){
             app.listen(parseInt(freePort),()=>{
-              console.log("\nlistening to "+parseInt(freePort))
+              console.log("listening to "+parseInt(freePort))
             })
           }
         })
       } else {
         app.listen(parseInt(freePort),()=>{
-          console.log("\nlistening to "+parseInt(freePort))
+          console.log("listening to "+parseInt(freePort))
         })
       }
     })

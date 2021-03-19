@@ -1,7 +1,10 @@
 'use strict';
+
 // const funn = setup.functions["funcFile"]["func1"]
 const studentModel = require('../../../db/models').students
 const Op = require('sequelize').Op
+const multer = require('multer')
+
 module.exports = {
     welcome: (req,res) => {
         var params = "Hiral"
@@ -48,5 +51,28 @@ module.exports = {
             //     e: e
             // })
         })
+    }, 
+    upload: (req,res,next) => {
+        console.log("setup upload ",setup.uploadFile===require('../../../config/fileUpload'))
+        const upload = setup.uploadFile.single('image')
+        console.log("file",req.files)
+        upload(req, res, (err) => {
+            if (req.fileValidationError) {
+                return res.send(req.fileValidationError);
+            }
+            else if (!req.files) {
+                return res.send('Please select an image to upload');
+            }
+            else if (err instanceof multer.MulterError) {
+                return res.send(err);
+            }
+            else if (err) {
+                return res.send(err);
+            }
+            console.log("file",req.files)
+            res.json({
+                file: req.files
+            })
+        });
     }
 }

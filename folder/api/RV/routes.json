@@ -24,5 +24,10 @@
         "action": "RV.insert",
         "root": false,
         "middleware": ["middle.errorHandler"]
+    },
+    {
+        "path": "/upload",
+        "method": "post",
+        "action": "RV.upload"
     }
 ]

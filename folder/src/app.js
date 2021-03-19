@@ -1,7 +1,8 @@
 global.setup = {}
+const fileupload = require('express-fileupload')
 const app = require('../core/migrations');
 require('../config/config')
-
+require('../config/fileUpload')
 function findErr(array, key) {
     var arr = []
     for (var i = 0; i < array.length; i++) {
@@ -17,13 +18,50 @@ setup.findErr = findErr
 const bodyParser = require('body-parser')
 
 app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileupload())
+// app.use(express.static(__dirname + '/../public'));
 require('dotenv').config()
 // global.framework={};
+// require('../config/fileUpload')
 require('../core/migrations');
 require('../core/functions')
 require('../core/services')
+// require('../config/fileUpload')
 const chalk = require('chalk')
 const routes = require('../core/routes');
+
+const multer = require('multer')
+// const upload = multer({dest:'uploads/'}).single("csv");
+// const upload = require('../config/fileUpload')
+// console.log("upload",upload)
+// app.post("/image",(req, res) => {
+//     upload.single('csv')(req, res, (err) => {
+//         if(err) {
+//           res.status(400).send("Something went wrong!");
+//         }
+//         res.json({
+//             file: req.files
+//         })
+//     });
+//  });
+
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+
+const upload = multer({ storage }).single('image');
+
+
+app.post('/', upload, (req, res) => {
+    console.log(req.files) // this does log the uploaded image data.
+})
+
 
 for(let key in routes.public){
     app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);

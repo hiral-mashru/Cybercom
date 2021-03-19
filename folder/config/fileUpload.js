@@ -1,15 +1,21 @@
-const app = require('../core/migrations')
 const multer = require('multer')
-
-app.use(express.static(__dirname + '/public'));
-var store = 'uploads/'
+const path = require('path')
+const fs = require('fs')
+var root = __dirname+'/..'
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, store);
-    },
-
-    // By default, multer removes file extensions so let's add them back
+    destination: function (req, file, cb) {
+        let dir=path.join(__dirname,'uploads')
+        if(!fs.existsSync(dir)){
+          fs.mkdirSync(dir);
+        }
+        cb(null, dir)
+      }, 
     filename: function(req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+        cb(null,Date.now()+'-'+ path.extname(file.originalname));
     }
 });
+
+var upload = multer({storage: storage})
+setup.uploadFile = upload
+// const upload = multer({dest:'uploads/'});
+module.exports = upload
