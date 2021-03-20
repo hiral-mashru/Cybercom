@@ -59,7 +59,7 @@ module.exports = {
                 return res.send(req.fileValidationError);
             }
             else if (!req.files) {
-                return res.send('Please select an image to upload');
+                return res.send('Please select a file to upload');
             }
             else if (err instanceof multer.MulterError) {
                 return res.send(err);

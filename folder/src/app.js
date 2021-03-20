@@ -1,5 +1,5 @@
 global.setup = {}
-const fileupload = require('express-fileupload')
+require('../crons/cron1')
 const app = require('../core/migrations');
 require('../config/config')
 require('../config/fileUpload')
