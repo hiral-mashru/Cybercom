@@ -53,10 +53,8 @@ module.exports = {
         })
     }, 
     upload: (req,res,next) => {
-        console.log("setup upload ",setup.uploadFile===require('../../../config/fileUpload'))
-        const upload = setup.uploadFile.single('image')
-        console.log("file",req.files)
-        upload(req, res, (err) => {
+        setup.store(__dirname+'/../')
+        setup.uploadFile.fields([{name: 'image',maxCount: 1}]) (req,res,(err)=>{
             if (req.fileValidationError) {
                 return res.send(req.fileValidationError);
             }
@@ -69,10 +67,11 @@ module.exports = {
             else if (err) {
                 return res.send(err);
             }
-            console.log("file",req.files)
-            res.json({
-                file: req.files
-            })
-        });
+        console.log("filee",req.files);
+        res.status(200).json({
+            status: 1,
+            files: req.files.image[0]["originalname"]+" file is saved as "+req.files.image[0]["filename"]+" at "+req.files.image[0]["destination"]
+        })
+    })
     }
 }
