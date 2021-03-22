@@ -1,5 +1,5 @@
 global.setup = {}
-require('../crons/cron1')
+// require('../core/crons')
 const app = require('../core/migrations');
 require('../config/config')
 require('../config/fileUpload')
@@ -24,6 +24,44 @@ require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
 const routes = require('../core/routes');
+
+////////////////////////////////////////////////////////////////
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
+
+const definition = {
+    openapi: '3.0.0',
+    info: {
+        title: "API",
+        description: "API Info",
+        contact: {
+            name: "Developer"
+        },
+        servers: ["http://localhost:8000"]
+    }
+}
+
+const options = {
+    definition,
+    apis: [""]
+} 
+
+const swaggerDocs = swaggerJsDoc(options);
+app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
+
+/**
+ * @openapi
+ * /c:
+ *   get:
+ *     description: Welcome to swagger-jsdoc!
+ *     responses:
+ *       200:
+ *         description: Returns a mysterious string.
+ */
+app.get('/c', (req, res) => {
+    res.send('Hello World!');
+});
+///////////////////////////////////////////////////////////////////////////
 
 for(let key in routes.public){
     app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);
