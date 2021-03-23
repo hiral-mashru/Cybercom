@@ -14,7 +14,7 @@
       "root": false
   },
   {
-      "path": "/student",
+      "path": "/student/:id",
       "method": "get",
       "action": "RV.getData"
   },

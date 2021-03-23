@@ -19,8 +19,11 @@ module.exports = {
     getData: (req,res,next) => {
         studentModel.findAll({
             where: {
-                email: {
-                    [Op.eq]: req.body.email
+                // email: {
+                //     [Op.eq]: req.body.email
+                // }
+                id: {
+                    [Op.eq] : req.params.id
                 }
             }
         }).then(data=>{

@@ -8,7 +8,8 @@ const connection = require('./connection');
 require('dotenv').config()
 const app = express()
 var config = require('../config/database.json');
-
+const swaggerJsDoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
 // if(config.database){
 
 try{
@@ -94,16 +95,41 @@ umzug.pending().then(function (migrations) {
           if(answer){
             app.listen(parseInt(freePort),()=>{
               console.log("listening to "+parseInt(freePort))
+              // swagger(parseInt(freePort))
             })
           }
         })
       } else {
         app.listen(parseInt(freePort),()=>{
           console.log("listening to "+parseInt(freePort))
+          // swagger(parseInt(freePort))
         })
       }
     })
   }
+
+function swagger(freePort){
+  console.log("swagger")
+  const definition = {
+    openapi: '3.0.0',
+    info: {
+        title: "API",
+        description: "API Info",
+        contact: {
+            name: "Developer"
+        },
+        servers: ["http://localhost:"+parseInt(freePort)]
+    }
+  }
+  const options = {
+    definition,
+    apis: [__dirname+"/../api/apidoc.js"]
+  } 
+  var str = 'hy'
+  module.exports = str
+  const swaggerDocs = swaggerJsDoc(options);
+  app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
+}
 
 module.exports = app
 // module.exports = {

@@ -24,7 +24,8 @@ require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
 const routes = require('../core/routes');
-
+var {str} = require('../core/migrations')
+console.log('str',{str})
 ////////////////////////////////////////////////////////////////
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
@@ -43,22 +44,16 @@ const definition = {
 
 const options = {
     definition,
-    apis: [""]
+    apis: [__dirname+"/../api/apidoc.js"]
 } 
 
 const swaggerDocs = swaggerJsDoc(options);
 app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
 
-/**
- * @openapi
- * /c:
- *   get:
- *     description: Welcome to swagger-jsdoc!
- *     responses:
- *       200:
- *         description: Returns a mysterious string.
- */
 app.get('/c', (req, res) => {
+    res.send('Hello World!');
+});
+app.get('/users/:id', (req, res) => {
     res.send('Hello World!');
 });
 ///////////////////////////////////////////////////////////////////////////
@@ -94,6 +89,7 @@ app.use(function (err, req, res, next) {
 
 process.on('uncaughtException', function (err,origin) {
     console.log(chalk.red('ERROR:')+err+`\nException origin: ${origin}`);
+    process.exit(1);
   });
   
   setTimeout(function () {
