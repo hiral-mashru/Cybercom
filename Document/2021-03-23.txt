@@ -1,0 +1,1 @@
+Today, I did swagger doocumentation, cron job, learned about garbage collection, memory management, memory leakage, server side rendering, etc..
