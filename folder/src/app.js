@@ -1,5 +1,5 @@
 global.setup = {}
-// require('../core/crons')
+require('../core/crons')
 const app = require('../core/migrations');
 require('../config/config')
 require('../config/fileUpload')
@@ -24,8 +24,7 @@ require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
 const routes = require('../core/routes');
-var {str} = require('../core/migrations')
-console.log('str',{str})
+
 ////////////////////////////////////////////////////////////////
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
@@ -38,7 +37,7 @@ const definition = {
         contact: {
             name: "Developer"
         },
-        servers: ["http://localhost:8000"]
+        servers: ["http://localhost:"+setup.port]
     }
 }
 

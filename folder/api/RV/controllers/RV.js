@@ -7,6 +7,7 @@ const multer = require('multer')
 
 module.exports = {
     welcome: (req,res) => {
+        setup.crons["cron1"]["task"].start()
         var params = "Hiral"
         res.status(200).json({
             status: 1,
@@ -37,6 +38,7 @@ module.exports = {
         })
     }, 
     insert: (req,res,next)=>{
+        // #swagger.tags = ['students']
         studentModel.create({
             name: req.body.name,
             email: req.body.email

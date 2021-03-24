@@ -104,15 +104,15 @@
  *         id:
  *           type: integer
  *           description: The user ID.
-//  *           example: 0
+ *           example: 0
  *         name:
  *           type: string
  *           description: The user's name.
-//  *           example: Leanne Graham
+ *           example: Leanne Graham
  *         email:
  *           type: string
  *           description: The user's email.
-//  *           example: LeanneGraham
+ *           example: LeanneGraham
  */
 
 /**
