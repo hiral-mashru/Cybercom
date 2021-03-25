@@ -18,8 +18,6 @@ module.exports = {
     },
     globall: setup.functions["funcFile"]["func1"],
     getData: (req,res,next) => {
-        /*  #swagger.tags = ['students']
-            #swagger.description = 'Endpoint to get the specific user.' */
         studentModel.findAll({
             where: {
                 // email: {

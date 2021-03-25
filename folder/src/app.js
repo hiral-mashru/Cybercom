@@ -1,5 +1,5 @@
 global.setup = {}
-require('../core/crons')
+// require('../core/crons')
 const app = require('../core/migrations');
 require('../config/config')
 require('../config/fileUpload')
@@ -24,47 +24,69 @@ require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
 const routes = require('../core/routes');
+////////////////////////////////////////////////////////////////
+
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('../swagger-output.json')
+app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 ////////////////////////////////////////////////////////////////
-const swaggerJsDoc = require('swagger-jsdoc')
-const swaggerUi = require('swagger-ui-express')
+// const swaggerJsDoc = require('swagger-jsdoc')
+// const swaggerUi = require('swagger-ui-express')
+// try{
+// const definition = {
+//     openapi: '3.0.0',
+//     info: {
+//         title: "API",
+//         description: "API Info",
+//         contact: {
+//             name: "Developer"
+//         },
+//         servers: ["http://localhost:"+setu.port]
+//     }
+// }
 
-const definition = {
-    openapi: '3.0.0',
-    info: {
-        title: "API",
-        description: "API Info",
-        contact: {
-            name: "Developer"
-        },
-        servers: ["http://localhost:"+setup.port]
-    }
-}
+// const options = {
+//     definition,
+//     apis: [__dirname+"/../api/apidoc.js"]
+// } 
 
-const options = {
-    definition,
-    apis: [__dirname+"/../api/apidoc.js"]
-} 
-
-const swaggerDocs = swaggerJsDoc(options);
-app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
-
+// const swaggerDocs = swaggerJsDoc(options);
+// app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
+// } catch(err){
+//     console.log(chalk.red("ERROR:")+err)
+// }
+//////////////////////////////////////////////////////////////////////////////////////////
+const stundetData = [{
+    id: 1,
+    name: 'Hiral'
+},{
+    id: 2,
+    name: 'harsh'
+}]
 app.get('/c', (req, res) => {
     res.send('Hello World!');
 });
 app.get('/users/:id', (req, res) => {
-    res.send('Hello World!');
+    /*  #swagger.tags = ['students']
+        #swagger.description = 'Endpoint to get the specific user.' */
+    /* #swagger.responses[200] = { 
+            schema: { "$ref": "#/definitions/students" },
+            description: "User found successfully." } */
+    res.send(stundetData.map(x=> Object.values(x)))
 });
 ///////////////////////////////////////////////////////////////////////////
+try{
+    for(let key in routes.public){    
+        app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);
+    }
 
-for(let key in routes.public){
-    app[routes.public[key].method](routes.public[key].path, (routes.public[key].middleware),routes.public[key].globalMiddleware,routes.public[key].action);
+    for(let key in routes.protected){
+        app[routes.protected[key].method](routes.protected[key].path, routes.protected[key].middleware, routes.protected[key].globalMiddleware, routes.protected[key].action);
+    }
+} catch(err){
+    console.log(chalk.red("ERROR:")+err)
 }
-
-for(let key in routes.protected){
-    app[routes.protected[key].method](routes.protected[key].path, routes.protected[key].middleware, routes.protected[key].globalMiddleware, routes.protected[key].action);
-}
-
 app.use(function(req,res,next){
     const err = new Error("Not found")
     err.status = 404
@@ -87,7 +109,7 @@ app.use(function (err, req, res, next) {
 })
 
 process.on('uncaughtException', function (err,origin) {
-    console.log(chalk.red('ERROR:')+err+`\nException origin: ${origin}`);
+    console.log(chalk.red('ERROR:')+process.stderr.fd+','+err+`\nException origin: ${origin}`);
     process.exit(1);
   });
   

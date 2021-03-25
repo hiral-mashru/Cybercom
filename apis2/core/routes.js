@@ -25,10 +25,10 @@ for(let key in apis){
             rr = routes
             looping(apis[key],rr,routes, publicRoutes, protectedRoutes)
         } else {
-            console.log(chalk.black.bgYellowBright('WARNING:')+`The format of ${__dirname}/../api/${apii}/routes.json is not correct.`)
+            console.log(chalk.black.bgYellowBright('WARNING:')+`The format of ${__dirname}\\..\\api\\${apii}\\routes.json is not correct.`)
         }
     } else {
-        console.log(chalk.black.bgYellowBright('WARNING:')+`PATH: ${__dirname}/../api/${apii}/routes.json is not available`) // 1
+        console.log(chalk.black.bgYellowBright('WARNING:')+`PATH: ${__dirname}\\..\\api\\${apii}\\routes.json is not available`) // 1
     }
 }
 
@@ -61,19 +61,19 @@ function looping(apii,rr,routes, publicRoutes, protectedRoutes){
                 var middleware = []
                 for(let a of rr.middleware) {
                     if(!(a.includes('.'))) { 
-                        console.log(chalk.black.bgYellowBright('WARNING:')+`Global Middleware ${rr.globalMiddleware} is not properly defined in ${__dirname}/../api/${apii}/routes.json`) 
-                        break
+                        console.log(chalk.black.bgYellowBright('WARNING:')+`Global Middleware ${rr.globalMiddleware} is not properly defined in ${__dirname}\\..\\api\\${apii}\\routes.json`) 
+                        return
                     } else {
                         var middlewareArr = a.split('.')
                         if(middlewareArr.length != 2){
                             console.log(chalk.black.bgYellowBright('WARNING:')+`Middleware is not defined in  routes.json file of ${apii}, PATH: ${pathh}`)
-                            break
+                            return
                         }
                         var [middlewareName, middlewareFunName] = middlewareArr
                         middleware.push(middlewareName)
                         if(!(require(`../api/${apii}/middleware/${middlewareName}`))[middlewareFunName]){
-                            console.log(chalk.black.bgYellowBright('WARNING:')+`Middleware ${middlewareFunName} doesn't exists in ${__dirname}/../api/${apii}/middleware/${middlewareName} file.`)
-                            break;
+                            console.log(chalk.black.bgYellowBright('WARNING:')+`Middleware ${middlewareFunName} doesn't exists in ${__dirname}\\..\\api\\${apii}\\middleware\\${middlewareName} file.`)
+                            return
                         } else {
                             middlewareFun.push((require(`../api/${apii}/middleware/${middlewareName}`))[middlewareFunName])
                         }
@@ -90,26 +90,26 @@ function looping(apii,rr,routes, publicRoutes, protectedRoutes){
 
                 for(let a of rr.globalMiddleware) {
                     if(!(a.includes('.'))) { 
-                        console.log(chalk.black.bgYellowBright('WARNING:')+`Global Middleware ${rr.globalMiddleware} is not properly defined in ${__dirname}/../api/${apii}/routes.json`) 
-                        break
+                        console.log(chalk.black.bgYellowBright('WARNING:')+`Global Middleware ${rr.globalMiddleware} is not properly defined in ${__dirname}\\..\\api\\${apii}\\routes.json`) 
+                        return
                     } else {
                         var globalMiddlewareArr = a.split('.');
                         if(globalMiddlewareArr.length != 2){
                             console.log(chalk.black.bgYellowBright('WARNING:')+` Global Middleware is not defined in  routes.json file of ${apii}, PATH: ${pathh}`)
-                            break
+                            return
                         }
                         var [globalMiddlewareName, globalMiddlewareFunName] = globalMiddlewareArr
                         globalMiddleware.push(globalMiddlewareName)
                         if(!(require(`../middleware/${globalMiddlewareName}`))[globalMiddlewareFunName]){
                             console.log(chalk.black.bgYellowBright('WARNING:')+`Global Middleware ${globalMiddlewareFunName} doesn't exists in ${__dirname}\\..\\middleware\\${globalMiddlewareName} file.`)
-                            break;
+                            return;
                         } else {
-                            globalMiddlewareFun.push((require(`../middleware/${globalMiddlewareName}`))[globalMiddlewareFunName])
-                            rr.globalMiddleware = globalMiddlewareFun
+                            globalMiddlewareFun.push((require(`../middleware/${globalMiddlewareName}`))[globalMiddlewareFunName])      
                         }
                     }
                     // console.log("x",rr.globalMiddleware)
                 }
+                rr.globalMiddleware = globalMiddlewareFun
             }  else { rr.globalMiddleware = [function(){}] }
 
 
