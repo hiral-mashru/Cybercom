@@ -1,0 +1,1 @@
+Today I implemented swagger and used get,post methods, schemas,tags,params. Also tried to implement swagger=autogen. And also did configuration for crons, etc..
