@@ -1,0 +1,1 @@
+Today I worked on swagger-autogen and created process bar while downloading the git repo.
