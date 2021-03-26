@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+var Spinner = require('cli-spinner').Spinner;
 const fs = require('fs');
 const path = require('path')
 const chalk = require('chalk')
@@ -36,9 +36,13 @@ if(type==='create-folder') {
             .then(function(answer){
                 if(answer){
                     console.log(chalk.green("Loading..."))
+                    var spinner = new Spinner('processing.. %s');
+                    spinner.setSpinnerString('|/-\\');
+                    spinner.start();
                     download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                         flag = true
                         console.log(err ? 'Error' : 'Success')
+                        spinner.stop(true)
                         if(!err){
                             createStructure()
                         }
@@ -47,9 +51,13 @@ if(type==='create-folder') {
             })
         } else {
             console.log(chalk.green("Loading..."))
+            var spinner = new Spinner('processing.. %s');
+            spinner.setSpinnerString('|/-\\');
+            spinner.start();
             download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                 flag = true
                 console.log(err ? 'Error' : 'Success ')
+                spinner.stop(true)
                 if(!err){
                     createStructure()
                 }
