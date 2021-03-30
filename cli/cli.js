@@ -9,7 +9,8 @@ const[type,...modulle] = args
 const rootDir = process.cwd()
 const download = require('download-git-repo')
 var flag = false
-const inquirer = require('inquirer')
+const inquirer = require('inquirer');
+const { isArray } = require('util');
 
 if(type==='create-folder') {
     
@@ -29,7 +30,7 @@ if(type==='create-folder') {
     }
 
 } else if(type === 'init') {
-    fs.readdir(process.cwd(), function(err, files){
+    fs.readdir(rootDir, function(err, files){
         if(files.length){
             new Confirm({message: 'You have already done initialization. Do you want to do init?', default: false})
             .run()
@@ -94,10 +95,11 @@ if(type==='create-folder') {
                 console.log(chalk.green(`Directory ${m}/services created successfully!`)); 
             });
             if(!fs.existsSync(rootDir+'/api/'+m+'/routes.json')) {
-                fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'', function(err, result) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'[]', function(err, result) {
                     if(err) console.log('error', err);
                 })
             }
+            
         } else {
             console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module\'s name')
         }
@@ -105,6 +107,26 @@ if(type==='create-folder') {
 
 } else if(type === 'db-config'){
     dbConfig()
+} else if(type === 'create-api'){
+    fs.readdir(path.join(rootDir,'api'),function(err,files){
+        if (err) {
+            console.log(chalk.red('ERROR:') +'Unable to scan directory: ' + err);
+        } else {
+            console.log("files ",files.map(a => { return {name: a,value: a}}))
+            var ques = [
+                {
+                    type: 'list',
+                    name: 'modules',
+                    message: "Enter Module Name:",
+                    choices: files.map(a => { return {name: a,value: a}})
+                }
+            ]
+            inquirer.prompt(ques).then(answers => {
+                console.log(answers['modules'])
+                createApi(answers['modules'])
+            })
+        }
+    })
 }
 // else if(type === 'github'){
 //     download('hiral-mashru/boilerplate-structure', '', function (err) {
@@ -132,7 +154,17 @@ function createStructure(){
             return console.error(err); 
         } 
     });
+    fs.mkdir(path.join(rootDir, 'crons'),{ recursive: true }, (err) => { 
+        if (err) { 
+            return console.error(err); 
+        } 
+    });
     fs.mkdir(path.join(rootDir, 'db'),{ recursive: true }, (err) => { 
+        if (err) { 
+            return console.error(err); 
+        } 
+    });
+    fs.mkdir(path.join(rootDir, 'dbLogs'),{ recursive: true }, (err) => { 
         if (err) { 
             return console.error(err); 
         } 
@@ -167,42 +199,40 @@ function createStructure(){
             return console.error(err); 
         } 
     });
-    if(!fs.existsSync(rootDir+'/.env')) {
-        fs.writeFile(path.join(rootDir, '.env'),'', function(err, result) {
+    
+        fs.appendFile(path.join(rootDir, '.env'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/core/connection.js')) {
-        fs.writeFile(path.join(rootDir, 'core', 'connection.js'),'', function(err, result) {
+    
+    
+        fs.appendFile(path.join(rootDir, 'core', 'connection.js'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/core/migrations.js')) {   
-        fs.writeFile(path.join(rootDir, 'core', 'migrations.js'),'', function(err, result) {
+    
+     
+        fs.appendFile(path.join(rootDir, 'core', 'migrations.js'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/core/routes.js')) {
-        fs.writeFile(path.join(rootDir, 'core', 'routes.js'),'', function(err, result) {
+    
+
+        fs.appendFile(path.join(rootDir, 'core', 'routes.js'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/core/models.js')) {
-        fs.writeFile(path.join(rootDir, 'core', 'models.js'),'', function(err, result) {
+
+    
+        fs.appendFile(path.join(rootDir, 'core', 'models.js'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/core/services.js')) {
-        fs.writeFile(path.join(rootDir, 'core', 'services.js'),'', function(err, result) {
+    
+    
+        fs.appendFile(path.join(rootDir, 'core', 'services.js'),'', function(err, result) {
             if(err) console.log('error', err);
         })
-    }
-    if(!fs.existsSync(rootDir+'/src/app.js')) {
-        fs.writeFile(path.join(rootDir, 'src', 'app.js'),'', function(err, result) {
+    
+        fs.appendFile(path.join(rootDir, 'src', 'app.js'),'', function(err, result) {
             if(err) {console.log('error', err);}
-            console.log('exists '+fs.existsSync(rootDir+'/src/app.js'))
         })
-    }
+    
     var setting;
     new Confirm({message: 'Do you want to config db right now?', default: false})
     .run()
@@ -276,6 +306,88 @@ function createJSON(setting){
                 if(err) console.log('error', err);
             })
         }
+    })
+}
+
+function createApi(moduule){
+    var questions = [
+        {
+          type: 'input',
+          name: 'path',
+          message: "Enter Path(endpoint): "
+        },
+        {
+            type: 'list',
+            name: 'method',
+            message: "Enter Method: ",
+            choices: [{name: 'GET', value: 'GET'},{name: 'POST', value: 'POST'},{name: 'PUT', value: 'PUT'},{name: 'DELETE', value: 'DELETE'}]
+        },
+        {
+            type: 'input',
+            name: 'action',
+            message: "Enter FileName.FunctionName: "
+        },
+        {
+            type: 'confirm',
+            name: 'public',
+            message: "API's access would be Public? : "
+        },
+        {
+            type: 'confirm',
+            name: 'root',
+            message: "Call from root? "
+        }
+    ]
+    inquirer.prompt(questions).then(answers => {
+        console.log(typeof answers['action'])
+        var pathh = answers['path'][0] === '/' ? answers['path'] : '/'+answers['path']
+        var method = answers['method']
+        var fileName = answers['action'].toString().includes('.') && answers['action'].toString().split('.')[1] ?  answers['action'].toString().split('.')[0] : new Error('Action is not valid')
+        if(typeof fileName === 'object'){
+            return
+        }
+        if(!fs.existsSync(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'))){
+            fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
+                if(!files.includes('controllers')){
+                    fs.mkdir(path.join(rootDir, 'api', moduule, 'controllers'),{ recursive: true }, (err) => { 
+                        if (err) { 
+                            return console.error(err); 
+                        }  
+                    });
+                }
+                fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'', function(err, result) {
+                    if(err) console.log('error', err);
+                })
+            })  
+        }
+        var obj = {"path": pathh, "method": method, "action": answers['action'], "public": answers['public'], "root": answers['root']}
+        var dataa;
+        fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
+            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the routes.json file');
+            if(data.length===0){
+                let d = []
+                d.push(obj)
+                fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d),'utf8', function(err, result) {
+                    if(err) console.log('error', err);
+                })
+            } else {
+                dataa = JSON.parse(data);
+                console.log("data",dataa);
+                if(Array.isArray(dataa)){
+                    dataa.push(obj)
+                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
+                        if(err) console.log('error', err);
+                    })
+                } else {
+                    var d = [];
+                    d.push(dataa)
+                    d.push(obj)
+                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d),'utf8', function(err, result) {
+                        if(err) console.log('error', err);
+                    })
+                }
+            }
+        });
     })
 }
 

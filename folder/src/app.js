@@ -1,7 +1,7 @@
 global.setup = {}
 // require('../core/crons')
-const app = require('../core/migrations');
-require('../config/config')
+
+// require('../config/config')
 require('../config/fileUpload')
 function findErr(array, key) {
     var arr = []
@@ -14,16 +14,25 @@ function findErr(array, key) {
 }
 setup.findErr = findErr
 
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
 require('dotenv').config()
 // global.framework={};
-require('../core/migrations');
+// require('../core/migrations');
 require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
 const routes = require('../core/routes');
+
+var app;
+let promise = new Promise((resolve,reject)=>{
+    app = require('../core/migrations').app;
+})
+
+promise.then((value)=>{
+
+
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
 ////////////////////////////////////////////////////////////////
 
 const swaggerUi = require('swagger-ui-express')
@@ -87,11 +96,11 @@ try{
 } catch(err){
     console.log(chalk.red("ERROR:")+err)
 }
-app.use(function(req,res,next){
-    const err = new Error("Not found")
-    err.status = 404
-    next(err)
-})
+// app.use(function(req,res,next){
+//     const err = new Error("Not found")
+//     err.status = 404
+//     next(err)
+// })
 
 app.use(function (err, req, res, next) {
     res.status(err.status || 500)
@@ -107,7 +116,7 @@ app.use(function (err, req, res, next) {
         }
     })
 })
-
+})
 process.on('uncaughtException', function (err,origin) {
     console.log(chalk.red('ERROR:')+process.stderr.fd+','+err+`\nException origin: ${origin}`);
     process.exit(1);
