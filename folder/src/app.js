@@ -1,7 +1,8 @@
 global.setup = {}
 // require('../core/crons')
-
-// require('../config/config')
+const express = require('express')
+const app = express()
+const Confirm = require('prompt-confirm');
 require('../config/fileUpload')
 function findErr(array, key) {
     var arr = []
@@ -20,16 +21,8 @@ require('dotenv').config()
 require('../core/functions')
 require('../core/services')
 const chalk = require('chalk')
+// require('../config/config')
 const routes = require('../core/routes');
-
-var app;
-let promise = new Promise((resolve,reject)=>{
-    app = require('../core/migrations').app;
-})
-
-promise.then((value)=>{
-
-
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -116,7 +109,65 @@ app.use(function (err, req, res, next) {
         }
     })
 })
+
+var umzug
+let promise = new Promise((resolve,reject)=>{
+    umzug = require('../core/migrations').umzg()
 })
+promise.then(function(value){
+umzug.pending().then(function (migrations) {
+    if(migrations.length>0){
+      new Confirm('Wanna do migrations?')
+      .run()
+      .then(function(answer) {
+        if(answer){
+            console.log("Pending migrations : ")
+            migrations.map(a => console.log(chalk.yellow(a.file)))
+            umzug.up().then(function()  {
+              console.log(chalk.green('Migration complete!'));
+              serverListen();
+            }).catch(err => {
+              throw `Unable to perform migration due to`;
+            }); 
+        } else {
+          serverListen();
+        }
+      });
+    } else {
+      console.log(chalk.green("No migrations are pending..."))
+      serverListen();
+    }
+    }).catch(err =>{
+      console.log(chalk.red("Error coming in migrations..."))
+      serverListen()
+})
+
+function serverListen(){
+    var fp = require("find-free-port")
+    var portt = process.env.PORT
+    fp(parseInt(portt), function(err, freePort){
+      if(parseInt(freePort) !== parseInt(portt)){
+        console.log(chalk.black.bgYellowBright('WARNING:')+`${parseInt(portt)} is not free`)
+        new Confirm('Wanna run the server on nearer port?')
+        .run()
+        .then(function(answer) {
+          if(answer){
+            app.listen(parseInt(freePort),()=>{
+              setup.port = parseInt(freePort)
+              console.log("listening to "+parseInt(freePort))
+            })
+          }
+        })
+      } else {
+        app.listen(parseInt(freePort),()=>{
+          setup.port = parseInt(freePort)
+          console.log("listening to "+parseInt(freePort));
+        })
+      }
+    })
+}
+})
+
 process.on('uncaughtException', function (err,origin) {
     console.log(chalk.red('ERROR:')+process.stderr.fd+','+err+`\nException origin: ${origin}`);
     process.exit(1);
@@ -130,3 +181,4 @@ process.on('uncaughtException', function (err,origin) {
 //   nonexistentFunc();
 //   console.log('This will not run.');
 /////////////////////////////////////////////////////////////
+module.exports = app

@@ -2,15 +2,14 @@
 var Spinner = require('cli-spinner').Spinner;
 const fs = require('fs');
 const path = require('path')
+const fetch = require('node-fetch')
 const chalk = require('chalk')
 const Confirm = require('prompt-confirm')
 const [,,...args] = process.argv // to parse command line arguments
 const[type,...modulle] = args
 const rootDir = process.cwd()
 const download = require('download-git-repo')
-var flag = false
 const inquirer = require('inquirer');
-const { isArray } = require('util');
 
 if(type==='create-folder') {
     
@@ -67,7 +66,10 @@ if(type==='create-folder') {
     })
 
 } else if(type === 'create-module') {
-    
+    if(modulle.length === 0){
+        console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module name...')
+        return
+    }
     for(let m of modulle){
         if(m) {
             fs.mkdir(path.join(rootDir, 'api', m),{ recursive: true }, (err) => { 
@@ -110,9 +112,13 @@ if(type==='create-folder') {
 } else if(type === 'create-api'){
     fs.readdir(path.join(rootDir,'api'),function(err,files){
         if (err) {
-            console.log(chalk.red('ERROR:') +'Unable to scan directory: ' + err);
-        } else {
-            console.log("files ",files.map(a => { return {name: a,value: a}}))
+            fs.mkdir(path.join(rootDir,'api'),{ recursive: true }, (err) => { 
+                if (err) { 
+                    return console.error(err); 
+                }  
+            });
+        } 
+        if(files){
             var ques = [
                 {
                     type: 'list',
@@ -125,6 +131,8 @@ if(type==='create-folder') {
                 console.log(answers['modules'])
                 createApi(answers['modules'])
             })
+        } else {
+            console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
         }
     })
 }
@@ -325,7 +333,17 @@ function createApi(moduule){
         {
             type: 'input',
             name: 'action',
-            message: "Enter FileName.FunctionName: "
+            message: "Enter controller (in 'FileName.FunctionName' format): "
+        },
+        {
+            type: 'input',
+            name: 'middlewares',
+            message: "Enter middlewares (FileName.FunctionName,FileName.FunctionName,..): "
+        },
+        {
+            type: 'input',
+            name: 'globalMiddleware',
+            message: "Enter global middleware (FileName.FunctionName,FileName.FunctionName,..): "
         },
         {
             type: 'confirm',
@@ -342,8 +360,47 @@ function createApi(moduule){
         console.log(typeof answers['action'])
         var pathh = answers['path'][0] === '/' ? answers['path'] : '/'+answers['path']
         var method = answers['method']
-        var fileName = answers['action'].toString().includes('.') && answers['action'].toString().split('.')[1] ?  answers['action'].toString().split('.')[0] : new Error('Action is not valid')
+        actionConfigure(answers['action'],moduule)
+        var middleware = middlewareConfigure(answers['middlewares'],moduule)
+        var globalMiddleware = globalMiddlewareConfigure(answers['globalMiddleware'])
+        var obj = {"path": pathh, "method": method, "action": answers['action'], "middlewares": middleware, "globalMiddleware": globalMiddleware , "public": answers['public'], "root": answers['root']}
+        if(!fs.existsSync(path.join(rootDir,'api',moduule,'routes.json'))){
+            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),'')
+        }
+        var dataa;
+        fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
+            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the routes.json file');
+            if(data.length===0){
+                let d = []
+                d.push(obj)
+                fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
+                    if(err) console.log('error', err);
+                })
+            } else {
+                dataa = JSON.parse(data);
+                if(Array.isArray(dataa)){
+                    dataa.push(obj)
+                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
+                        if(err) console.log('error', err);
+                    })
+                } else {
+                    var d = [];
+                    d.push(dataa)
+                    d.push(obj)
+                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
+                        if(err) console.log('error', err);
+                    })
+                }
+            }
+        });
+    })
+}
+
+
+function actionConfigure(action,moduule){
+    var fileName = action.toString().includes('.') && action.toString().split('.')[1] ?  action.toString().split('.')[0] : console.log(chalk.black.bgYellowBright('WARNING:')+' Controller is not defined in valid format')
         if(typeof fileName === 'object'){
+            console.log(chalk.black.bgYellowBright('WARNING:')+' Controller is not defined in valid format')
             return
         }
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'))){
@@ -355,39 +412,105 @@ function createApi(moduule){
                         }  
                     });
                 }
-                fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'', function(err, result) {
-                    if(err) console.log('error', err);
-                })
             })  
+            let funName = action.toString().split('.')[1] 
+            let obj = {}
+            obj[funName]= (req,res)=>{}               
+            fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                if(err) console.log('error', err);
+            })
+        } else {
+            let fileData = (require(path.join(rootDir,'api',moduule,'controllers',fileName+'.js')))
+            console.log(fileData['l'])
+            fileData[action.toString().split('.')[1]] = ()=>{console.log("yeyy")}
+            // console.log("fldt",JSON.stringify(fileData))
+            // fs.readFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'utf8',(err,data)=>{
+            //     let obj = JSON.parse(data)
+            //     console.log("ddd",data, typeof data)
+            // })
         }
-        var obj = {"path": pathh, "method": method, "action": answers['action'], "public": answers['public'], "root": answers['root']}
-        var dataa;
-        fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
-            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the routes.json file');
-            if(data.length===0){
-                let d = []
-                d.push(obj)
-                fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d),'utf8', function(err, result) {
-                    if(err) console.log('error', err);
-                })
-            } else {
-                dataa = JSON.parse(data);
-                console.log("data",dataa);
-                if(Array.isArray(dataa)){
-                    dataa.push(obj)
-                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
-                        if(err) console.log('error', err);
-                    })
-                } else {
-                    var d = [];
-                    d.push(dataa)
-                    d.push(obj)
-                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d),'utf8', function(err, result) {
-                        if(err) console.log('error', err);
-                    })
-                }
-            }
-        });
-    })
 }
 
+function middlewareConfigure(middlewares,moduule){
+    if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || !middlewares.includes(',') || middlewares.length === 0){
+        console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+        return ''
+    }
+    if(!middlewares.toString().includes(',')){
+        var middlewareArr = []
+        middlewareArr.push(middlewares)
+    } else {
+        var middlewareArr = middlewares.toString().split(',')
+    }
+    console.log("mm",middlewareArr)
+    let middleware = []
+    for(m of middlewareArr){
+        if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
+            console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+            return ''
+        }
+        middleware.push(m)
+        if(!fs.existsSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))){
+            fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
+                if(!files.includes('middlewares')){
+                    fs.mkdir(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true }, (err) => { 
+                        if (err) { 
+                            return console.error(err); 
+                        }  
+                    })
+                }
+            })
+            let funName = m.split('.')[1] 
+            let obj = {}
+            obj[funName]= (req,res)=>{}               
+            fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                if(err) console.log('error', err);
+            })
+        } else {
+
+        }
+    }
+    return middleware
+}
+
+function globalMiddlewareConfigure(globalMiddleware){
+    if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.') || !globalMiddleware.includes(',') || globalMiddleware.length === 0){
+        console.log(chalk.black.bgYellowBright('WARNING:')+' globalMiddleware is not defined in valid format')
+        return ''
+    }
+    if(!globalMiddleware.toString().includes(',')){
+        var middlewareArr = []
+        middlewareArr.push(globalMiddleware)
+    } else {
+        var middlewareArr = globalMiddleware.toString().split(',')
+    }
+    console.log("mm",middlewareArr)
+    let middleware = []
+    for(m of middlewareArr){
+        if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
+            console.log(chalk.black.bgYellowBright('WARNING:')+' Golabal Middleware is not defined in valid format')
+            return ''
+        }
+        middleware.push(m)
+        if(!fs.existsSync(path.join(rootDir,'middleware',m.split('.')[0]+'.js'))){
+            fs.readdir(path.join(rootDir),function(err,files){
+                if(!files.includes('middleware')){
+                    fs.mkdir(path.join(rootDir,'middleware'),{ recursive: true }, (err) => { 
+                        if (err) { 
+                            return console.error(err); 
+                        }  
+                    })
+                }
+            })
+            let funName = m.split('.')[1] 
+            let obj = {}
+            obj[funName]= (req,res)=>{}               
+            fs.writeFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                if(err) console.log('error', err);
+            })
+        } else {
+
+        }
+    }
+    return middleware
+}
