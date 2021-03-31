@@ -401,7 +401,7 @@ function actionConfigure(action,moduule){
     var fileName = action.toString().includes('.') && action.toString().split('.')[1] ?  action.toString().split('.')[0] : console.log(chalk.black.bgYellowBright('WARNING:')+' Controller is not defined in valid format')
         if(typeof fileName === 'object'){
             console.log(chalk.black.bgYellowBright('WARNING:')+' Controller is not defined in valid format')
-            return
+            return ''
         }
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'))){
             fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
@@ -420,19 +420,21 @@ function actionConfigure(action,moduule){
                 if(err) console.log('error', err);
             })
         } else {
-            let fileData = (require(path.join(rootDir,'api',moduule,'controllers',fileName+'.js')))
-            console.log(fileData['l'])
-            fileData[action.toString().split('.')[1]] = ()=>{console.log("yeyy")}
+            // let fileData = (require(path.join(rootDir,'api',moduule,'controllers',fileName+'.js')))
+            // console.log(fileData['l'])
+            // fileData[action.toString().split('.')[1]] = ()=>{console.log("yeyy")}
             // console.log("fldt",JSON.stringify(fileData))
-            // fs.readFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'utf8',(err,data)=>{
-            //     let obj = JSON.parse(data)
-            //     console.log("ddd",data, typeof data)
-            // })
+            var text = Object.create(null);
+            fs.readFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'utf8',(err,data)=>{
+                // text = JSON.parse(data);
+                eval(`text = {${data}}`);
+                console.log("ddd",text, typeof text)
+            })
         }
 }
 
 function middlewareConfigure(middlewares,moduule){
-    if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || !middlewares.includes(',') || middlewares.length === 0){
+    if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || middlewares.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
         return ''
     }
@@ -474,7 +476,7 @@ function middlewareConfigure(middlewares,moduule){
 }
 
 function globalMiddlewareConfigure(globalMiddleware){
-    if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.') || !globalMiddleware.includes(',') || globalMiddleware.length === 0){
+    if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.') || globalMiddleware.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' globalMiddleware is not defined in valid format')
         return ''
     }
