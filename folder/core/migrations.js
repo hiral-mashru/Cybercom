@@ -6,15 +6,9 @@ var Umzug = require('umzug');
 let rootPath = path.resolve(__dirname, '../');
 require('dotenv').config()
 
-var con = require('./connection');
-var connection
-async function umzg(){
+
+async function umzg(connection){
   return new Promise((resolve,reject)=>{
-    let p = new Promise((resolve,reject)=>{
-      connection = con.getSequelize()
-    })
-    p.then(function(value){
-    console.log("conn",connection)
     try{
       var umzug = new Umzug({
           storage: 'sequelize',
@@ -35,7 +29,6 @@ async function umzg(){
     } catch(err){
       console.log(chalk.red("Error coming between sequelize and umzug connection..."))
     }
-  })
   })
 }
 module.exports.umzg = umzg

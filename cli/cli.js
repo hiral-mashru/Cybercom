@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 var Spinner = require('cli-spinner').Spinner;
 const fs = require('fs');
-const path = require('path')
-const fetch = require('node-fetch')
+const path = require('path');
 const chalk = require('chalk')
 const Confirm = require('prompt-confirm')
 const [,,...args] = process.argv // to parse command line arguments
@@ -17,7 +16,7 @@ if(type==='create-folder') {
         if (!fs.existsSync(String(modulle))) {
             fs.mkdir(path.join(rootDir, String(modulle)),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory ${modulle} can't be created`) 
                 } 
                 console.log(chalk.green(`Directory ${modulle} created successfully!`)); 
             });
@@ -35,13 +34,12 @@ if(type==='create-folder') {
             .run()
             .then(function(answer){
                 if(answer){
-                    console.log(chalk.green("Loading..."))
                     var spinner = new Spinner('processing.. %s');
                     spinner.setSpinnerString('|/-\\');
                     spinner.start();
                     download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                         flag = true
-                        console.log(err ? 'Error' : 'Success')
+                        console.log(err ? chalk.red('Error in downloading folder structure') : chalk.green('Success'))
                         spinner.stop(true)
                         if(!err){
                             createStructure()
@@ -50,13 +48,12 @@ if(type==='create-folder') {
                 }
             })
         } else {
-            console.log(chalk.green("Loading..."))
             var spinner = new Spinner('processing.. %s');
             spinner.setSpinnerString('|/-\\');
             spinner.start();
             download('hiral-mashru/boilerplate-structure', rootDir, function (err) {
                 flag = true
-                console.log(err ? 'Error' : 'Success ')
+                console.log(err ? chalk.red('Error in downloading folder structure') : chalk.green('Success'))
                 spinner.stop(true)
                 if(!err){
                     createStructure()
@@ -64,7 +61,6 @@ if(type==='create-folder') {
             })
         }
     })
-
 } else if(type === 'create-module') {
     if(modulle.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module name...')
@@ -74,31 +70,31 @@ if(type==='create-folder') {
         if(m) {
             fs.mkdir(path.join(rootDir, 'api', m),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory ${m} can't be created`) 
                 } 
                 console.log(chalk.green(`Directory ${m} created successfully!`)); 
             });
             fs.mkdir(path.join(rootDir, 'api', m,'controllers'),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory ${m}/controllers can't be created`) 
                 } 
                 console.log(chalk.green(`Directory ${m}/controllers created successfully!`)); 
             });
             fs.mkdir(path.join(rootDir, 'api', m,'middlewares'),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory ${m}/middlewares can't be created`)  
                 } 
                 console.log(chalk.green(`Directory ${m}/middlewares created successfully!`)); 
             });
             fs.mkdir(path.join(rootDir, 'api', m,'services'),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory ${m}/services can't be created`)  
                 } 
                 console.log(chalk.green(`Directory ${m}/services created successfully!`)); 
             });
             if(!fs.existsSync(rootDir+'/api/'+m+'/routes.json')) {
                 fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'[]', function(err, result) {
-                    if(err) console.log('error', err);
+                    if(err) console.log(chalk.red('ERROR:')+` Directory ${m}/routes.json can't be created`) 
                 })
             }
             
@@ -108,13 +104,22 @@ if(type==='create-folder') {
     }
 
 } else if(type === 'db-config'){
+    fs.readdir(path.join(rootDir),function(err,files){
+        if (!files.includes('config')) {
+            fs.mkdir(path.join(rootDir,'config'),{ recursive: true }, (err) => { 
+                if (err) { 
+                    console.log(chalk.red('ERROR:')+` Directory config can't be created`) 
+                }  
+            });
+        }
+    }) 
     dbConfig()
 } else if(type === 'create-api'){
     fs.readdir(path.join(rootDir,'api'),function(err,files){
         if (err) {
             fs.mkdir(path.join(rootDir,'api'),{ recursive: true }, (err) => { 
                 if (err) { 
-                    return console.error(err); 
+                    console.log(chalk.red('ERROR:')+` Directory api can't be created`) 
                 }  
             });
         } 
@@ -128,7 +133,6 @@ if(type==='create-folder') {
                 }
             ]
             inquirer.prompt(ques).then(answers => {
-                console.log(answers['modules'])
                 createApi(answers['modules'])
             })
         } else {
@@ -145,103 +149,130 @@ else {
     console.log(chalk.black.bgYellowBright('WARNING:')+' Type is not provided')
 }
 
+let devusername="root";
+let devpassword=null;
+let devdatabase="database_development";
+let prousername="root";
+let propassword=null;
+let prodatabase="database_production";
+let databaseJsonData=`{
+  "development": {
+    "username": "${devusername}",
+    "password": "${devpassword}",
+    "database": "${devdatabase}",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "username": "${prousername}",
+    "password": "${propassword}",
+    "database": "${prodatabase}",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "logging": false
+  }
+}`
 
 function createStructure(){
     fs.mkdir(path.join(rootDir, 'api'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory api can't be created`) 
         }  
     });
     fs.mkdir(path.join(rootDir, 'config'), { recursive: true },(err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory config can't be created`) 
         }  
     });
     fs.mkdir(path.join(rootDir, 'core'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory core can't be created`) 
         } 
     });
     fs.mkdir(path.join(rootDir, 'crons'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory crons can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'db'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory db can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'dbLogs'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory dbLogs can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'db','models'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory db/models can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'db','migrations'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory db/migrations can't be created`) 
         } 
     });
     fs.mkdir(path.join(rootDir, 'db','seeders'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory db/seeders can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'functions'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory functions can't be created`)  
         } 
     });
     fs.mkdir(path.join(rootDir, 'middlewares'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory middlewares can't be created`) 
         } 
     });
     fs.mkdir(path.join(rootDir, 'src'),{ recursive: true }, (err) => { 
         if (err) { 
-            return console.error(err); 
+            console.log(chalk.red('ERROR:')+` Directory src can't be created`)  
         } 
     });
     
         fs.appendFile(path.join(rootDir, '.env'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File .env can't be created`) 
         })
     
     
         fs.appendFile(path.join(rootDir, 'core', 'connection.js'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File core/connection.js can't be created`) 
         })
     
      
         fs.appendFile(path.join(rootDir, 'core', 'migrations.js'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File core/migrations.js can't be created`) 
         })
     
 
         fs.appendFile(path.join(rootDir, 'core', 'routes.js'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File core/routes.js can't be created`) 
         })
 
     
         fs.appendFile(path.join(rootDir, 'core', 'models.js'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File core/models.js can't be created`) 
         })
     
     
         fs.appendFile(path.join(rootDir, 'core', 'services.js'),'', function(err, result) {
-            if(err) console.log('error', err);
+            if(err) console.log(chalk.red('ERROR:')+` File core/services.js can't be created`) 
         })
     
         fs.appendFile(path.join(rootDir, 'src', 'app.js'),'', function(err, result) {
-            if(err) {console.log('error', err);}
+            if(err) {console.log(chalk.red('ERROR:')+` File src/app.js can't be created`);}
+        })
+
+        fs.writeFile(path.join(rootDir,'config','database.json'),(databaseJsonData),function(err,result){
+            if(err) {console.log(chalk.red('ERROR:')+` File config/database.json can't be created`);}
         })
     
-    var setting;
     new Confirm({message: 'Do you want to config db right now?', default: false})
     .run()
     .then(function(answer){
@@ -252,22 +283,22 @@ function createStructure(){
 }
 
 function dbConfig(){
+    if(!fs.existsSync(rootDir+'/config'+'/database.json')) {
+        fs.writeFileSync(rootDir+'/config/database.json',databaseJsonData)
+    }
     new Confirm({message:'Do you want to setup development env?',default: false})
         .run()
         .then(function(answer){
-            if(fs.existsSync(rootDir+'/config'+'/database.json')) {
-                if(answer){
-                    setting = 'dev'
-                    createJSON(setting)
-                } else {
-                    console.log("Go for production env setup...")
-                    setting = 'prod'
-                    createJSON(setting)
-                }
+            if(answer){
+                setting = 'dev'
+                createJSON(setting)
+            } else {
+                console.log("Go for production env setup...")
+                setting = 'prod'
+                createJSON(setting)
             }
         })
 }
-
 
 function createJSON(setting){
     var questions = [
@@ -305,13 +336,52 @@ function createJSON(setting){
     ]
     inquirer.prompt(questions).then(answers => {
         if(setting === 'dev'){
-            fs.writeFile(path.join(rootDir, 'config','database.json'),"{\"development\":{\"username\":\""+answers['username']+"\",\"password\":\""+answers['password']+"\",\"database\":\""+answers['database']+"\",\"host\":\""+answers['host']+"\",\"dialect\":\""+answers['dialect']+"\",\"logging\":"+answers['logging']+"}}", function(err, result) {
-                if(err) console.log('error', err);
+            databaseJsonData=`{
+    "development": {
+        "username": "${answers['username']}",
+        "password": "${answers['password']}",
+        "database": "${answers['database']}",
+        "host": "${answers['host']}",
+        "dialect": "${answers['dialect']}",
+        "logging": ${answers['logging']}
+    },
+    "production": {
+        "username": "${prousername}",
+        "password": "${propassword}",
+        "database": "${prodatabase}",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "logging": false
+    }
+}`
+            // fs.writeFile(path.join(rootDir, 'config','database.json'),"{\"development\":{\"username\":\""+answers['username']+"\",\"password\":\""+answers['password']+"\",\"database\":\""+answers['database']+"\",\"host\":\""+answers['host']+"\",\"dialect\":\""+answers['dialect']+"\",\"logging\":"+answers['logging']+"}}", function(err, result) {
+            //     if(err) console.log(chalk.red('ERROR:')+` File config/database.json can't be created`) 
+            // })
+            fs.writeFile(path.join(rootDir, 'config','database.json'),(databaseJsonData), function(err, result) {
+                if(err) console.log(chalk.red('ERROR:')+` File config/database.json can't be created`) 
             })
         } 
         else if(setting === 'prod'){
-            fs.writeFile(path.join(rootDir, 'config','database.json'),"{\"production\":{\"username\":\""+answers['username']+"\",\"password\":\""+answers['password']+"\",\"database\":\""+answers['database']+"\",\"host\":\""+answers['host']+"\",\"dialect\":\""+answers['dialect']+"\",\"logging\":"+answers['logging']+"}}", function(err, result) {
-                if(err) console.log('error', err);
+            databaseJsonData=`{
+    "development": {
+        "username": "${devusername}",
+        "password": "${devpassword}",
+        "database": "${devdatabase}",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "logging": false
+    },
+    "production": {
+        "username": "${answers['username']}",
+        "password": "${answers['password']}",
+        "database": "${answers['database']}",
+        "host": "${answers['host']}",
+        "dialect": "${answers['dialect']}",
+        "logging": ${answers['logging']}
+    }
+}`
+            fs.writeFile(path.join(rootDir, 'config','database.json'),(databaseJsonData), function(err, result) {
+                if(err) console.log(chalk.red('ERROR:')+` File config/database.json can't be created`) 
             })
         }
     })
@@ -357,7 +427,6 @@ function createApi(moduule){
         }
     ]
     inquirer.prompt(questions).then(answers => {
-        console.log(typeof answers['action'])
         var pathh = answers['path'][0] === '/' ? answers['path'] : '/'+answers['path']
         var method = answers['method']
         actionConfigure(answers['action'],moduule)
@@ -369,33 +438,32 @@ function createApi(moduule){
         }
         var dataa;
         fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
-            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the routes.json file');
+            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the api/'+moduule+'/routes.json file');
             if(data.length===0){
                 let d = []
                 d.push(obj)
                 fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
-                    if(err) console.log('error', err);
+                    if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
                 })
             } else {
                 dataa = JSON.parse(data);
                 if(Array.isArray(dataa)){
                     dataa.push(obj)
                     fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
-                        if(err) console.log('error', err);
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
                     })
                 } else {
                     var d = [];
                     d.push(dataa)
                     d.push(obj)
                     fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
-                        if(err) console.log('error', err);
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
                     })
                 }
             }
         });
     })
 }
-
 
 function actionConfigure(action,moduule){
     var fileName = action.toString().includes('.') && action.toString().split('.')[1] ?  action.toString().split('.')[0] : console.log(chalk.black.bgYellowBright('WARNING:')+' Controller is not defined in valid format')
@@ -408,7 +476,7 @@ function actionConfigure(action,moduule){
                 if(!files.includes('controllers')){
                     fs.mkdir(path.join(rootDir, 'api', moduule, 'controllers'),{ recursive: true }, (err) => { 
                         if (err) { 
-                            return console.error(err); 
+                            console.log(chalk.red('ERROR:')+' Directory api/'+moduule+'/controllers can\'t br created');
                         }  
                     });
                 }
@@ -417,23 +485,30 @@ function actionConfigure(action,moduule){
             let obj = {}
             obj[funName]= (req,res)=>{}               
             fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                if(err) console.log('error', err);
+                if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+fileName+'.js file');
             })
         } else {
-            // let fileData = (require(path.join(rootDir,'api',moduule,'controllers',fileName+'.js')))
-            // console.log(fileData['l'])
-            // fileData[action.toString().split('.')[1]] = ()=>{console.log("yeyy")}
-            // console.log("fldt",JSON.stringify(fileData))
-            var text = Object.create(null);
-            fs.readFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),'utf8',(err,data)=>{
-                // text = JSON.parse(data);
-                eval(`text = {${data}}`);
-                console.log("ddd",text, typeof text)
+            fs.readFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),'utf8',(err,data)=>{
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),`module.exports = {\n ${action.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+action.split('.')[0]+'.js file');
+                    })
+                }
+                if(data.slice(-1)==='}'){
+                    let str = data.slice(0, -1)
+                    str += `,\n${action.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.toString().split('.')[1]}")\n }\n}`  
+                    fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+action.split('.')[0]+'.js file');
+                    })
+                }
             })
         }
 }
 
 function middlewareConfigure(middlewares,moduule){
+    if(middlewares.length === 0){
+        return ''
+    }
     if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || middlewares.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
         return ''
@@ -444,7 +519,6 @@ function middlewareConfigure(middlewares,moduule){
     } else {
         var middlewareArr = middlewares.toString().split(',')
     }
-    console.log("mm",middlewareArr)
     let middleware = []
     for(m of middlewareArr){
         if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
@@ -457,7 +531,7 @@ function middlewareConfigure(middlewares,moduule){
                 if(!files.includes('middlewares')){
                     fs.mkdir(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true }, (err) => { 
                         if (err) { 
-                            return console.error(err); 
+                            console.log(chalk.red('ERROR:')+' Directory api/'+moduule+'/midlewares can\'t be created');
                         }  
                     })
                 }
@@ -466,17 +540,33 @@ function middlewareConfigure(middlewares,moduule){
             let obj = {}
             obj[funName]= (req,res)=>{}               
             fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                if(err) console.log('error', err);
+                if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
             })
         } else {
-
+            fs.readFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in reading the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
+                    })
+                }
+                if(data.slice(-1)==='}'){
+                    let str = data.slice(0, -1)
+                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}`  
+                    fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
+                    })
+                }
+            })
         }
     }
     return middleware
 }
 
 function globalMiddlewareConfigure(globalMiddleware){
-    if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.') || globalMiddleware.length === 0){
+    if(globalMiddleware.length === 0){
+        return ''
+    }
+    if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.')){
         console.log(chalk.black.bgYellowBright('WARNING:')+' globalMiddleware is not defined in valid format')
         return ''
     }
@@ -486,7 +576,6 @@ function globalMiddlewareConfigure(globalMiddleware){
     } else {
         var middlewareArr = globalMiddleware.toString().split(',')
     }
-    console.log("mm",middlewareArr)
     let middleware = []
     for(m of middlewareArr){
         if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
@@ -499,7 +588,7 @@ function globalMiddlewareConfigure(globalMiddleware){
                 if(!files.includes('middleware')){
                     fs.mkdir(path.join(rootDir,'middleware'),{ recursive: true }, (err) => { 
                         if (err) { 
-                            return console.error(err); 
+                            console.log(chalk.red('ERROR:')+` Directory middleware can't br created`)
                         }  
                     })
                 }
@@ -508,11 +597,37 @@ function globalMiddlewareConfigure(globalMiddleware){
             let obj = {}
             obj[funName]= (req,res)=>{}               
             fs.writeFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                if(err) console.log('error', err);
+                if(err) console.log(chalk.red('ERROR:')+` Directory middleware/${m.split('.')[0]}.js can't be created`)
             })
         } else {
-
+            fs.readFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.writeFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+` Directory middleware/${m.split('.')[0]}.js can't be created`)
+                    })
+                }
+                console.log("ddd",data.slice(-1))
+                if(data.slice(-1)==='}'){
+                    let str = data.slice(0, -1)
+                    console.log("strr",str)
+                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}` 
+                    console.log("sss",str) 
+                    fs.writeFile(path.join(rootDir,'middleware',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
+                        if(err) console.log(chalk.red('ERROR:')+` Directory middleware/${m.split('.')[0]}.js can't be created`)
+                    })
+                }
+            })
         }
     }
     return middleware
+}
+
+function objToString (obj) {
+    var str = '';
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + ':' + obj[p] + '\n';
+        }
+    }
+    return str;
 }
