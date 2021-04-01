@@ -1,1 +1,1 @@
-Today,I did configuration for creating api, and db Logs..
+Today I updated setup, did changes in configuration, added async function and promise object for betterperformance..
