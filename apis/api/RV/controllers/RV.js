@@ -17,7 +17,7 @@ module.exports = {
     },
     globall: setup.functions["funcFile"]["func1"],
     getData: (req,res,next) => {
-        setup.crons["cron1"]["task"].start()
+        // setup.crons["cron1"]["task"].start()
         /*  #swagger.tags = ['students']
             #swagger.description = 'Endpoint to get the specific user.' */
         studentModel.findAll({
@@ -51,12 +51,9 @@ module.exports = {
                 message: "Student created successfully"
             })
         }).catch(e=>{
-            const err = new Error(e.name+" : "+setup.findErr(e.errors,'message'))
+            const err = new Error(e.name+" : "+setup.findErr(e))
             err.status = 500
             next(err)
-            // res.json({
-            //     e: e
-            // })
         })
     }, 
     upload: (req,res,next) => {

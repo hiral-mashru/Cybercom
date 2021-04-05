@@ -94,10 +94,24 @@ if(type==='create-folder') {
             });
             if(!fs.existsSync(rootDir+'/api/'+m+'/routes.json')) {
                 fs.writeFile(path.join(rootDir, 'api', m, 'routes.json'),'[]', function(err, result) {
-                    if(err) console.log(chalk.red('ERROR:')+` Directory ${m}/routes.json can't be created`) 
+                    if(err) console.log(chalk.red('ERROR:')+` File ${m}/routes.json can't be created`) 
                 })
             }
-            
+            if(!fs.existsSync(rootDir+'/api/'+m+'/controllers/'+m+'.js')) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'controllers',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+                    if(err) console.log(chalk.red('ERROR:')+` File ${m}/controllers/${m}.js can't be created`) 
+                })
+            }
+            if(!fs.existsSync(rootDir+'/api/'+m+'/middlewares/'+m+'.js')) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+                    if(err) console.log(chalk.red('ERROR:')+` File ${m}/middlewares/${m}.js can't be created`) 
+                })
+            }
+            if(!fs.existsSync(rootDir+'/api/'+m+'/services/'+m+'.js')) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'services',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+                    if(err) console.log(chalk.red('ERROR:')+` File ${m}/services/${m}.js can't be created`) 
+                })
+            }
         } else {
             console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module\'s name')
         }
@@ -115,15 +129,16 @@ if(type==='create-folder') {
     }) 
     dbConfig()
 } else if(type === 'create-api'){
-    fs.readdir(path.join(rootDir,'api'),function(err,files){
-        if (err) {
-            fs.mkdir(path.join(rootDir,'api'),{ recursive: true }, (err) => { 
-                if (err) { 
-                    console.log(chalk.red('ERROR:')+` Directory api can't be created`) 
-                }  
-            });
-        } 
-        if(files){
+    fs.readdirSync(path.join(rootDir),function(err,files){
+        if(!files.includes('api')){
+            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+        }
+    })
+    fs.readdir(path.join(rootDir,'api'),function(err,files){ 
+        if(err){
+            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+        }
+        if(files && files.length!==0){
             var ques = [
                 {
                     type: 'list',
@@ -140,6 +155,11 @@ if(type==='create-folder') {
         }
     })
 } else if(type === 'create-middleware'){
+    fs.readdirSync(path.join(rootDir),function(err,files){
+        if(!files.includes('api')){
+            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+        }
+    })
     fs.readdir(path.join(rootDir,'api'),function(err,files){
         if (err) {
             fs.mkdir(path.join(rootDir,'api'),{ recursive: true }, (err) => { 
@@ -148,7 +168,7 @@ if(type==='create-folder') {
                 }  
             });
         } 
-        if(files){
+        if(files && files.length!==0){
             var ques = [
                 {
                     type: 'list',
@@ -159,6 +179,36 @@ if(type==='create-folder') {
             ]
             inquirer.prompt(ques).then(answers => {
                 createMiddleware(answers['modules'])
+            })
+        } else {
+            console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
+        }
+    })
+} else if(type === 'create-globalMiddleware'){
+    fs.readdirSync(path.join(rootDir),function(err,files){
+        if(!files.includes('api')){
+            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+        }
+    })
+    fs.readdir(path.join(rootDir,'api'),function(err,files){
+        if (err) {
+            fs.mkdir(path.join(rootDir,'api'),{ recursive: true }, (err) => { 
+                if (err) { 
+                    console.log(chalk.red('ERROR:')+` Directory api can't be created`) 
+                }  
+            });
+        } 
+        if(files && files.length!==0){
+            var ques = [
+                {
+                    type: 'list',
+                    name: 'modules',
+                    message: "Enter Module Name:",
+                    choices: files.map(a => { return {name: a,value: a}})
+                }
+            ]
+            inquirer.prompt(ques).then(answers => {
+                createGlobalMiddleware(answers['modules'])
             })
         } else {
             console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
@@ -258,6 +308,11 @@ function createStructure(){
     fs.mkdir(path.join(rootDir, 'src'),{ recursive: true }, (err) => { 
         if (err) { 
             console.log(chalk.red('ERROR:')+` Directory src can't be created`)  
+        } 
+    });
+    fs.mkdir(path.join(rootDir, 'uploads'),{ recursive: true }, (err) => { 
+        if (err) { 
+            console.log(chalk.red('ERROR:')+` Directory uploads can't be created`)  
         } 
     });
     
@@ -532,11 +587,11 @@ function actionConfigure(action,moduule){
 
 function middlewareConfigure(middlewares,moduule){
     if(middlewares.length === 0){
-        return ''
+        return []
     }
     if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || middlewares.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
-        return ''
+        return []
     }
     if(!middlewares.toString().includes(',')){
         var middlewareArr = []
@@ -548,26 +603,36 @@ function middlewareConfigure(middlewares,moduule){
     for(m of middlewareArr){
         if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
             console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
-            return ''
+            return []
         }
         middleware.push(m)
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))){
+            console.log("0")
             fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
                 if(!files.includes('middlewares')){
                     fs.mkdir(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true }, (err) => { 
                         if (err) { 
-                            console.log(chalk.red('ERROR:')+' Directory api/'+moduule+'/midlewares can\'t be created');
+                            console.log(chalk.red('ERROR:')+' Directory api/'+moduule+'/middlewares can\'t be created');
+                        } else {
+                            let funName = m.split('.')[1] 
+                            let obj = {}
+                            obj[funName]= (req,res)=>{}               
+                            fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                                if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
+                            })
                         }  
+                    })
+                } else {
+                    let funName = m.split('.')[1] 
+                    let obj = {}
+                    obj[funName]= (req,res)=>{}               
+                    fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
                     })
                 }
             })
-            let funName = m.split('.')[1] 
-            let obj = {}
-            obj[funName]= (req,res)=>{}               
-            fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
-            })
         } else {
+            console.log("1")
             fs.readFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
                 if(data.length === 0 || !data.includes("module.exports")){
                     fs.appendFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
@@ -589,11 +654,11 @@ function middlewareConfigure(middlewares,moduule){
 
 function globalMiddlewareConfigure(globalMiddleware){
     if(globalMiddleware.length === 0){
-        return ''
+        return []
     }
     if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.')){
         console.log(chalk.black.bgYellowBright('WARNING:')+' globalMiddleware is not defined in valid format')
-        return ''
+        return []
     }
     if(!globalMiddleware.toString().includes(',')){
         var middlewareArr = []
@@ -604,41 +669,46 @@ function globalMiddlewareConfigure(globalMiddleware){
     let middleware = []
     for(m of middlewareArr){
         if(m.split('.')[0].length === 0 || m.split('.')[1].length === 0 || (!m.includes('.'))){
-            console.log(chalk.black.bgYellowBright('WARNING:')+' Golabal Middleware is not defined in valid format')
-            return ''
+            console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+            return []
         }
         middleware.push(m)
-        if(!fs.existsSync(path.join(rootDir,'middleware',m.split('.')[0]+'.js'))){
+        if(!fs.existsSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'))){
             fs.readdir(path.join(rootDir),function(err,files){
-                if(!files.includes('middleware')){
-                    fs.mkdir(path.join(rootDir,'middleware'),{ recursive: true }, (err) => { 
+                if(!files.includes('middlewares')){
+                    fs.mkdir(path.join(rootDir,'middlewares'),{ recursive: true }, (err) => { 
                         if (err) { 
-                            console.log(chalk.red('ERROR:')+` Directory middleware can't be created`)
-                        }  
+                            console.log(chalk.red('ERROR:')+` Directory middlewares can't be created`)
+                        } else {
+                            let funName = m.split('.')[1] 
+                            let obj = {}
+                            obj[funName]= (req,res)=>{}               
+                            fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                                if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created `+err)
+                            })
+                        } 
+                    })
+                } else {
+                    let funName = m.split('.')[1] 
+                    let obj = {}
+                    obj[funName]= (req,res)=>{}               
+                    fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created `+err)
                     })
                 }
-            })
-            let funName = m.split('.')[1] 
-            let obj = {}
-            obj[funName]= (req,res)=>{}               
-            fs.writeFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                if(err) console.log(chalk.red('ERROR:')+` File middleware/${m.split('.')[0]}.js can't be created `+err)
             })
         } else {
-            fs.readFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
+            fs.readFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.writeFile(path.join(rootDir,'middleware',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+` File middleware/${m.split('.')[0]}.js can't be created`)
+                    fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
+                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created`)
                     })
                 }
-                console.log("ddd",data.slice(-1))
                 if(data.slice(-1)==='}'){
                     let str = data.slice(0, -1)
-                    console.log("strr",str)
-                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}` 
-                    console.log("sss",str) 
-                    fs.writeFile(path.join(rootDir,'middleware',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
-                        if(err) console.log(chalk.red('ERROR:')+` File middleware/${m.split('.')[0]}.js can't be created`)
+                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}`  
+                    fs.writeFile(path.join(rootDir,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
+                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created`)
                     })
                 }
             })
@@ -659,54 +729,121 @@ function createMiddleware(moduule){
     Object.values(jsonData).forEach(obj=> {
         queChoice.push("path: "+obj['path']+", action: "+obj['action'])
     })
-    let ques = [
-        {
-            type: 'list',
-            name: 'apis',
-            message: "Enter api name:",
-            choices: queChoice
-        },
-        {
-            type: 'input',
-            name: 'middleware',
-            message: 'Enter name of middleware:',
-        }
-    ]
-    inquirer.prompt(ques).then(answers => {
-        if(answers['middleware'].length === 0){
-            return ''
-        }
-        if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || answers['middleware'].length === 0){
-            console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
-            return ''
-        }
-        let pathh = answers['apis'].toString().split(',')[0].split(': ')[1]
-        let action = answers['apis'].toString().split(',')[1].split(': ')[1]
-        Object.values(jsonData).forEach(obj=> {
-            console.log('oooo',obj['middlewares'],Array.isArray(obj['middlewares']),answers['middleware'].includes(','),obj['middlewares'] === "",obj['middlewares'].length===0,!obj['middlwares'])
-            if(obj['path'] === pathh && obj['action'] === action){
-                if(obj['middlewares'] === "" || obj['middlewares'].length===0){
-                    let ar = []
-                    if(answers['middleware'].includes(',')){
-                        obj['middlewares'] = answers['middleware'].split(',')
-                    } else {
-                        ar.push(answers['middleware'])
-                        obj['middlewares'] = ar
-                    }
-                } else if(Array.isArray(obj['middlewares']) && answers['middleware'].includes(',')){
-                    obj['middlewares'] = obj['middlewares'].concat(answers['middleware'].split(','))
-                } else if(Array.isArray(obj['middlewares'])){
-                    obj['middlewares'].push(answers['middleware']) 
-                } else {
-                    let arr = []
-                    arr.push(obj['middlewares'])
-                    arr.push(answers['middleware'])
-                }
+    if(queChoice.length !== 0){
+        let ques = [
+            {
+                type: 'list',
+                name: 'apis',
+                message: "Enter api name:",
+                choices: queChoice
+            },
+            {
+                type: 'input',
+                name: 'middleware',
+                message: 'Enter name of middleware:',
             }
+        ]
+        inquirer.prompt(ques).then(answers => {
+            if(answers['middleware'].length === 0){
+                return []
+            }
+            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || answers['middleware'].length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                return []
+            }
+            let pathh = answers['apis'].toString().split(',')[0].split(': ')[1]
+            let action = answers['apis'].toString().split(',')[1].split(': ')[1]
+            Object.values(jsonData).forEach(obj=> {
+                if(obj['path'] === pathh && obj['action'] === action){
+                    if(obj['middlewares'] === "" || obj['middlewares'].length===0){
+                        let ar = []
+                        if(answers['middleware'].includes(',')){
+                            obj['middlewares'] = answers['middleware'].split(',')
+                        } else {
+                            ar.push(answers['middleware'])
+                            obj['middlewares'] = ar
+                        }
+                    } else if(Array.isArray(obj['middlewares']) && answers['middleware'].includes(',')){
+                        obj['middlewares'] = obj['middlewares'].concat(answers['middleware'].split(','))
+                    } else if(Array.isArray(obj['middlewares'])){
+                        obj['middlewares'].push(answers['middleware']) 
+                    } else {
+                        let arr = []
+                        arr.push(obj['middlewares'])
+                        arr.push(answers['middleware'])
+                    }
+                }
+            })
+            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData))
+            middlewareConfigure(answers['middleware'],moduule)
         })
-        fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData))
-        middlewareConfigure(answers['middleware'],moduule)
+    } else {
+        console.log(chalk.black.bgYellowBright('WARNING:')+' There is no api. Create api with "framework create-api"')
+    }
+}
+
+function createGlobalMiddleware(moduule){
+    fs.readdir(path.join(rootDir),(err,files)=>{
+        if(!files.includes('middlewares')){
+            fs.mkdirSync(path.join(rootDir,'middlewares'),{recursive: true})
+        }
     })
+    let jsonData = require(path.join(rootDir,'api',moduule,'routes.json'))
+    let queChoice = []
+    Object.values(jsonData).forEach(obj=> {
+        queChoice.push("path: "+obj['path']+", action: "+obj['action'])
+    })
+    if(queChoice.length !== 0){
+        let ques = [
+            {
+                type: 'list',
+                name: 'apis',
+                message: "Enter api name:",
+                choices: queChoice
+            },
+            {
+                type: 'input',
+                name: 'middleware',
+                message: 'Enter name of global middleware:',
+            }
+        ]
+        inquirer.prompt(ques).then(answers => {
+            if(answers['middleware'].length === 0){
+                return []
+            }
+            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || answers['middleware'].length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+                return []
+            }
+            let pathh = answers['apis'].toString().split(',')[0].split(': ')[1]
+            let action = answers['apis'].toString().split(',')[1].split(': ')[1]
+            Object.values(jsonData).forEach(obj=> {
+                if(obj['path'] === pathh && obj['action'] === action){
+                    if(obj['globalMiddleware'] === "" || obj['globalMiddleware'].length===0){
+                        let ar = []
+                        if(answers['middleware'].includes(',')){
+                            obj['globalMiddleware'] = answers['middleware'].split(',')
+                        } else {
+                            ar.push(answers['middleware'])
+                            obj['globalMiddleware'] = ar
+                        }
+                    } else if(Array.isArray(obj['globalMiddleware']) && answers['middleware'].includes(',')){
+                        obj['globalMiddleware'] = obj['globalMiddleware'].concat(answers['middleware'].split(','))
+                    } else if(Array.isArray(obj['globalMiddleware'])){
+                        obj['globalMiddleware'].push(answers['middleware']) 
+                    } else {
+                        let arr = []
+                        arr.push(obj['globalMiddleware'])
+                        arr.push(answers['middleware'])
+                    }
+                }
+            })
+            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData))
+            globalMiddlewareConfigure(answers['middleware'],moduule)
+        })
+    } else {
+        console.log(chalk.black.bgYellowBright('WARNING:')+' There is no api. Create api with "framework create-api"')
+    }
 }
 
 function objToString (obj) {

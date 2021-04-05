@@ -8,9 +8,7 @@ require('../core/connection').getSequelize()
     .then((app)=>{
       require('../config/config').morgn(app)
       require('../config/fileUpload')
-      function findErr(err) {
-          var array = err.errors
-          var key = 'message'
+      function findErr(array, key) {
           var arr = []
           for (var i = 0; i < array.length; i++) {
               if (array[i][key]) {
