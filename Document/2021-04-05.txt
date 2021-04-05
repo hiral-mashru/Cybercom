@@ -1,0 +1,1 @@
+Today I prepared a doc file in which features of setup are defined and solved some bugs in setup.
