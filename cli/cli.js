@@ -214,6 +214,13 @@ if(type==='create-folder') {
             console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
         }
     })
+} else if(type === 'help'){
+    console.log(chalk.black.bgYellowBright('framework init')+' => It creates the whole folder structure and also will ask for database configuration.')
+    console.log(chalk.black.bgYellowBright('framework create-module <moduleName>')+' => It creates module consistes of controllers,services,middlewares files and folders with routes.json file.')
+    console.log(chalk.black.bgYellowBright('framework create-api')+' => It generates the api in given module.')
+    console.log(chalk.black.bgYellowBright('framework create-middleware')+' => It generates the middleware in given module.')
+    console.log(chalk.black.bgYellowBright('framework create-globalMiddleware')+' => It generates the global middleware in given module.')
+    console.log(chalk.black.bgYellowBright('framework db-config')+' => It does configuration of database.')
 }
 // else if(type === 'github'){
 //     download('hiral-mashru/boilerplate-structure', '', function (err) {
@@ -221,7 +228,7 @@ if(type==='create-folder') {
 //     })
 // }
 else {
-    console.log(chalk.black.bgYellowBright('WARNING:')+' Type is not provided')
+    console.log(chalk.black.bgYellowBright('WARNING:')+' Enter correct command. Need help ? Go for "framework help"')
 }
 
 let devusername="root";
