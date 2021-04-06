@@ -762,7 +762,7 @@ function createMiddleware(moduule){
             let action = answers['apis'].toString().split(',')[1].split(': ')[1]
             Object.values(jsonData).forEach(obj=> {
                 if(obj['path'] === pathh && obj['action'] === action){
-                    if(obj['middlewares'] === "" || obj['middlewares'].length===0){
+                    if(!('middlewares' in obj) || obj['middlewares'] === "" || obj['middlewares'].length===0){
                         let ar = []
                         if(answers['middleware'].includes(',')){
                             obj['middlewares'] = answers['middleware'].split(',')
@@ -826,7 +826,7 @@ function createGlobalMiddleware(moduule){
             let action = answers['apis'].toString().split(',')[1].split(': ')[1]
             Object.values(jsonData).forEach(obj=> {
                 if(obj['path'] === pathh && obj['action'] === action){
-                    if(obj['globalMiddleware'] === "" || obj['globalMiddleware'].length===0){
+                    if(!('globalMiddleware' in obj) || obj['globalMiddleware'] === "" || obj['globalMiddleware'].length===0){
                         let ar = []
                         if(answers['middleware'].includes(',')){
                             obj['globalMiddleware'] = answers['middleware'].split(',')
