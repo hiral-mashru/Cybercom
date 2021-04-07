@@ -103,7 +103,7 @@ if(type==='create-folder') {
                 })
             }
             if(!fs.existsSync(rootDir+'/api/'+m+'/middlewares/'+m+'.js')) {
-                fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+                fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res,next)=> {\n  console.log("This is function ${m}")\n  next();\n }\n}`, function(err, result) {
                     if(err) console.log(chalk.red('ERROR:')+` File ${m}/middlewares/${m}.js can't be created`) 
                 })
             }
@@ -129,7 +129,7 @@ if(type==='create-folder') {
     }) 
     dbConfig()
 } else if(type === 'create-api'){
-    fs.readdirSync(path.join(rootDir),function(err,files){
+    fs.readdir(path.join(rootDir),function(err,files){
         if(!files.includes('api')){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
         }
@@ -155,7 +155,7 @@ if(type==='create-folder') {
         }
     })
 } else if(type === 'create-middleware'){
-    fs.readdirSync(path.join(rootDir),function(err,files){
+    fs.readdir(path.join(rootDir),function(err,files){
         if(!files.includes('api')){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
         }
@@ -185,7 +185,7 @@ if(type==='create-folder') {
         }
     })
 } else if(type === 'create-globalMiddleware'){
-    fs.readdirSync(path.join(rootDir),function(err,files){
+    fs.readdir(path.join(rootDir),function(err,files){
         if(!files.includes('api')){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
         }
@@ -312,6 +312,11 @@ function createStructure(){
             console.log(chalk.red('ERROR:')+` Directory middlewares can't be created`) 
         } 
     });
+    if(!fs.existsSync(rootDir+'/middlewares/middleware.js')) {
+        fs.writeFile(path.join(rootDir,'middlewares','middleware.js'),`module.exports = {\n middleware: (req,res,next)=> {\n  console.log("This is function global middleware")\n  next();\n }\n}`, function(err, result) {
+            if(err) console.log(chalk.red('ERROR:')+` File /middlewares/middleware.js can't be created`) 
+        })
+    }
     fs.mkdir(path.join(rootDir, 'src'),{ recursive: true }, (err) => { 
         if (err) { 
             console.log(chalk.red('ERROR:')+` Directory src can't be created`)  
@@ -428,8 +433,8 @@ function createJSON(setting){
         "username": "${answers['username']}",
         "password": "${answers['password']}",
         "database": "${answers['database']}",
-        "host": "${answers['host']}",
-        "dialect": "${answers['dialect']}",
+        "host": "${answers['host'] || '127.0.0.1'}",
+        "dialect": "${answers['dialect'] || 'mysql'}",
         "logging": ${answers['logging']}
     },
     "production": {
@@ -462,8 +467,8 @@ function createJSON(setting){
         "username": "${answers['username']}",
         "password": "${answers['password']}",
         "database": "${answers['database']}",
-        "host": "${answers['host']}",
-        "dialect": "${answers['dialect']}",
+        "host": "${answers['host'] || '127.0.0.1'}",
+        "dialect": "${answers['dialect'] || 'mysql'}",
         "logging": ${answers['logging']}
     }
 }`
@@ -485,7 +490,7 @@ function createApi(moduule){
             type: 'list',
             name: 'method',
             message: "Enter Method: ",
-            choices: [{name: 'GET', value: 'GET'},{name: 'POST', value: 'POST'},{name: 'PUT', value: 'PUT'},{name: 'DELETE', value: 'DELETE'}]
+            choices: [{name: 'get', value: 'get'},{name: 'post', value: 'post'},{name: 'put', value: 'put'},{name: 'patch', value: 'patch'},{name: 'delete', value: 'delete'}]
         },
         {
             type: 'input',
@@ -614,46 +619,24 @@ function middlewareConfigure(middlewares,moduule){
         }
         middleware.push(m)
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))){
-            console.log("0")
-            fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
+            let files = fs.readdirSync(path.join(rootDir,'api',moduule))
                 if(!files.includes('middlewares')){
-                    fs.mkdir(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true }, (err) => { 
-                        if (err) { 
-                            console.log(chalk.red('ERROR:')+' Directory api/'+moduule+'/middlewares can\'t be created');
-                        } else {
-                            let funName = m.split('.')[1] 
-                            let obj = {}
-                            obj[funName]= (req,res)=>{}               
-                            fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                                if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
-                            })
-                        }  
-                    })
-                } else {
-                    let funName = m.split('.')[1] 
-                    let obj = {}
-                    obj[funName]= (req,res)=>{}               
-                    fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
-                    })
+                    fs.mkdirSync(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true })
                 }
-            })
+                let funName = m.split('.')[1]                
+                fs.writeFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is function ${funName}")\n  next();\n }\n}`,'utf8')
+            
         } else {
-            console.log("1")
-            fs.readFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
+            let data = fs.readFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.appendFile(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+' Error coming in reading the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
-                    })
+                    fs.appendFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
                 }
-                if(data.slice(-1)==='}'){
-                    let str = data.slice(0, -1)
-                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}`  
-                    fs.writeFile(path.join(rootDir,'api',moduule,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
-                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/middlewares/'+m.split('.')[0]+'.js file');
-                    })
+                if(data.toString().charAt(data.length-1)==='}'){
+                    const lastParanthesis=data.toString().lastIndexOf('}')
+                    let str = data.slice(0,lastParanthesis);
+                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
+                    fs.writeFileSync(path.join(rootDir,'api',moduule,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8')
                 }
-            })
         }
     }
     return middleware
@@ -681,44 +664,25 @@ function globalMiddlewareConfigure(globalMiddleware){
         }
         middleware.push(m)
         if(!fs.existsSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'))){
-            fs.readdir(path.join(rootDir),function(err,files){
+            let files = fs.readdirSync(path.join(rootDir))
                 if(!files.includes('middlewares')){
-                    fs.mkdir(path.join(rootDir,'middlewares'),{ recursive: true }, (err) => { 
-                        if (err) { 
-                            console.log(chalk.red('ERROR:')+` Directory middlewares can't be created`)
-                        } else {
-                            let funName = m.split('.')[1] 
-                            let obj = {}
-                            obj[funName]= (req,res)=>{}               
-                            fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                                if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created `+err)
-                            })
-                        } 
-                    })
-                } else {
-                    let funName = m.split('.')[1] 
-                    let obj = {}
-                    obj[funName]= (req,res)=>{}               
-                    fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created `+err)
-                    })
+                    fs.mkdirSync(path.join(rootDir,'middlewares'),{ recursive: true })
                 }
-            })
+                let funName = m.split('.')[1]                
+                fs.writeFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is function ${funName}")\n  next();\n }\n}`,'utf8')
+            
         } else {
-            fs.readFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),'utf8',(err,data)=>{
+            let data = fs.readFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.writeFile(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created`)
-                    })
+                    fs.appendFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
                 }
-                if(data.slice(-1)==='}'){
-                    let str = data.slice(0, -1)
-                    str += `,\n${m.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n }\n}`  
-                    fs.writeFile(path.join(rootDir,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
-                        if(err) console.log(chalk.red('ERROR:')+` File middlewares/${m.split('.')[0]}.js can't be created`)
-                    })
+                if(data.toString().charAt(data.length-1)==='}'){
+                    var lastParanthesis=data.toString().lastIndexOf('}')
+                    let str = data.slice(0,lastParanthesis);
+                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
+                    fs.writeFileSync(path.join(rootDir,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8')
                 }
-            })
+            
         }
     }
     return middleware
