@@ -68,25 +68,25 @@ if(type==='create-folder') {
     }
     for(let m of modulle){
         if(m) {
-            fs.mkdir(path.join(rootDir, 'api', m),{ recursive: true }, (err) => { 
+            fs.mkdir(rootDir+'/api/'+m,{ recursive: true }, (err) => { 
                 if (err) { 
                     console.log(chalk.red('ERROR:')+` Directory ${m} can't be created`) 
                 } 
                 console.log(chalk.green(`Directory ${m} created successfully!`)); 
             });
-            fs.mkdir(path.join(rootDir, 'api', m,'controllers'),{ recursive: true }, (err) => { 
+            fs.mkdir(rootDir+'/api/'+m+'/controllers',{ recursive: true }, (err) => { 
                 if (err) { 
                     console.log(chalk.red('ERROR:')+` Directory ${m}/controllers can't be created`) 
                 } 
                 console.log(chalk.green(`Directory ${m}/controllers created successfully!`)); 
             });
-            fs.mkdir(path.join(rootDir, 'api', m,'middlewares'),{ recursive: true }, (err) => { 
+            fs.mkdir(rootDir+'/api/'+m+'/middlewares',{ recursive: true }, (err) => { 
                 if (err) { 
                     console.log(chalk.red('ERROR:')+` Directory ${m}/middlewares can't be created`)  
                 } 
                 console.log(chalk.green(`Directory ${m}/middlewares created successfully!`)); 
             });
-            fs.mkdir(path.join(rootDir, 'api', m,'services'),{ recursive: true }, (err) => { 
+            fs.mkdir(rootDir+'/api/'+m+'/services',{ recursive: true }, (err) => { 
                 if (err) { 
                     console.log(chalk.red('ERROR:')+` Directory ${m}/services can't be created`)  
                 } 
@@ -317,6 +317,11 @@ function createStructure(){
             if(err) console.log(chalk.red('ERROR:')+` File /middlewares/middleware.js can't be created`) 
         })
     }
+        
+    fs.appendFile(path.join(rootDir,'.gitignore'),`node_modules/`, function(err, result) {
+        if(err) console.log(chalk.red('ERROR:')+` File .gitignore can't be created`) 
+    })
+    
     fs.mkdir(path.join(rootDir, 'src'),{ recursive: true }, (err) => { 
         if (err) { 
             console.log(chalk.red('ERROR:')+` Directory src can't be created`)  
@@ -378,7 +383,7 @@ function dbConfig(){
     if(!fs.existsSync(rootDir+'/config'+'/database.json')) {
         fs.writeFileSync(rootDir+'/config/database.json',databaseJsonData)
     }
-    new Confirm({message:'Do you want to setup development env?',default: false})
+    new Confirm({message:'Do you want to setup development env?'})
         .run()
         .then(function(answer){
             if(answer){
@@ -397,17 +402,38 @@ function createJSON(setting){
         {
           type: 'input',
           name: 'username',
-          message: "Enter username: "
+          message: "Enter username: ",
+          validate: function( value ) {
+            if (value.length) {
+              return true;
+            } else {
+              return 'Enter the username: ';
+            }
+          }
         },
         {
             type: 'password',
             name: 'password',
-            message: "Enter password: "
+            message: "Enter password: ",
+            validate: function( value ) {
+                if (value.length) {
+                  return true;
+                } else {
+                  return 'Enter password: ';
+                }
+              }
         },
         {
             type: 'input',
             name: 'database',
-            message: "Enter database: "
+            message: "Enter database name: ",
+            validate: function( value ) {
+                if (value.length) {
+                  return true;
+                } else {
+                  return 'Enter dataase name:';
+                }
+              }
         },
         {
             type: 'input',
@@ -495,7 +521,14 @@ function createApi(moduule){
         {
             type: 'input',
             name: 'action',
-            message: "Enter controller (in 'FileName.FunctionName' format): "
+            message: "Enter controller (in 'FileName.FunctionName' format): ",
+            validate: function( value ) {
+                if (value.length) {
+                  return true;
+                } else {
+                  return "Enter controller (in 'FileName.FunctionName' format): ";
+                }
+            }
         },
         {
             type: 'input',
@@ -510,51 +543,81 @@ function createApi(moduule){
         {
             type: 'confirm',
             name: 'public',
-            message: "API's access would be Public? : "
+            message: "API's access would be Public? : ",
+            default: true
         },
         {
             type: 'confirm',
             name: 'root',
-            message: "Call from root? "
+            message: "Call from root? ",
+            default: false
         }
     ]
     inquirer.prompt(questions).then(answers => {
         var pathh = answers['path'][0] === '/' ? answers['path'] : '/'+answers['path']
         var method = answers['method']
-        actionConfigure(answers['action'],moduule)
-        var middleware = middlewareConfigure(answers['middlewares'],moduule)
-        var globalMiddleware = globalMiddlewareConfigure(answers['globalMiddleware'])
-        var obj = {"path": pathh, "method": method, "action": answers['action'], "middlewares": middleware, "globalMiddleware": globalMiddleware , "public": answers['public'], "root": answers['root']}
-        if(!fs.existsSync(path.join(rootDir,'api',moduule,'routes.json'))){
-            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),'')
-        }
-        var dataa;
-        fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
-            if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the api/'+moduule+'/routes.json file');
-            if(data.length===0){
-                let d = []
-                d.push(obj)
-                fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
-                    if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
-                })
-            } else {
-                dataa = JSON.parse(data);
-                if(Array.isArray(dataa)){
-                    dataa.push(obj)
-                    fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
-                        if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
-                    })
-                } else {
-                    var d = [];
-                    d.push(dataa)
+        checkPath(moduule,pathh,answers['root'],method).then((jsonData)=>{
+            for(obj of jsonData){
+                if(obj['path']===pathh && obj['root']===answers['root'] && obj['method']===method){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' This path has been used already..')
+                    return '';
+                }
+            }
+            let apiData = require(path.join(rootDir,'api',moduule,'controllers',answers['action'].split('.')[0]+'.js'))
+            for(i in (apiData)){
+                if(i === answers['action'].split('.')[1]){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' api '+answers['action'].split('.')[1]+' name is already exists in '+answers['action'].split('.')[0]+'.js')
+                    return ''
+                }
+            } 
+            actionConfigure(answers['action'],moduule)
+            var middleware = middlewareConfigure(answers['middlewares'],moduule)
+            if(middleware === ''){
+                return ''
+            }
+            var globalMiddleware = globalMiddlewareConfigure(answers['globalMiddleware'])
+            if(globalMiddleware === ''){
+                return ''
+            }
+            var obj = {"path": pathh, "method": method, "action": answers['action'], "middlewares": middleware, "globalMiddleware": globalMiddleware , "public": answers['public'], "root": answers['root']}
+            if(!fs.existsSync(path.join(rootDir,'api',moduule,'routes.json'))){
+                fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),'')
+            }
+            var dataa;
+            fs.readFile(path.join(rootDir, 'api',moduule,'routes.json'), (err, data) => {
+                if (err) console.log(chalk.red('ERROR:')+' Error coming in reading the api/'+moduule+'/routes.json file');
+                if(data.length===0){
+                    let d = []
                     d.push(obj)
                     fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
                         if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
                     })
+                } else {
+                    dataa = JSON.parse(data);
+                    if(Array.isArray(dataa)){
+                        dataa.push(obj)
+                        fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
+                            if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
+                        })
+                    } else {
+                        var d = [];
+                        d.push(dataa)
+                        d.push(obj)
+                        fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(d,null," "),'utf8', function(err, result) {
+                            if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
+                        })
+                    }
                 }
-            }
-        });
+            });
+        })
     })
+}
+
+async function checkPath(moduule,pathh,root,method){
+    return new Promise((resolve,reject)=>{
+    let jsonData = require(path.join(rootDir,'api',moduule,'routes.json'))
+    resolve(jsonData)
+})
 }
 
 function actionConfigure(action,moduule){
@@ -580,6 +643,13 @@ function actionConfigure(action,moduule){
                 if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+fileName+'.js file');
             })
         } else {
+            let apiData = require(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'))
+            for(i in (apiData)){
+                if(i === action.split('.')[1]){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' Given api name is already exists in '+action.split('.')[0]+'.js')
+                    return ''
+                }
+            }
             fs.readFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),'utf8',(err,data)=>{
                 if(data.length === 0 || !data.includes("module.exports")){
                     fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),`module.exports = {\n ${action.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
@@ -618,6 +688,13 @@ function middlewareConfigure(middlewares,moduule){
             return []
         }
         middleware.push(m)
+        let middlewareData = require(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))
+        for(j in (middlewareData)){
+            if(j === m.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' '+m.split('.')[0]+' middleware is already exists in '+m.split('.')[0]+'.js')
+                return ''
+            }
+        }
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))){
             let files = fs.readdirSync(path.join(rootDir,'api',moduule))
                 if(!files.includes('middlewares')){
@@ -663,6 +740,13 @@ function globalMiddlewareConfigure(globalMiddleware){
             return []
         }
         middleware.push(m)
+        let middlewareData = require(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'))
+        for(j in (middlewareData)){
+            if(j === m.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' '+m.split('.')[0]+' global middleware is already exists in '+m.split('.')[0]+'.js')
+                return ''
+            }
+        }
         if(!fs.existsSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'))){
             let files = fs.readdirSync(path.join(rootDir))
                 if(!files.includes('middlewares')){
@@ -695,10 +779,9 @@ function createMiddleware(moduule){
         }
     })
     let jsonData = require(path.join(rootDir,'api',moduule,'routes.json'))
-    // let jsonData = fs.readFileSync(path.join(rootDir,'api',moduule,'routes.json'))
     let queChoice = []
     Object.values(jsonData).forEach(obj=> {
-        queChoice.push("path: "+obj['path']+", action: "+obj['action'])
+        queChoice.push("path: "+obj['path']+", action: "+obj['action']+", method:"+obj['method'])
     })
     if(queChoice.length !== 0){
         let ques = [
@@ -762,7 +845,7 @@ function createGlobalMiddleware(moduule){
     let jsonData = require(path.join(rootDir,'api',moduule,'routes.json'))
     let queChoice = []
     Object.values(jsonData).forEach(obj=> {
-        queChoice.push("path: "+obj['path']+", action: "+obj['action'])
+        queChoice.push("path: "+obj['path']+", action: "+obj['action']+", method:"+obj['method'])
     })
     if(queChoice.length !== 0){
         let ques = [

@@ -16,6 +16,7 @@
     "inquirer": "^8.0.0",
     "node-fetch": "^2.6.1",
     "prompt-confirm": "^2.0.4",
-    "prompts": "^2.4.0"
+    "prompts": "^2.4.0",
+    "shelljs": "^0.8.4"
   }
 }
