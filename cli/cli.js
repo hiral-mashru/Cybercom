@@ -499,6 +499,11 @@ function createModule(m){
             console.log(chalk.red('ERROR:')+` Directory ${m}/middlewares can't be created`)  
         }  
     });
+    fs.mkdir(rootDir+'/api/'+m+'/functions',{ recursive: true }, (err) => { 
+        if (err) { 
+            console.log(chalk.red('ERROR:')+` Directory ${m}/functions can't be created`)  
+        }  
+    });
     fs.mkdir(rootDir+'/api/'+m+'/services',{ recursive: true }, (err) => { 
         if (err) { 
             console.log(chalk.red('ERROR:')+` Directory ${m}/services can't be created`)  
@@ -517,6 +522,11 @@ function createModule(m){
     if(!fs.existsSync(rootDir+'/api/'+m+'/middlewares/'+m+'.js')) {
         fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res,next)=> {\n  console.log("This is function ${m}")\n  next();\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File ${m}/middlewares/${m}.js can't be created`) 
+        })
+    }
+    if(!fs.existsSync(rootDir+'/api/'+m+'/functions/'+m+'.js')) {
+        fs.writeFile(path.join(rootDir, 'api', m, 'functions',m+'.js'),`module.exports = {\n ${m}: ()=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+            if(err) console.log(chalk.red('ERROR:')+` File ${m}/functions/${m}.js can't be created`) 
         })
     }
     if(!fs.existsSync(rootDir+'/api/'+m+'/services/'+m+'.js')) {
