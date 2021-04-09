@@ -120,7 +120,7 @@ if(type==='create-folder') {
         if(err){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
         }
-        if(files.length === 0){
+        if(!files || files.length === 0){
             console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api')
         }
         files.push("Want_New_module?")
@@ -534,6 +534,7 @@ function createModule(m){
             if(err) console.log(chalk.red('ERROR:')+` File ${m}/services/${m}.js can't be created`) 
         })
     }
+console.log(chalk.green(m+' module is created.'))
 }
 }
 
@@ -589,16 +590,57 @@ function createApi(moduule){
         var pathh = answers['path'][0] === '/' ? answers['path'] : '/'+answers['path']
         var method = answers['method']
         checkPath(moduule,pathh,answers['root'],method).then((jsonData)=>{
+            
             for(obj of jsonData){
                 if(obj['path']===pathh && obj['root']===answers['root'] && obj['method']===method){
                     console.log(chalk.black.bgYellowBright('WARNING:')+' This path has been used already..')
                     return '';
                 }
             } 
-            let act = actionConfigure(answers['action'],moduule)
-            if(act===0){
+            if(answers['action'].length === 0){
+                return 0
+            }
+            if(!answers['action'].match(/[A-Za-z0-9]/) || !answers['action'].includes('.') || !answers['action'].split('.')[0] || !answers['action'].split('.')[1] || answers['action'].length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Action is not defined in valid format')
+                return 0
+            }
+            let fll = fs.readdirSync(path.join(rootDir,'api',moduule,'controllers'))
+            if(fll.includes(answers['action'].split('.')[0]+'.js')){
+                let apiData = require(path.join(rootDir,'api',moduule,'controllers',answers['action'].split('.')[0]+'.js'))
+                for(i in (apiData)){
+                    if(i.toString().toLowerCase() === answers['action'].split('.')[1].toString().toLowerCase()){
+                        console.log(chalk.black.bgYellowBright('WARNING:')+' api '+answers['action'].split('.')[1]+' name is already exists in '+answers['action'].split('.')[0]+'.js')
+                        return ''
+                    }
+                }
+            }
+            if(answers['middlewares']){
+            if(!answers['middlewares'].match(/[A-Za-z0-9]/) || !answers['middlewares'].includes('.') || answers['middlewares'].length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
                 return ''
             }
+            let middle = answers['middlewares'].split(',')
+            for(n of middle){
+                if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                    return ''
+                }
+            }
+            }
+            if(answers['globalMiddleware']){
+            if(!answers['globalMiddleware'].match(/[A-Za-z0-9]/) || !answers['globalMiddleware'].includes('.') || answers['globalMiddleware'].length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                return ''
+            }
+            let gmiddle = answers['globalMiddleware'].split(',')
+            for(n of gmiddle){ 
+                if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+                    return ''
+                }
+            }
+            }
+            actionConfigure(answers['action'],moduule)
             var middleware = middlewareConfigure(answers['middlewares'],moduule)
             if(middleware === ''){
                 return ''
@@ -607,6 +649,7 @@ function createApi(moduule){
             if(globalMiddleware === ''){
                 return ''
             }
+            
             var obj = {"path": pathh, "method": method, "action": answers['action'], "middlewares": middleware, "globalMiddleware": globalMiddleware , "public": answers['public'], "root": answers['root']}
             if(!fs.existsSync(path.join(rootDir,'api',moduule,'routes.json'))){
                 fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),'')
@@ -624,7 +667,7 @@ function createApi(moduule){
                     dataa = JSON.parse(data);
                     if(Array.isArray(dataa)){
                         dataa.push(obj)
-                        fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa),'utf8', function(err, result) {
+                        fs.writeFile(path.join(rootDir, 'api',moduule,'routes.json'),JSON.stringify(dataa,null," "),'utf8', function(err, result) {
                             if(err) console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/routes.json file');
                         })
                     } else {
@@ -637,6 +680,7 @@ function createApi(moduule){
                     }
                 }
             });
+            
         })
     })
 }
@@ -656,6 +700,7 @@ function actionConfigure(action,moduule){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Action is not defined in valid format')
         return 0
     }
+    let fileName = action.toString().split('.')[0] 
         if(!fs.existsSync(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'))){
             fs.readdir(path.join(rootDir,'api',moduule),function(err,files){
                 if(!files.includes('controllers')){
@@ -681,13 +726,13 @@ function actionConfigure(action,moduule){
                         if(err) {console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+action.split('.')[0]+'.js file'); return 0;}
                     })
                 } else {
-                    let apiData = require(path.join(rootDir,'api',moduule,'controllers',answers['action'].split('.')[0]+'.js'))
-                    for(i in (apiData)){
-                        if(i.toString().toLowerCase() === answers['action'].split('.')[1].toString().toLowerCase()){
-                            console.log(chalk.black.bgYellowBright('WARNING:')+' api '+answers['action'].split('.')[1]+' name is already exists in '+answers['action'].split('.')[0]+'.js')
-                            return 0
-                        }
-                    }
+                    // let apiData = require(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'))
+                    // for(i in (apiData)){
+                    //     if(i.toString().toLowerCase() === action.split('.')[1].toString().toLowerCase()){
+                    //         console.log(chalk.black.bgYellowBright('WARNING:')+' api '+action.split('.')[1]+' name is already exists in '+action.split('.')[0]+'.js')
+                    //         return 0
+                    //     }
+                    // }
                     if(data.slice(-1)==='}'){
                         let str = data.slice(0, -1)
                         str += `,\n${action.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.toString().split('.')[1]}")\n }\n}`  
@@ -835,7 +880,7 @@ function createMiddleware(moduule){
             if(answers['middleware'].length === 0){
                 return []
             }
-            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || answers['middleware'].length === 0){
+            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || !answers['middleware'].split('.')[0] || !answers['middleware'].split('.')[1] || answers['middleware'].length === 0){
                 console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
                 return []
             }
@@ -862,7 +907,7 @@ function createMiddleware(moduule){
                     }
                 }
             })
-            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData))
+            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData,null," "))
             middlewareConfigure(answers['middleware'],moduule)
         })
     } else {
@@ -899,7 +944,7 @@ function createGlobalMiddleware(moduule){
             if(answers['middleware'].length === 0){
                 return []
             }
-            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || answers['middleware'].length === 0){
+            if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || !answers['middleware'].split('.')[0] || !answers['middleware'].split('.')[1] || answers['middleware'].length === 0){
                 console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
                 return []
             }
@@ -926,7 +971,7 @@ function createGlobalMiddleware(moduule){
                     }
                 }
             })
-            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData))
+            fs.writeFileSync(path.join(rootDir,'api',moduule,'routes.json'),JSON.stringify(jsonData,null," "))
             globalMiddlewareConfigure(answers['middleware'],moduule)
         })
     } else {

@@ -1,1 +1,0 @@
-[{"path":"/","method":"get","action":"HM.hm","middlewares":[],"globalMiddleware":[],"public":true,"root":false},{"path":"/","method":"get","action":"hm.hmm","middlewares":[],"globalMiddleware":[],"public":true,"root":true}]
