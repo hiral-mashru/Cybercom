@@ -111,53 +111,42 @@ if(type==='create-folder') {
     }) 
     dbConfig()
 } else if(type === 'create-api'){
-    fs.readdir(path.join(rootDir),function(err,files){
-        if(!files.includes('api')){
-            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
-        }
-    })
-    fs.readdir(path.join(rootDir,'api'),function(err,files){ 
-        if(err){
-            fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
-        }
-        if(!files || files.length === 0){
-            console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api')
-        }
-        files.push("Want_New_module?")
-        // if(files && files.length!==0){
-            var ques = [
-                {
-                    type: 'list',
-                    name: 'modules',
-                    message: "Enter Module Name:",
-                    choices: files.map(a => { return {name: a,value: a}})
+    let flss = fs.readdirSync(path.join(rootDir))
+    if(!flss.includes('api')){
+        fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+    }
+    let files = fs.readdirSync(path.join(rootDir,'api')) 
+    if(!files || files.length === 0){
+        console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api')
+    }
+    files.push("Want_New_module?")
+    var ques = [{
+        type: 'list',
+        name: 'modules',
+        message: "Enter Module Name:",
+        choices: files.map(a => { return {name: a,value: a}})
+    }]
+    inquirer.prompt(ques).then(answers => {
+        if(answers['modules'] === 'Want_New_module?'){
+            let q = [{
+                type: 'input',
+                name: 'mdl',
+                message: "Enter new module: ",
+                validate: function( value ) {
+                    if (value.length) {
+                        return true;
+                    } else {
+                        return 'Enter new module: ';
+                    }
                 }
-            ]
-            inquirer.prompt(ques).then(answers => {
-                if(answers['modules'] === 'Want_New_module?'){
-                    let q = [{
-                        type: 'input',
-                        name: 'mdl',
-                        message: "Enter new module: ",
-                        validate: function( value ) {
-                          if (value.length) {
-                            return true;
-                          } else {
-                            return 'Enter new module: ';
-                          }
-                        }
-                      }]
-                    inquirer.prompt(q).then(ans=>{
-                        createModule(ans['mdl'])
-                        createApi(ans['mdl'])
-                    })
-                } else {
-                    createApi(answers['modules'])
-                }
+            }]
+            inquirer.prompt(q).then(ans=>{
+                createModule(ans['mdl'])
+                createApi(ans['mdl'])
             })
-        // } else {
-            // console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
-        // }
+        } else {
+            createApi(answers['modules'])
+        }
     })
 } else if(type === 'create-middleware'){
     fs.readdir(path.join(rootDir),function(err,files){
@@ -219,6 +208,108 @@ if(type==='create-folder') {
             console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
         }
     })
+} else if(type === 'create-function'){
+    inquirer.prompt({
+        type: 'list',
+        name: 'function',
+        message: "Enter type of function:",
+        choices: [{value: "moduleLevel",name: "Module level functions"},{value: "globalLevel",name: "Global level functions"}] 
+    }).then(ansr => {
+        if(ansr['function']==='moduleLevel'){
+            let flss = fs.readdirSync(path.join(rootDir))
+            if(!flss.includes('api')){
+                fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+            }
+            let files = fs.readdirSync(path.join(rootDir,'api')) 
+            if(!files || files.length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api')
+            }
+            files.push("Want_New_module?")
+            var ques = [
+                {
+                    type: 'list',
+                    name: 'modules',
+                    message: "Enter Module Name:",
+                    choices: files.map(a => { return {name: a,value: a}})
+                }
+            ]
+            inquirer.prompt(ques).then(answers => {
+                if(answers['modules'] === 'Want_New_module?'){
+                    let q = [{
+                        type: 'input',
+                        name: 'mdl',
+                        message: "Enter new module: ",
+                        validate: function( value ) {
+                            if (value.length) {
+                                return true;
+                            } else {
+                                return 'Enter new module: ';
+                            }
+                        }
+                    }]
+                    inquirer.prompt(q).then(ans=>{
+                        createModule(ans['mdl'])
+                        createFunction(ans['mdl'])
+                    })
+                } else {
+                    createFunction(answers['modules'])
+                }
+            })
+        } else {
+            createGlobalFunction()
+        }
+    })
+} else if(type === 'create-service'){
+    inquirer.prompt({
+        type: 'list',
+        name: 'service',
+        message: "Enter type of service:",
+        choices: [{value: "moduleLevel",name: "Module level services"},{value: "globalLevel",name: "Global level services"}] 
+    }).then(ansr => {
+        if(ansr['service']==='moduleLevel'){
+            let flss = fs.readdirSync(path.join(rootDir))
+            if(!flss.includes('api')){
+                fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
+            }
+            let files = fs.readdirSync(path.join(rootDir,'api')) 
+            if(!files || files.length === 0){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api')
+            }
+            files.push("Want_New_module?")
+            var ques = [
+                {
+                    type: 'list',
+                    name: 'modules',
+                    message: "Enter Module Name:",
+                    choices: files.map(a => { return {name: a,value: a}})
+                }
+            ]
+            inquirer.prompt(ques).then(answers => {
+                if(answers['modules'] === 'Want_New_module?'){
+                    let q = [{
+                        type: 'input',
+                        name: 'mdl',
+                        message: "Enter new module: ",
+                        validate: function( value ) {
+                            if (value.length) {
+                                return true;
+                            } else {
+                                return 'Enter new module: ';
+                            }
+                        }
+                    }]
+                    inquirer.prompt(q).then(ans=>{
+                        createModule(ans['mdl'])
+                        createService(ans['mdl'])
+                    })
+                } else {
+                    createService(answers['modules'])
+                }
+            })
+        } else {
+            createGlobalService()
+        }
+    })
 } else if(type === 'help'){
     console.log(chalk.black.bgYellowBright('framework init')+' => It creates the whole folder structure and also will ask for database configuration.')
     console.log(chalk.black.bgYellowBright('framework create-module <moduleName>')+' => It creates module consistes of controllers,services,middlewares files and folders with routes.json file.')
@@ -226,13 +317,7 @@ if(type==='create-folder') {
     console.log(chalk.black.bgYellowBright('framework create-middleware')+' => It generates the middleware in given module.')
     console.log(chalk.black.bgYellowBright('framework create-globalMiddleware')+' => It generates the global middleware in given module.')
     console.log(chalk.black.bgYellowBright('framework db-config')+' => It does configuration of database.')
-}
-// else if(type === 'github'){
-//     download('hiral-mashru/boilerplate-structure', '', function (err) {
-//         console.log(err ? 'Error' : 'Success')
-//     })
-// }
-else {
+} else {
     console.log(chalk.black.bgYellowBright('WARNING:')+' Enter correct command. Need help ? Go for "framework help"')
 }
 
@@ -977,6 +1062,210 @@ function createGlobalMiddleware(moduule){
     } else {
         console.log(chalk.black.bgYellowBright('WARNING:')+' There is no api. Create api with "framework create-api"')
     }
+}
+
+function createFunction(mdl){
+    let files = fs.readdirSync(path.join(rootDir,'api',mdl))
+    if(!files.includes('functions')){
+        fs.mkdirSync(path.join(rootDir,'api',mdl,'functions'))
+    }
+    inquirer.prompt({
+        type: 'input',
+        name: 'functions',
+        message: 'Enter functions (in "fileName.functionName,fileName.functionName,.." format:'
+    }).then(answer=>{
+        if(answer['functions'].length === 0){
+            return ''
+        }
+        if(answer['functions'].includes(',')){
+            var functionArr = answer['functions'].split(',')
+        } else {
+            var functionArr = []
+            functionArr.push(answer['functions'])
+        }
+        for(f of functionArr){
+            if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Function is not defined in valid format')
+                return ''
+            }
+            let fls = fs.existsSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'))
+            if(!fls){
+                fs.writeFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+            } else {
+                let data = fs.readFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),'utf8')
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.appendFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                } else {
+                    let functionData = require(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'))
+                    for(j in (functionData)){
+                        if(j.toString().toLowerCase() === f.split('.')[1].toString().toLowerCase()){
+                            console.log(chalk.black.bgYellowBright('WARNING:')+' '+f.split('.')[1]+' function is already exists in '+f.split('.')[0]+'.js')
+                            return ''
+                        }
+                    }
+                    if(data.toString().charAt(data.length-1)==='}'){
+                        const lastParanthesis=data.toString().lastIndexOf('}')
+                        let str = data.slice(0,lastParanthesis);
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.toString().split('.')[1]}")\n  }\n}`  
+                        fs.writeFileSync(path.join(rootDir,'api',mdl,'functions',f.toString().split('.')[0]+'.js'),str,'utf8')
+                    }
+                } 
+            }
+        }
+    })
+}
+
+function createGlobalFunction(){
+    let files = fs.readdirSync(path.join(rootDir))
+    if(!files.includes('functions')){
+        fs.mkdirSync(path.join(rootDir,'functions'))
+    }
+    inquirer.prompt({
+        type: 'input',
+        name: 'functions',
+        message: 'Enter functions (in "fileName.functionName,fileName.functionName,.." format):'
+    }).then(answer=>{
+        if(answer['functions'].length === 0){
+            return ''
+        }
+        if(answer['functions'].includes(',')){
+            var functionArr = answer['functions'].split(',')
+        } else {
+            var functionArr = []
+            functionArr.push(answer['functions'])
+        }
+        for(f of functionArr){
+            if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Function is not defined in valid format')
+                return ''
+            }
+            let fls = fs.existsSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'))
+            if(!fls){
+                fs.writeFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+            } else {
+                let data = fs.readFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),'utf8')
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.appendFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                } else {
+                    let functionData = require(path.join(rootDir,'functions',f.split('.')[0]+'.js'))
+                    for(j in (functionData)){
+                        if(j.toString().toLowerCase() === f.split('.')[1].toString().toLowerCase()){
+                            console.log(chalk.black.bgYellowBright('WARNING:')+' '+f.split('.')[1]+' function is already exists in '+f.split('.')[0]+'.js')
+                            return ''
+                        }
+                    }
+                    if(data.toString().charAt(data.length-1)==='}'){
+                        const lastParanthesis=data.toString().lastIndexOf('}')
+                        let str = data.slice(0,lastParanthesis);
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.toString().split('.')[1]}")\n  }\n}`  
+                        fs.writeFileSync(path.join(rootDir,'functions',f.toString().split('.')[0]+'.js'),str,'utf8')
+                    }
+                } 
+            }
+        }
+    })
+}
+
+function createService(mdl){
+    let files = fs.readdirSync(path.join(rootDir,'api',mdl))
+    if(!files.includes('services')){
+        fs.mkdirSync(path.join(rootDir,'api',mdl,'services'))
+    }
+    inquirer.prompt({
+        type: 'input',
+        name: 'services',
+        message: 'Enter services (in "fileName.functionName,fileName.functionName,.." format):'
+    }).then(answer=>{
+        if(answer['services'].length === 0){
+            return ''
+        }
+        if(answer['services'].includes(',')){
+            var serviceArr = answer['services'].split(',')
+        } else {
+            var serviceArr = []
+            serviceArr.push(answer['services'])
+        }
+        for(f of serviceArr){
+            if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Service is not defined in valid format')
+                return ''
+            }
+            let fls = fs.existsSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'))
+            if(!fls){
+                fs.writeFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+            } else {
+                let data = fs.readFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),'utf8')
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.appendFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                } else {
+                    let functionData = require(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'))
+                    for(j in (functionData)){
+                        if(j.toString().toLowerCase() === f.split('.')[1].toString().toLowerCase()){
+                            console.log(chalk.black.bgYellowBright('WARNING:')+' '+f.split('.')[1]+' service is already exists in '+f.split('.')[0]+'.js')
+                            return ''
+                        }
+                    }
+                    if(data.toString().charAt(data.length-1)==='}'){
+                        const lastParanthesis=data.toString().lastIndexOf('}')
+                        let str = data.slice(0,lastParanthesis);
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.toString().split('.')[1]}")\n  }\n}`  
+                        fs.writeFileSync(path.join(rootDir,'api',mdl,'services',f.toString().split('.')[0]+'.js'),str,'utf8')
+                    }
+                } 
+            }
+        }
+    })
+}
+
+function createGlobalService(){
+    let files = fs.readdirSync(path.join(rootDir))
+    if(!files.includes('services')){
+        fs.mkdirSync(path.join(rootDir,'services'))
+    }
+    inquirer.prompt({
+        type: 'input',
+        name: 'services',
+        message: 'Enter services (in "fileName.functionName,fileName.functionName,.." format):'
+    }).then(answer=>{
+        if(answer['services'].length === 0){
+            return ''
+        }
+        if(answer['services'].includes(',')){
+            var serviceArr = answer['services'].split(',')
+        } else {
+            var serviceArr = []
+            serviceArr.push(answer['services'])
+        }
+        for(f of serviceArr){
+            if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
+                console.log(chalk.black.bgYellowBright('WARNING:')+' Service is not defined in valid format')
+                return ''
+            }
+            let fls = fs.existsSync(path.join(rootDir,'services',f.split('.')[0]+'.js'))
+            if(!fls){
+                fs.writeFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+            } else {
+                let data = fs.readFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),'utf8')
+                if(data.length === 0 || !data.includes("module.exports")){
+                    fs.appendFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                } else {
+                    let functionData = require(path.join(rootDir,'services',f.split('.')[0]+'.js'))
+                    for(j in (functionData)){
+                        if(j.toString().toLowerCase() === f.split('.')[1].toString().toLowerCase()){
+                            console.log(chalk.black.bgYellowBright('WARNING:')+' '+f.split('.')[1]+' service is already exists in '+f.split('.')[0]+'.js')
+                            return ''
+                        }
+                    }
+                    if(data.toString().charAt(data.length-1)==='}'){
+                        const lastParanthesis=data.toString().lastIndexOf('}')
+                        let str = data.slice(0,lastParanthesis);
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.toString().split('.')[1]}")\n  }\n}`  
+                        fs.writeFileSync(path.join(rootDir,'services',f.toString().split('.')[0]+'.js'),str,'utf8')
+                    }
+                } 
+            }
+        }
+    })
 }
 
 function objToString (obj) {
