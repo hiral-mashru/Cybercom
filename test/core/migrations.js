@@ -1,100 +1,102 @@
-/* For migrations */
-const express = require('express')
 const path = require('path');
-const Confirm = require('prompt-confirm');
 const chalk = require('chalk')
 var Umzug = require('umzug');
-let rootPath = path.resolve(__dirname, '../');
-const connection = require('./connection');
-require('dotenv').config()
+const express = require('express')
 const app = express()
-var config = require('../config/database.json');
+const bodyParser = require('body-parser')
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+let rootPath = path.resolve(__dirname, '../');
+require('dotenv').config()
 
-if(config.database){
-var umzug = new Umzug({
-    storage: 'sequelize',
-    storageOptions: {
-        sequelize: connection // here should be a sequelize instance, not the Sequelize module
-    },
-    migrations: {
-        // The params that gets passed to the migrations.
-        // Might be an array or a synchronous function which returns an array.
-        params: [connection.getQueryInterface(), connection.constructor, function() {
-            throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
-        }],
-        path: path.join(rootPath, 'db/migrations/')
+
+async function umzg(connection){
+  return new Promise((resolve,reject)=>{
+    try{
+      var umzug = new Umzug({
+          storage: 'sequelize',
+          storageOptions: {
+              sequelize: connection 
+          },
+          migrations: {
+              params: [connection.getQueryInterface(), connection.constructor, function() {
+                  throw new Error('Migration tried to use old style "done" callback. Please upgrade to "umzug" and return a promise instead.');
+              }],
+              path: path.join(rootPath, 'db/migrations/')
+          }
+      });
+      resolve(umzug)
+    // umzug.down(/*{ to: '20210223113512-create-address' }*/).then(()=>{
+    //   console.log("downn")
+    // })
+    } catch(err){
+      console.log(chalk.red("Error coming between sequelize and umzug connection..."))
     }
-});
-
-// umzug.down(/*{ to: '20210223113512-create-address' }*/).then(()=>{
-//   console.log("downn")
-// })
-
-umzug.pending().then(function (migrations) {
-    new Confirm('Wanna do migrations?')
-    .run()
-    .then(function(answer) {
-      if(answer){
-        if(migrations.length > 0){
-          console.log("Pending migrations : ")
-          migrations.map(a => console.log(chalk.yellow(a.file)))
-          umzug.up().then(function()  {
-            console.log(chalk.green('Migration complete!'));
-            serverListen();
-          }).catch(err => {
-            throw `Unable to perform migration due to ${err}`;
-          });
-        } else {
-          console.log(chalk.green("No migrations are pending..."))
-          serverListen();
-        }
-      } else {
-        serverListen();
-      }
-    });
-  });
-} else {
-  serverListen()
+  })
 }
-  function serverListen(){
-    // server.on('error', e => {
-    //   console.log(`port ${config.port} is taken`)
-    //   config.port +=1;
-    //   server.close();
-    //   serverListen(server, config.port);
-    // }).listen(port, function() {
-    //   if (config.launched){
-    //     return;
-    //   }
-    //   console.log('Listening on port ' + server.address().port);
-    //   // launchBrowser();
-    //   config.launched = true;
-    // });
-    
-    var fp = require("find-free-port")
-    var portt = process.env.PORT
-    fp(parseInt(portt), function(err, freePort){
-      if(parseInt(freePort) !== parseInt(portt)){
-        console.log(chalk.black.bgYellowBright('WARNING:')+`${parseInt(portt)} is not free`)
-        new Confirm('Wanna run the server on nearer port?')
+
+
+async function umzgg(umzug){
+  return new Promise((resolve,reject)=>{
+    umzug.pending().then(function (migrations) {
+      if(migrations.length>0){
+        new Confirm('Wanna do migrations?')
         .run()
         .then(function(answer) {
           if(answer){
-            app.listen(parseInt(freePort),()=>{
-              console.log("listening to "+parseInt(freePort))
-            })
+              console.log("Pending migrations : ")
+              migrations.map(a => console.log(chalk.yellow(a.file)))
+              umzug.up().then(function()  {
+                console.log(chalk.green('Migration complete!'));
+                serverListen();
+              }).catch(err => {
+                console.log(chalk.red(`Unable to perform migration`));
+              }); 
+          } else {
+            serverListen(resolve);
+            resolve(app)
           }
-        })
+        });
       } else {
-        app.listen(parseInt(freePort),()=>{
-          console.log("listening to "+parseInt(freePort))
-        })
+        console.log(chalk.green("No migrations are pending..."))
+        serverListen(resolve);
+        resolve(app)
       }
-    });
-  }
+      }).catch(err =>{
+        console.log(chalk.red("Error coming in migrations..."))
+        serverListen(resolve)
+        resolve(app)
+    })
+    
+    function serverListen(resolve){
+      var fp = require("find-free-port")
+      var portt = process.env.PORT
+      fp(parseInt(portt), function(err, freePort){
+        if(parseInt(freePort) !== parseInt(portt)){
+          console.log(chalk.black.bgYellowBright('WARNING:')+`${parseInt(portt)} is not free`)
+          new Confirm('Wanna run the server on nearer port?')
+          .run()
+          .then(function(answer) {
+            if(answer){
+              app.listen(parseInt(freePort),()=>{
+                setup.port = parseInt(freePort)
+                console.log("listening to "+parseInt(freePort))
+              })
+              resolve(app)
+            }
+          })
+        } else {
+          app.listen(parseInt(freePort),()=>{
+            setup.port = parseInt(freePort)
+            console.log("listening to "+parseInt(freePort));
+          })
+          resolve(app)
+        }
+      })
+    }
+  })
+}
 
-module.exports = app
-// module.exports = {
-//   umzug: umzug,
-//   app: app
-// }
+
+module.exports.umzg = umzg
+module.exports.umzgg = umzgg

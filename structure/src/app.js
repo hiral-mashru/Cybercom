@@ -91,11 +91,11 @@ require('../core/connection').getSequelize()
       } catch(err){
           console.log(chalk.red("ERROR:")+err)
       }
-    //   app.use(function(req,res,next){
-    //       const err = new Error("Not found")
-    //       err.status = 404
-    //       next(err)
-    //   })
+      app.use(function(req,res,next){
+          const err = new Error("Not found")
+          err.status = 404
+          next(err)
+      })
 
       app.use(function (err, req, res, next) {
           res.status(err.status || 500)

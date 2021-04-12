@@ -700,37 +700,43 @@ function createApi(moduule){
                 }
             }
             if(answers['middlewares']){
-            if(!answers['middlewares'].match(/[A-Za-z0-9]/) || !answers['middlewares'].includes('.') || answers['middlewares'].length === 0){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
-                return ''
-            }
-            let middle = answers['middlewares'].split(',')
-            for(n of middle){
-                if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
+                if(!answers['middlewares'].match(/[A-Za-z0-9]/) || !answers['middlewares'].includes('.') || answers['middlewares'].length === 0){
                     console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
                     return ''
                 }
-            }
-            }
-            if(answers['globalMiddleware']){
-            if(!answers['globalMiddleware'].match(/[A-Za-z0-9]/) || !answers['globalMiddleware'].includes('.') || answers['globalMiddleware'].length === 0){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
-                return ''
-            }
-            let gmiddle = answers['globalMiddleware'].split(',')
-            for(n of gmiddle){ 
-                if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
-                    console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
-                    return ''
+                let middle = answers['middlewares'].split(',')
+                var middleware = []
+                for(n of middle){
+                    if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
+                        console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                        return ''
+                    }
+                    middleware.push(n)
                 }
             }
+            if(answers['globalMiddleware']){
+                if(!answers['globalMiddleware'].match(/[A-Za-z0-9]/) || !answers['globalMiddleware'].includes('.') || answers['globalMiddleware'].length === 0){
+                    console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                    return ''
+                }
+                let gmiddle = answers['globalMiddleware'].split(',')
+                var globalMiddleware = []
+                for(n of gmiddle){ 
+                    if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
+                        console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+                        return ''
+                    }
+                    globalMiddleware.push(n)
+                }
             }
             actionConfigure(answers['action'],moduule)
-            var middleware = middlewareConfigure(answers['middlewares'],moduule)
+            // var middleware = middlewareConfigure(answers['middlewares'],moduule)
+            middlewareConfigure(answers['middlewares'],moduule)
             if(middleware === ''){
                 return ''
             }
-            var globalMiddleware = globalMiddlewareConfigure(answers['globalMiddleware'])
+            // var globalMiddleware = globalMiddlewareConfigure(answers['globalMiddleware'])
+            globalMiddlewareConfigure(answers['globalMiddleware'])
             if(globalMiddleware === ''){
                 return ''
             }

@@ -1,0 +1,30 @@
+[
+ {
+  "path": "/",
+  "method": "get",
+  "action": "user.getUser",
+  "public": true,
+  "root": false,
+  "middlewares": [
+   "user.user"
+  ],
+  "globalMiddleware": [
+   "user.data"
+  ]
+ },
+ {
+  "path": "/get",
+  "method": "get",
+  "action": "user.edit",
+  "middlewares": [
+   "user.me",
+   "user.us"
+  ],
+  "globalMiddleware": [
+   "use.user",
+   "user.use"
+  ],
+  "public": true,
+  "root": true
+ }
+]

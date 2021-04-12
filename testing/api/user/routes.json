@@ -1,1 +1,0 @@
-[{"path":"/","method":"get","action":"user1.use","middlewares":["user.use"],"globalMiddleware":[],"public":true,"root":true},{"path":"/user","method":"get","action":"user.uu","middlewares":[],"globalMiddleware":[],"public":true,"root":true}]

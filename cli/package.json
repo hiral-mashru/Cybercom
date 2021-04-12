@@ -1,7 +1,7 @@
 {
-  "name": "@hiralmashru/test",
+  "name": "@hiralmashru/pulish--structure",
   "version": "1.0.0",
-  "description": "",
+  "description": "•\t`framework init`",
   "main": "cli.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,5 +18,14 @@
     "prompt-confirm": "^2.0.4",
     "prompts": "^2.4.0",
     "shelljs": "^0.8.4"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiral-mashru/create-structure-with-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hiral-mashru/create-structure-with-cli/issues"
+  },
+  "homepage": "https://github.com/hiral-mashru/create-structure-with-cli#readme"
 }

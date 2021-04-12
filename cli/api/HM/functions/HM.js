@@ -1,5 +1,5 @@
 module.exports = {
- HM: (req,res)=> {
+ HM: ()=> {
   console.log("This is function HM")
  }
 }
