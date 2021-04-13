@@ -686,7 +686,7 @@ function createApi(moduule){
                 return 0
             }
             if(!answers['action'].match(/[A-Za-z0-9]/) || !answers['action'].includes('.') || !answers['action'].split('.')[0] || !answers['action'].split('.')[1] || answers['action'].length === 0){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Action is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Action is not defined in valid format')
                 return 0
             }
             let fll = fs.readdirSync(path.join(rootDir,'api',moduule,'controllers'))
@@ -701,14 +701,14 @@ function createApi(moduule){
             }
             if(answers['middlewares']){
                 if(!answers['middlewares'].match(/[A-Za-z0-9]/) || !answers['middlewares'].includes('.') || answers['middlewares'].length === 0){
-                    console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                    console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
                     return ''
                 }
                 let middle = answers['middlewares'].split(',')
                 var middleware = []
                 for(n of middle){
                     if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
-                        console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                        console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
                         return ''
                     }
                     middleware.push(n)
@@ -716,14 +716,14 @@ function createApi(moduule){
             }
             if(answers['globalMiddleware']){
                 if(!answers['globalMiddleware'].match(/[A-Za-z0-9]/) || !answers['globalMiddleware'].includes('.') || answers['globalMiddleware'].length === 0){
-                    console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                    console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
                     return ''
                 }
                 let gmiddle = answers['globalMiddleware'].split(',')
                 var globalMiddleware = []
                 for(n of gmiddle){ 
                     if(n.split('.')[0] === '' || n.split('.')[1] === '' || (!n.includes('.'))){
-                        console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+                        console.log(chalk.red('ERROR:')+' Global Middleware is not defined in valid format')
                         return ''
                     }
                     globalMiddleware.push(n)
@@ -788,7 +788,7 @@ function actionConfigure(action,moduule){
         return 0
     }
     if(!action.match(/[A-Za-z0-9]/) || !action.includes('.') || action.length === 0){
-        console.log(chalk.black.bgYellowBright('WARNING:')+' Action is not defined in valid format')
+        console.log(chalk.red('ERROR:')+' Action is not defined in valid format')
         return 0
     }
     let fileName = action.toString().split('.')[0] 
@@ -841,7 +841,7 @@ function middlewareConfigure(middlewares,moduule){
         return []
     }
     if(!middlewares.match(/[A-Za-z0-9]/) || !middlewares.includes('.') || middlewares.length === 0){
-        console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+        console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
         return []
     }
     if(!middlewares.toString().includes(',')){
@@ -853,7 +853,7 @@ function middlewareConfigure(middlewares,moduule){
     let middleware = []
     for(m of middlewareArr){
         if(m.split('.')[0] === '' || m.split('.')[1] === '' || (!m.includes('.'))){
-            console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+            console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
             return []
         }
         middleware.push(m)
@@ -894,7 +894,7 @@ function globalMiddlewareConfigure(globalMiddleware){
         return []
     }
     if(!globalMiddleware.match(/[A-Za-z0-9]/) || !globalMiddleware.includes('.')){
-        console.log(chalk.black.bgYellowBright('WARNING:')+' globalMiddleware is not defined in valid format')
+        console.log(chalk.red('ERROR:')+' globalMiddleware is not defined in valid format')
         return []
     }
     if(!globalMiddleware.toString().includes(',')){
@@ -906,7 +906,7 @@ function globalMiddlewareConfigure(globalMiddleware){
     let middleware = []
     for(m of middlewareArr){
         if(m.split('.')[0] === '' || m.split('.')[1] === '' || (!m.includes('.'))){
-            console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+            console.log(chalk.red('ERROR:')+' Global Middleware is not defined in valid format')
             return []
         }
         middleware.push(m)
@@ -972,7 +972,7 @@ function createMiddleware(moduule){
                 return []
             }
             if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || !answers['middleware'].split('.')[0] || !answers['middleware'].split('.')[1] || answers['middleware'].length === 0){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Middleware is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Middleware is not defined in valid format')
                 return []
             }
             let pathh = answers['apis'].toString().split(',')[0].split(': ')[1]
@@ -1036,7 +1036,7 @@ function createGlobalMiddleware(moduule){
                 return []
             }
             if(!answers['middleware'].match(/[A-Za-z0-9]/) || !answers['middleware'].includes('.') || !answers['middleware'].split('.')[0] || !answers['middleware'].split('.')[1] || answers['middleware'].length === 0){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Global Middleware is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Global Middleware is not defined in valid format')
                 return []
             }
             let pathh = answers['apis'].toString().split(',')[0].split(': ')[1]
@@ -1091,7 +1091,7 @@ function createFunction(mdl){
         }
         for(f of functionArr){
             if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Function is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Function is not defined in valid format')
                 return ''
             }
             let fls = fs.existsSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'))
@@ -1142,7 +1142,7 @@ function createGlobalFunction(){
         }
         for(f of functionArr){
             if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Function is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Function is not defined in valid format')
                 return ''
             }
             let fls = fs.existsSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'))
@@ -1193,7 +1193,7 @@ function createService(mdl){
         }
         for(f of serviceArr){
             if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Service is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Service is not defined in valid format')
                 return ''
             }
             let fls = fs.existsSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'))
@@ -1244,7 +1244,7 @@ function createGlobalService(){
         }
         for(f of serviceArr){
             if(!f.match(/[A-Za-z0-9]/) || !f.includes('.') || !f.split('.')[0] || !f.split('.')[1]){
-                console.log(chalk.black.bgYellowBright('WARNING:')+' Service is not defined in valid format')
+                console.log(chalk.red('ERROR:')+' Service is not defined in valid format')
                 return ''
             }
             let fls = fs.existsSync(path.join(rootDir,'services',f.split('.')[0]+'.js'))
