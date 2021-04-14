@@ -1,0 +1,1 @@
+Today I revised mysql commands, tried to make setup repo dynamic..

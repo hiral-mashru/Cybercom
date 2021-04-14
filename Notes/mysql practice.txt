@@ -1,0 +1,90 @@
+-> UPDATE table_name SET column_name = '',column_name = '' WHERE ...AND/OR...
+
+-> SELECT column1,column2,.. FROM table_name WHERE ....
+
+-> INSERT INTO tableName(column1,column2) VALUES
+
+-> CREATE TABLE countries (
+country_id varchar(2),
+country_name varchar(40),
+region_id decimal(10,0) 
+);
+
+-> CREATE TABLE IF NOT EXISTS countries(
+country_id varchar(2),
+country_name varchar(40),
+region_id decimal(10,0)
+);
+
+-> CREATE TABLE IF NOT EXISTS dup_countries LIKE countries; --> to create same structure
+
+-> CREATE TABLE IF NOT EXISTS dup_countries AS SELECT * FROM countries; --> to create same structure and data
+
+-> CREATE TABLE IF NOT EXISTS countries(
+country_id varchar(2) NOT NULL,
+country_name varchar(40) NOT NULL,
+region_id decimal(10,0) NOT NULL
+);
+
+-> CREATE TABLE IF NOT EXISTS jobs(
+job_id varchar(2),
+job_title varchar(30),
+min_salary varchar(10),
+max_salary varchar(20)
+CHECK(max_salary<=25000)
+); 
+
+-> CREATE TABLE IF NOT EXISTS countries(
+country_id varchar(2) NOT NULL,
+country_name varchar(40) NOT NULL CHECK(country_name IN ('Italy','China','India')),
+region_id decimal(10,0) NOT NULL
+CHECK(country_name IN ('Italy','China','India'))
+);
+
+-> CREATE TABLE IF NOT EXISTS job_history (
+employee_id varchar(2) NOT NULL,
+start_date date NOT NULL,
+end_date date NOT NULL CHECK(end_date LIKE '--/--/---'),
+job_id varchar(2) NOT NULL,
+department_id varchar(2) NOT NULL
+); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
