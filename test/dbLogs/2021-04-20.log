@@ -1,0 +1,30 @@
+10:25:47 AM
+Executing (default): SELECT 1+1 AS result
+10:25:47 AM
+Executing (default): SELECT 1+1 AS result
+10:25:47 AM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+10:25:47 AM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+10:25:47 AM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+10:26:12 AM
+Executing (default): SELECT 1+1 AS result
+10:26:12 AM
+Executing (default): SELECT 1+1 AS result
+10:26:12 AM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+10:26:12 AM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+10:26:12 AM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+10:27:54 AM
+Executing (default): SELECT 1+1 AS result
+10:27:54 AM
+Executing (default): SELECT 1+1 AS result
+10:27:54 AM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+10:27:54 AM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+10:27:54 AM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;

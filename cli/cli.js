@@ -4,11 +4,11 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk')
 const Confirm = require('prompt-confirm')
-const [,,...args] = process.argv // to parse command line arguments
-const[type,...modulle] = args
 const rootDir = process.cwd()
 const download = require('download-git-repo')
 const inquirer = require('inquirer');
+const { program } = require('commander');
+const pkgConfig = require('./package.json')
 
 let devusername="root";
 let devpassword=null;
@@ -35,8 +35,9 @@ let databaseJsonData=`{
   }
 }`
 
-if(type==='create-folder') {
-    
+program.version(pkgConfig.version).description(pkgConfig.description)
+
+program.command('create-folder <module>').description('To create folder.').action((modulle)=>{  
     if(modulle){
         if (!fs.existsSync(String(modulle))) {
             fs.mkdir(path.join(rootDir, String(modulle)),{ recursive: true }, (err) => { 
@@ -52,7 +53,9 @@ if(type==='create-folder') {
         console.log(chalk.black.bgYellowBright('WARNING:')+'Provide a module name')
     }
 
-} else if(type === 'init') {
+})
+
+program.command('init').description('To initialize the basic setup.').action(()=>{
     fs.readdir(rootDir, function(err, files){
         if(files.length){
             new Confirm({message: 'You have already done initialization. Do you want to do init?', default: false})
@@ -86,7 +89,9 @@ if(type==='create-folder') {
             })
         }
     })
-} else if(type === 'create-module') {
+})
+
+program.command('create-module <module...>').description('To create module in api folder').action((modulle)=>{
     if(modulle.length === 0){
         console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module name...')
         return
@@ -98,8 +103,9 @@ if(type==='create-folder') {
             console.log(chalk.black.bgYellowBright('WARNING:')+' Provide module\'s name')
         }
     }
+})
 
-} else if(type === 'db-config'){
+program.command('db-config').description('To configure the database.').action(()=>{
     fs.readdir(path.join(rootDir),function(err,files){
         if (!files.includes('config')) {
             fs.mkdir(path.join(rootDir,'config'),{ recursive: true }, (err) => { 
@@ -110,7 +116,9 @@ if(type==='create-folder') {
         }
     }) 
     dbConfig()
-} else if(type === 'create-api'){
+})
+
+program.command('create-api').description('To create api.').action(()=>{
     let flss = fs.readdirSync(path.join(rootDir))
     if(!flss.includes('api')){
         fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
@@ -148,7 +156,9 @@ if(type==='create-folder') {
             createApi(answers['modules'])
         }
     })
-} else if(type === 'create-middleware'){
+})
+
+program.command('create-middleware').description('To create module level middleware.').action(()=>{
     fs.readdir(path.join(rootDir),function(err,files){
         if(!files.includes('api')){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
@@ -175,10 +185,12 @@ if(type==='create-folder') {
                 createMiddleware(answers['modules'])
             })
         } else {
-            console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
+            console.log(chalk.red('ERROR:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
         }
     })
-} else if(type === 'create-globalMiddleware'){
+})
+
+program.command('create-globalMiddleware').description('To create global middleware.').action(()=>{
     fs.readdir(path.join(rootDir),function(err,files){
         if(!files.includes('api')){
             fs.mkdirSync(path.join(rootDir,'api'),{ recursive: true });
@@ -205,10 +217,12 @@ if(type==='create-folder') {
                 createGlobalMiddleware(answers['modules'])
             })
         } else {
-            console.log(chalk.black.bgYellowBright('WARNING:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
+            console.log(chalk.red('ERROR:')+' There are no folders at '+rootDir+'/api, create module using "framework create-module"')
         }
     })
-} else if(type === 'create-function'){
+})
+
+program.command('create-function').description('To create function.').action(()=>{
     inquirer.prompt({
         type: 'list',
         name: 'function',
@@ -259,7 +273,9 @@ if(type==='create-folder') {
             createGlobalFunction()
         }
     })
-} else if(type === 'create-service'){
+})
+
+program.command('create-service').description('To create service.').action(()=>{
     inquirer.prompt({
         type: 'list',
         name: 'service',
@@ -310,16 +326,9 @@ if(type==='create-folder') {
             createGlobalService()
         }
     })
-} else if(type === 'help'){
-    console.log(chalk.black.bgYellowBright('framework init')+' => It creates the whole folder structure and also will ask for database configuration.')
-    console.log(chalk.black.bgYellowBright('framework create-module <moduleName>')+' => It creates module consistes of controllers,services,middlewares files and folders with routes.json file.')
-    console.log(chalk.black.bgYellowBright('framework create-api')+' => It generates the api in given module.')
-    console.log(chalk.black.bgYellowBright('framework create-middleware')+' => It generates the middleware in given module.')
-    console.log(chalk.black.bgYellowBright('framework create-globalMiddleware')+' => It generates the global middleware in given module.')
-    console.log(chalk.black.bgYellowBright('framework db-config')+' => It does configuration of database.')
-} else {
-    console.log(chalk.black.bgYellowBright('WARNING:')+' Enter correct command. Need help ? Go for "framework help"')
-}
+})
+
+program.parse(process.argv);
 
 function createStructure(){
     fs.mkdir(path.join(rootDir, 'api'),{ recursive: true }, (err) => { 
@@ -378,7 +387,7 @@ function createStructure(){
         } 
     });
     if(!fs.existsSync(rootDir+'/middlewares/middleware.js')) {
-        fs.writeFile(path.join(rootDir,'middlewares','middleware.js'),`module.exports = {\n middleware: (req,res,next)=> {\n  console.log("This is function global middleware")\n  next();\n }\n}`, function(err, result) {
+        fs.writeFile(path.join(rootDir,'middlewares','middleware.js'),`module.exports = {\n middleware: (req,res,next)=> {\n  console.log("This is global middleware")\n  res.send('This is global middleware')\n  next();\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File /middlewares/middleware.js can't be created`) 
         })
     }
@@ -565,6 +574,10 @@ function createJSON(setting){
 }
 
 function createModule(m){
+    let f = fs.readdirSync(rootDir)
+    if(!f.includes('api')){
+        fs.mkdirSync(rootDir+'/api',{ recursive: true })
+    }
     let fls = fs.readdirSync(rootDir+'/api')
     if(fls.includes(m)){
         console.log(chalk.black.bgYellowBright('WARNING:')+' '+rootDir+'/api/'+m+' already exists.')
@@ -600,12 +613,12 @@ function createModule(m){
         })
     }
     if(!fs.existsSync(rootDir+'/api/'+m+'/controllers/'+m+'.js')) {
-        fs.writeFile(path.join(rootDir, 'api', m, 'controllers',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+        fs.writeFile(path.join(rootDir, 'api', m, 'controllers',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is api ${m}")\n  res.send('This is api ${m}')\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File ${m}/controllers/${m}.js can't be created`) 
         })
     }
     if(!fs.existsSync(rootDir+'/api/'+m+'/middlewares/'+m+'.js')) {
-        fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res,next)=> {\n  console.log("This is function ${m}")\n  next();\n }\n}`, function(err, result) {
+        fs.writeFile(path.join(rootDir, 'api', m, 'middlewares',m+'.js'),`module.exports = {\n ${m}: (req,res,next)=> {\n  console.log("This is middleware ${m}")\n  res.send('This is middleware ${m}')\n  next();\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File ${m}/middlewares/${m}.js can't be created`) 
         })
     }
@@ -615,7 +628,7 @@ function createModule(m){
         })
     }
     if(!fs.existsSync(rootDir+'/api/'+m+'/services/'+m+'.js')) {
-        fs.writeFile(path.join(rootDir, 'api', m, 'services',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is function ${m}")\n }\n}`, function(err, result) {
+        fs.writeFile(path.join(rootDir, 'api', m, 'services',m+'.js'),`module.exports = {\n ${m}: (req,res)=> {\n  console.log("This is service ${m}")\n  res.send('This is service ${m}')\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File ${m}/services/${m}.js can't be created`) 
         })
     }
@@ -678,7 +691,7 @@ function createApi(moduule){
             
             for(obj of jsonData){
                 if(obj['path']===pathh && obj['root']===answers['root'] && obj['method']===method){
-                    console.log(chalk.black.bgYellowBright('WARNING:')+' This path has been used already..')
+                    console.log(chalk.res('ERROR:')+' This path has been used already..')
                     return '';
                 }
             } 
@@ -694,7 +707,7 @@ function createApi(moduule){
                 let apiData = require(path.join(rootDir,'api',moduule,'controllers',answers['action'].split('.')[0]+'.js'))
                 for(i in (apiData)){
                     if(i.toString().toLowerCase() === answers['action'].split('.')[1].toString().toLowerCase()){
-                        console.log(chalk.black.bgYellowBright('WARNING:')+' api '+answers['action'].split('.')[1]+' name is already exists in '+answers['action'].split('.')[0]+'.js')
+                        console.log(chalk.red('ERROR:')+' api '+answers['action'].split('.')[1]+' name is already exists in '+answers['action'].split('.')[0]+'.js')
                         return ''
                     }
                 }
@@ -806,14 +819,14 @@ function actionConfigure(action,moduule){
             let funName = action.toString().split('.')[1] 
             let obj = {}
             obj[funName]= (req,res)=>{}               
-            fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is function ${funName}")\n }\n}`,'utf8', function(err, result) {
+            fs.writeFile(path.join(rootDir,'api',moduule,'controllers',fileName+'.js'),`module.exports = {\n ${funName}: (req,res)=> {\n  console.log("This is api ${funName}")\n  res.send('This is api ${funName}')\n }\n}`,'utf8', function(err, result) {
                 if(err) {console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+fileName+'.js file'); return 0;}
             })
         } else {
             
             fs.readFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),'utf8',(err,data)=>{
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),`module.exports = {\n ${action.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
+                    fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.split('.')[0]+'.js'),`module.exports = {\n ${action.split('.')[1]}: (req,res)=> {\n  console.log("This is api ${action.split('.')[1]}")\n  res.send("This is api ${action.split('.')[1]}")\n }\n}`,'utf8', function(err, result) {
                         if(err) {console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+action.split('.')[0]+'.js file'); return 0;}
                     })
                 } else {
@@ -826,7 +839,7 @@ function actionConfigure(action,moduule){
                     // }
                     if(data.slice(-1)==='}'){
                         let str = data.slice(0, -1)
-                        str += `,\n${action.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${action.toString().split('.')[1]}")\n }\n}`  
+                        str += `,\n${action.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is api ${action.toString().split('.')[1]}")\n  res.send("This is api ${action.toString().split('.')[1]}")\n }\n}`  
                         fs.writeFile(path.join(rootDir,'api',moduule,'controllers',action.toString().split('.')[0]+'.js'),str,'utf8',function(err,result){
                             if(err) {console.log(chalk.red('ERROR:')+' Error coming in writing the api/'+moduule+'/controllers/'+action.split('.')[0]+'.js file'); return 0;}
                         })
@@ -863,12 +876,12 @@ function middlewareConfigure(middlewares,moduule){
                     fs.mkdirSync(path.join(rootDir,'api',moduule,'middlewares'),{ recursive: true })
                 }
                 let funName = m.split('.')[1]                
-                fs.writeFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is function ${funName}")\n  next();\n }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is middleware ${funName}")\n  res.send("This is middleware ${funName}")\n  next();\n }\n}`,'utf8')
             
         } else {
             let data = fs.readFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),'utf8')
             if(data.length === 0 || !data.includes("module.exports")){
-                fs.appendFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
+                fs.appendFileSync(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is middleware ${m.split('.')[1]}")\n  res.send("This is middleware ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
             } else {
                 let middlewareData = require(path.join(rootDir,'api',moduule,'middlewares',m.split('.')[0]+'.js'))
                 for(j in (middlewareData)){
@@ -880,7 +893,7 @@ function middlewareConfigure(middlewares,moduule){
                 if(data.toString().charAt(data.length-1)==='}'){
                     const lastParanthesis=data.toString().lastIndexOf('}')
                     let str = data.slice(0,lastParanthesis);
-                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
+                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is middleware ${m.toString().split('.')[1]}")\n  res.send("This is middleware ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
                     fs.writeFileSync(path.join(rootDir,'api',moduule,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8')
                 }
             }   
@@ -916,12 +929,12 @@ function globalMiddlewareConfigure(globalMiddleware){
                     fs.mkdirSync(path.join(rootDir,'middlewares'),{ recursive: true })
                 }
                 let funName = m.split('.')[1]                
-                fs.writeFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is function ${funName}")\n  next();\n }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${funName}: (req,res,next)=> {\n  console.log("This is global middleware ${funName}")\n  res.send("This is global middleware ${funName}")\n  next();\n }\n}`,'utf8')
             
         } else {
             let data = fs.readFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),'utf8')
             if(data.length === 0 || !data.includes("module.exports")){
-                fs.appendFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
+                fs.appendFileSync(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'),`module.exports = {\n ${m.split('.')[1]}: (req,res,next)=> {\n  console.log("This is global middleware ${m.split('.')[1]}")\n  res.send("This is global middleware ${m.split('.')[1]}")\n  next();\n }\n}`,'utf8')
             } else {
                 let middlewareData = require(path.join(rootDir,'middlewares',m.split('.')[0]+'.js'))
                 for(j in (middlewareData)){
@@ -933,7 +946,7 @@ function globalMiddlewareConfigure(globalMiddleware){
                 if(data.toString().charAt(data.length-1)==='}'){
                     var lastParanthesis=data.toString().lastIndexOf('}')
                     let str = data.slice(0,lastParanthesis);
-                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is function ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
+                    str += `,\n${m.toString().split('.')[1]}: (req,res,next)=> {\n  console.log("This is global middleware ${m.toString().split('.')[1]}")\n  res.send("This is global middleware ${m.toString().split('.')[1]}")\n  next();\n }\n}`  
                     fs.writeFileSync(path.join(rootDir,'middlewares',m.toString().split('.')[0]+'.js'),str,'utf8')
                 }
             }
@@ -1002,7 +1015,7 @@ function createMiddleware(moduule){
             middlewareConfigure(answers['middleware'],moduule)
         })
     } else {
-        console.log(chalk.black.bgYellowBright('WARNING:')+' There is no api. Create api with "framework create-api"')
+        console.log(chalk.red('ERROR:')+' There is no api. Create api with "framework create-api"')
     }
 }
 
@@ -1066,7 +1079,7 @@ function createGlobalMiddleware(moduule){
             globalMiddlewareConfigure(answers['middleware'],moduule)
         })
     } else {
-        console.log(chalk.black.bgYellowBright('WARNING:')+' There is no api. Create api with "framework create-api"')
+        console.log(chalk.red('ERROR:')+' There is no api. Create api with "framework create-api"')
     }
 }
 
@@ -1096,11 +1109,11 @@ function createFunction(mdl){
             }
             let fls = fs.existsSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'))
             if(!fls){
-                fs.writeFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  res.send("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
             } else {
                 let data = fs.readFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.appendFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                    fs.appendFileSync(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  res.send("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
                 } else {
                     let functionData = require(path.join(rootDir,'api',mdl,'functions',f.split('.')[0]+'.js'))
                     for(j in (functionData)){
@@ -1112,7 +1125,7 @@ function createFunction(mdl){
                     if(data.toString().charAt(data.length-1)==='}'){
                         const lastParanthesis=data.toString().lastIndexOf('}')
                         let str = data.slice(0,lastParanthesis);
-                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.toString().split('.')[1]}")\n  }\n}`  
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.toString().split('.')[1]}")\n  res.send("This is function ${f.toString().split('.')[1]}")\n  }\n}`  
                         fs.writeFileSync(path.join(rootDir,'api',mdl,'functions',f.toString().split('.')[0]+'.js'),str,'utf8')
                     }
                 } 
@@ -1147,11 +1160,11 @@ function createGlobalFunction(){
             }
             let fls = fs.existsSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'))
             if(!fls){
-                fs.writeFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is global function ${f.split('.')[1]}")\n  res.send("This is global function ${f.split('.')[1]}")\n  }\n}`,'utf8')
             } else {
                 let data = fs.readFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.appendFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                    fs.appendFileSync(path.join(rootDir,'functions',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is global function ${f.split('.')[1]}")\n  res.send("This is global function ${f.split('.')[1]}")\n  }\n}`,'utf8')
                 } else {
                     let functionData = require(path.join(rootDir,'functions',f.split('.')[0]+'.js'))
                     for(j in (functionData)){
@@ -1163,7 +1176,7 @@ function createGlobalFunction(){
                     if(data.toString().charAt(data.length-1)==='}'){
                         const lastParanthesis=data.toString().lastIndexOf('}')
                         let str = data.slice(0,lastParanthesis);
-                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is function ${f.toString().split('.')[1]}")\n  }\n}`  
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is global function ${f.toString().split('.')[1]}")\n  res.send("This is global function ${f.toString().split('.')[1]}")\n  }\n}`  
                         fs.writeFileSync(path.join(rootDir,'functions',f.toString().split('.')[0]+'.js'),str,'utf8')
                     }
                 } 
@@ -1198,11 +1211,11 @@ function createService(mdl){
             }
             let fls = fs.existsSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'))
             if(!fls){
-                fs.writeFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  res.send("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
             } else {
                 let data = fs.readFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.appendFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                    fs.appendFileSync(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  res.semd("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
                 } else {
                     let functionData = require(path.join(rootDir,'api',mdl,'services',f.split('.')[0]+'.js'))
                     for(j in (functionData)){
@@ -1214,7 +1227,7 @@ function createService(mdl){
                     if(data.toString().charAt(data.length-1)==='}'){
                         const lastParanthesis=data.toString().lastIndexOf('}')
                         let str = data.slice(0,lastParanthesis);
-                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.toString().split('.')[1]}")\n  }\n}`  
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.toString().split('.')[1]}")\n  res.send("This is service ${f.toString().split('.')[1]}")\n  }\n}`  
                         fs.writeFileSync(path.join(rootDir,'api',mdl,'services',f.toString().split('.')[0]+'.js'),str,'utf8')
                     }
                 } 
@@ -1249,11 +1262,11 @@ function createGlobalService(){
             }
             let fls = fs.existsSync(path.join(rootDir,'services',f.split('.')[0]+'.js'))
             if(!fls){
-                fs.writeFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                fs.writeFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is global service ${f.split('.')[1]}")\n  res.send("This is global service ${f.split('.')[1]}")\n  }\n}`,'utf8')
             } else {
                 let data = fs.readFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),'utf8')
                 if(data.length === 0 || !data.includes("module.exports")){
-                    fs.appendFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
+                    fs.appendFileSync(path.join(rootDir,'services',f.split('.')[0]+'.js'),`module.exports = {\n ${f.split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.split('.')[1]}")\n  res.send("This is service ${f.split('.')[1]}")\n  }\n}`,'utf8')
                 } else {
                     let functionData = require(path.join(rootDir,'services',f.split('.')[0]+'.js'))
                     for(j in (functionData)){
@@ -1265,7 +1278,7 @@ function createGlobalService(){
                     if(data.toString().charAt(data.length-1)==='}'){
                         const lastParanthesis=data.toString().lastIndexOf('}')
                         let str = data.slice(0,lastParanthesis);
-                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is service ${f.toString().split('.')[1]}")\n  }\n}`  
+                        str += `,\n${f.toString().split('.')[1]}: (req,res)=> {\n  console.log("This is global service ${f.toString().split('.')[1]}")\n  res.send("This is global service ${f.toString().split('.')[1]}")\n  }\n}`  
                         fs.writeFileSync(path.join(rootDir,'services',f.toString().split('.')[0]+'.js'),str,'utf8')
                     }
                 } 

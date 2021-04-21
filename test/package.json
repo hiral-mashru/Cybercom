@@ -1,9 +1,11 @@
 {
-  "name": "@hiralmashru/boilerplate-structure",
+  "name": "boilerplate-structure",
   "version": "1.0.0",
   "description": "",
   "main": "src/app.js",
   "dependencies": {
+    "api-doc": "^4.0.3",
+    "apidoc": "^0.27.1",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
@@ -36,9 +38,5 @@
     "swagger": "nodemon ./swagger.js"
   },
   "author": "Hiral Mashru",
-  "license": "ISC",
-  "bin": {
-    "framework": "cli.js"
-  },
-  "preferGlobal": true
+  "license": "ISC"
 }

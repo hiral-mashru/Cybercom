@@ -29,39 +29,31 @@ require('../core/connection').getSequelize()
       const chalk = require('chalk')
       const routes = require('../core/routes');
       ////////////////////////////////////////////////////////////////
+      app.use('/docs',express.static(path.join(__dirname,'docs')));
+/**
+ * @api {get} /user/:id Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {Number} id User's unique ID.
+ *
+ * @apiSuccess {String} firstname Firstname of the User.
+ * @apiSuccess {String} lastname  Lastname of the User.
+ */
+const { createDoc } = require('apidoc')
+const path = require('path')
+const doc = createDoc({
+    src: path.resolve(__dirname, 'src'),
+    dest: path.resolve(__dirname, 'doc')
+  })
+  
+  if (typeof doc !== 'boolean') {
+    // Documentation was generated!
+    console.log("dd",doc.data) // `api_data.json` file content
+    console.log("pp",doc.project) // `api_project.json` file content
+  }
 
-      const swaggerUi = require('swagger-ui-express')
-      const swaggerFile = require('../swagger-output.json');
-      app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
-
-      ////////////////////////////////////////////////////////////////
-      // const swaggerJsDoc = require('swagger-jsdoc')
-      // const swaggerUi = require('swagger-ui-express')
-      // try{
-      // const definition = {
-      //     openapi: '3.0.0',
-      //     info: {
-      //         title: "API",
-      //         description: "API Info",
-      //         contact: {
-      //             name: "Developer"
-      //         },
-      //         servers: ["http://localhost:"+setu.port]
-      //     }
-      // }
-
-      // const options = {
-      //     definition,
-      //     apis: [__dirname+"/../api/apidoc.js"]
-      // } 
-
-      // const swaggerDocs = swaggerJsDoc(options);
-      // app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocs, { explorer: true }))
-      // } catch(err){
-      //     console.log(chalk.red("ERROR:")+err)
-      // }
-      //////////////////////////////////////////////////////////////////////////////////////////
-      const stundetData = [{
+     const stundetData = [{
           id: 1,
           name: 'Hiral'
       },{
@@ -72,11 +64,6 @@ require('../core/connection').getSequelize()
           res.send('Hello World!');
       });
       app.get('/users/:id', (req, res) => {
-          /*  #swagger.tags = ['students']
-              #swagger.description = 'Endpoint to get the specific user.' */
-          /* #swagger.responses[200] = { 
-                  schema: { "$ref": "#/definitions/students" },
-                  description: "User found successfully." } */
           res.send(stundetData.map(x=> Object.values(x)))
       });
       ///////////////////////////////////////////////////////////////////////////
@@ -96,7 +83,7 @@ require('../core/connection').getSequelize()
     //       err.status = 404
     //       next(err)
     //   })
-
+      
       app.use(function (err, req, res, next) {
           res.status(err.status || 500)
           console.log(chalk.red('ERROR:')+" Status: "+err.status+", Message: "+err.message)

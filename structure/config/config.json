@@ -1,6 +1,0 @@
-{
-    "morgan-config":{
-        "req-body": true,
-        "req-headers": false
-    }
-}
