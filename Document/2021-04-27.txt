@@ -1,0 +1,1 @@
+Today I created given tables and worked on that..and also did practice on making relations between tables and created some apis for apidocs for practice..
