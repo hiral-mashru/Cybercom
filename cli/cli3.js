@@ -1,9 +1,10 @@
 const { program } = require('commander');
 const pkgConfig = require('./package.json') 
-const { init } = require('./helpers/init')
+const { init } = require('./core/init')
 const { green, red } = require('chalk');
-const dbConfig = require('./core/dbConfig');
-const create_module = require('./helpers/create_module')
+const dbConfig = require('./helpers/dbConfig');
+const create_module = require('./core/create_module')
+const createApi = require('./core/create_api')
 
 program.version(pkgConfig.version).description(pkgConfig.description)
 
@@ -25,10 +26,12 @@ program.command('db-config').description('To configure the database.').action(()
     dbConfig()
 })
 
-program.command('create-module <modulle>').description('Name of module')
-  .action((modulle)=>{
-      console.log(modulle)
+program.command('create-module <module...>').description('Name of module').action((modulle)=>{
       create_module(modulle)
   })
+
+program.command('create-api').description('To create api.').action(()=>{
+    createApi()
+})
 
 program.parse(process.argv);

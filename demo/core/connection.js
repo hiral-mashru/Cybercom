@@ -1,7 +1,4 @@
 const chalk = require('chalk');
-
-try {
-
 const fs = require('fs')
 const Sequelize = require('sequelize');
 var config = require('../config/database.json');
@@ -101,7 +98,3 @@ async function getSequelize(){
 }
 
 module.exports.getSequelize = getSequelize
-
-} catch(err){
-    console.log(chalk.red('ERROR:')+' Error coming in core/connection.js, Error is: ',err)
-}

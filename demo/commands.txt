@@ -1,0 +1,11 @@
+npx sequelize model:generate --name DepartmentMaster --attributes title:string,isActive:boolean
+
+npx sequelize model:generate --name DesignationMaster --attributes title:string,isActive:boolean
+
+npx sequelize model:generate --name TechnologyMaster --attributes title:string,isActive:boolean
+
+npx sequelize model:generate --name SkillMaster --attributes title:string,isActive:boolean
+
+npx sequelize model:generate --name BloodGroupMaster --attributes title:string,isActive:boolean
+
+npx sequelize model:generate --name EducationTypeMaster --attributes title:string,isActive:boolean

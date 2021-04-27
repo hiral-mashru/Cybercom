@@ -386,6 +386,11 @@ function createStructure(){
             console.log(chalk.red('ERROR:')+` Directory middlewares can't be created`) 
         } 
     });
+    fs.mkdir(path.join(rootDir, 'services'),{ recursive: true }, (err) => { 
+        if (err) { 
+            console.log(chalk.red('ERROR:')+` Directory services can't be created`) 
+        } 
+    });
     if(!fs.existsSync(rootDir+'/middlewares/middleware.js')) {
         fs.writeFile(path.join(rootDir,'middlewares','middleware.js'),`module.exports = {\n middleware: (req,res,next)=> {\n  console.log("This is global middleware")\n  res.send('This is global middleware')\n  next();\n }\n}`, function(err, result) {
             if(err) console.log(chalk.red('ERROR:')+` File /middlewares/middleware.js can't be created`) 
