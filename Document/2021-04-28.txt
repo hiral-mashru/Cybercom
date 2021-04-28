@@ -1,0 +1,1 @@
+Today,  I created a demo project for oauth.. I referred videos for that, and created demo api.. I used https://manage.auth0.com/ website to create dummy api..and did code also for that.I referred many more packages like simple-oauth2 , passport-oauth2-client-password,client-oauth2, okta jwt verifier. I am creating api in google and getting access from there..         
