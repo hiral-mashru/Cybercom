@@ -38,6 +38,58 @@ require('../core/connection').getSequelize()
       app.use(cookieParser())
       app.use('/docs',require('../core/migrations').express.static(path.join(__dirname,'..','docs')));
       
+////////////////////////////////////////////////////////
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
+var guard = require('express-jwt-permissions')()
+
+var jwtCheck = jwt({
+      secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: 'https://dev-9d43xvrs.au.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'https://challenges-api.com',
+    issuer: 'https://dev-9d43xvrs.au.auth0.com/',
+    algorithms: ['RS256']
+});
+
+app.use(jwtCheck);
+
+app.get('/challenges',guard.check(['read:challenges']), function (req, res) {
+    res.json({
+        challenge1: '1 challenge',
+        challenge2: '2 challenge'
+    })
+});
+
+const { auth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: 'a long, randomly-generated string stored in env',
+  baseURL: 'http://localhost:8000',
+  clientID: 'hLkgOQTB2DAdclDmmgOV4zv823G88lwA',
+  issuerBaseURL: 'https://dev-9d43xvrs.au.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+// req.isAuthenticated is provided from the auth router
+app.get('/', (req, res) => {
+  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
+});
+
+const { requiresAuth } = require('express-openid-connect');
+
+app.get('/profile', requiresAuth(), (req, res) => {
+  res.send(JSON.stringify(req.oidc.user));
+});
+
+///////////////////////////////////////////////////////
       try{
           for(let key in routes.public){    
               app[routes.public[key].method](routes.public[key].path, (routes.public[key].middlewares),routes.public[key].globalMiddleware,routes.public[key].action);

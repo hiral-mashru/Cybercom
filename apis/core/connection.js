@@ -83,6 +83,7 @@ async function getSequelize(){
         }
         if(sequelize){
             seq(sequelize)
+            setup = { connection: sequelize };
             resolve(sequelize)
         }               
     })
