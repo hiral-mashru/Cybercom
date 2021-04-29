@@ -1,0 +1,1 @@
+Today I created a demo project for oauth ,created dummy api.. I referred packages for oauth simple-oauth2 , passport-oauth2-client-password,client-oauth2, okta jwt verifier..I used passport and passport-google-oauth20 package in project for oauth2.0 and created api of google and set credentials.
