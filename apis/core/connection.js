@@ -1,17 +1,14 @@
 const chalk = require('chalk');
-
+require('dotenv').config()
 try {
 
 const fs = require('fs')
 const Sequelize = require('sequelize');
-var config = require('../config/database.json');
+var config = require('../config/database.json')[process.env.NODE_ENV]; 
 const inquirer = require('inquirer')
+const path = require('path')
 
-if(config.development){
-    config = config.development
-} else {
-    config = config.production
-}
+fs.mkdirSync(path.join(process.cwd(),'dbLogs'), { recursive: true })
 
 async function getSequelize(){
     var sequelize;

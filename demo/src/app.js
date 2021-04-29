@@ -39,55 +39,24 @@ require('../core/connection').getSequelize()
       app.use('/docs',require('../core/migrations').express.static(path.join(__dirname,'..','docs')));
       
 ////////////////////////////////////////////////////////
-var jwt = require('express-jwt');
-var jwks = require('jwks-rsa');
-var guard = require('express-jwt-permissions')()
 
-var jwtCheck = jwt({
-      secret: jwks.expressJwtSecret({
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: 'https://dev-9d43xvrs.au.auth0.com/.well-known/jwks.json'
-    }),
-    audience: 'https://challenges-api.com',
-    issuer: 'https://dev-9d43xvrs.au.auth0.com/',
-    algorithms: ['RS256']
-});
-
-app.use(jwtCheck);
-
-app.get('/challenges',guard.check(['read:challenges']), function (req, res) {
-    res.json({
-        challenge1: '1 challenge',
-        challenge2: '2 challenge'
-    })
-});
-
-const { auth } = require('express-openid-connect');
-
-const config = {
-  authRequired: false,
-  auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'http://localhost:8000',
-  clientID: 'hLkgOQTB2DAdclDmmgOV4zv823G88lwA',
-  issuerBaseURL: 'https://dev-9d43xvrs.au.auth0.com'
-};
-
-// auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(config));
-
-// req.isAuthenticated is provided from the auth router
-app.get('/', (req, res) => {
-  res.send(req.oidc.isAuthenticated() ? 'Logged in' : 'Logged out');
-});
-
-const { requiresAuth } = require('express-openid-connect');
-
-app.get('/profile', requiresAuth(), (req, res) => {
-  res.send(JSON.stringify(req.oidc.user));
-});
+const passport = require('passport')
+const googleStrategy = require('passport-google-oauth20')
+passport.use(new googleStrategy({
+  clientID :"487669936531-93ca94ido1d5mqudgnjte78qkfmjjs5f.apps.googleusercontent.com",
+  clientSecret : "HB2UeemZ67ahGag5ZLbC6Vnd",
+  callbackURL : "http://localhost:8000/auth/google/authorised"
+},(accessToken,refreshToken,profile,done)=>{
+  console.log("accessToken: ",accessToken)
+  console.log("refreshToken: ",refreshToken)
+  console.log("Profile: ",profile)
+}))
+app.get("/auth/google",passport.authenticate("google",{
+  scope: ["profile","email"]
+}))
+app.get("/auth/google/authorised",passport.authenticate('google'),(req,res,next)=>{
+  res.send("Authenticated")
+})
 
 ///////////////////////////////////////////////////////
       try{
