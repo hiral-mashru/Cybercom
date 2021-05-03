@@ -38,7 +38,7 @@ require('../core/connection').getSequelize()
       app.use(cookieParser())
       app.use('/docs',require('../core/migrations').express.static(path.join(__dirname,'..','docs')));
       
-////////////////////////////////////////////////////////
+////////////////////// google //////////////////////////////////
 
 const passport = require('passport')
 const googleStrategy = require('passport-google-oauth20')
@@ -57,6 +57,37 @@ app.get("/auth/google",passport.authenticate("google",{
 app.get("/auth/google/authorised",passport.authenticate('google'),(req,res,next)=>{
   res.send("Authenticated")
 })
+
+//////////////////////////// github //////////////////////////////////////////////
+
+const axios = require('axios');
+
+app.get('/github/auth',(req,res)=>{
+  res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}`)
+})
+
+app.get('/github/callback', ({ query: { code } }, res) => {
+  console.log(code)
+  const body = {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
+    code,
+  };
+  const opts = { headers: { accept: 'application/json' } };
+  axios
+    .post('https://github.com/login/oauth/access_token', body, opts)
+    .then((_res) => _res.data.access_token)
+    .then((token) => {
+      // eslint-disable-next-line no-console
+      console.log('My token:', token);
+
+      // res.redirect(`/?token=${token}`);
+      res.json({status: 1, token: token})
+    })
+    .catch((err) => res.status(500).json({ err: err.message }));
+});
+
+//////////////////////// pagination //////////////////////////////////////
 
 const users = [
   { id: 1, name: 'User 1'},
