@@ -1,0 +1,1 @@
+Today, I created demo project using passport pkg for open ID connect using okta application..and trying to implement password flow using okta.
