@@ -87,11 +87,6 @@ app.get('/github/callback', ({ query: { code } }, res) => {
     .catch((err) => res.status(500).json({ err: err.message }));
 });
 
-//////////////////////// facebook ////////////////////////////////////////
-
-const strategy = require('passport-facebook')
-
-
 //////////////////////// pagination //////////////////////////////////////
 
 const users = [
