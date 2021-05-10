@@ -1,0 +1,1 @@
+T?oday I implemented @okta/jwt-verifier for client-credentials oauth and done with 3 types of grant..exploring other packages for oauth2.0.  
