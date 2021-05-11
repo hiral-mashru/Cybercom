@@ -520,3 +520,103 @@ Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER
 Executing (default): SELECT `id`, `name`, `email`, `createdAt`, `updatedAt`, `deletedAt` FROM `students` AS `students` WHERE (`students`.`deletedAt` IS NULL AND `students`.`id` = 1);
 7:04:18 PM
 Executing (default): UPDATE `students` SET `my-integer-field`=`my-integer-field`+ 2,`my-very-other-field`=`my-very-other-field`+ 3,`updatedAt`='2021-05-11 13:34:18' WHERE `id` = 1
+7:08:21 PM
+Executing (default): SELECT 1+1 AS result
+7:08:21 PM
+Executing (default): SELECT 1+1 AS result
+7:08:21 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+7:08:21 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+7:08:21 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+7:19:02 PM
+Executing (default): SELECT 1+1 AS result
+7:19:02 PM
+Executing (default): SELECT 1+1 AS result
+7:19:02 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+7:19:02 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+7:19:02 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:01:09 PM
+Executing (default): SELECT 1+1 AS result
+8:01:09 PM
+Executing (default): SELECT 1+1 AS result
+8:01:09 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+8:01:09 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+8:01:09 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:02:33 PM
+Executing (default): SELECT 1+1 AS result
+8:02:33 PM
+Executing (default): SELECT 1+1 AS result
+8:02:33 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+8:02:33 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+8:02:33 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:04:07 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:04:07 PM
+Executing (default): UPDATE `Products` SET `amount`=`amount`+ 2,`amount2`=`amount2`+ 3,`updatedAt`='2021-05-11 14:34:07' WHERE `id` = 1
+8:04:07 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:05:59 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:05:59 PM
+Executing (default): UPDATE `Products` SET `amount`=`amount`- 2,`amount2`=`amount2`- 3,`updatedAt`='2021-05-11 14:35:59' WHERE `id` = 1
+8:05:59 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:07:30 PM
+Executing (default): SELECT 1+1 AS result
+8:07:30 PM
+Executing (default): SELECT 1+1 AS result
+8:07:30 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+8:07:30 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+8:07:30 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:08:38 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:08:38 PM
+Executing (default): UPDATE `Products` SET `amount`=`amount`- 2,`amount2`=`amount2`- 3,`updatedAt`='2021-05-11 14:38:38' WHERE `id` = 1
+8:08:38 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 1;
+8:08:59 PM
+Executing (default): SELECT 1+1 AS result
+8:08:59 PM
+Executing (default): SELECT 1+1 AS result
+8:08:59 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+8:08:59 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+8:08:59 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:23:44 PM
+Executing (default): SELECT 1+1 AS result
+8:23:44 PM
+Executing (default): SELECT 1+1 AS result
+8:23:44 PM
+Executing (default): CREATE TABLE IF NOT EXISTS `SequelizeMeta` (`name` VARCHAR(255) NOT NULL UNIQUE , PRIMARY KEY (`name`)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_unicode_ci;
+8:23:44 PM
+Executing (default): SHOW INDEX FROM `SequelizeMeta`
+8:23:44 PM
+Executing (default): SELECT `name` FROM `SequelizeMeta` AS `SequelizeMeta` ORDER BY `SequelizeMeta`.`name` ASC;
+8:23:53 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = '2';
+8:23:53 PM
+Executing (default): UPDATE `Products` SET `amount`=`amount`- 2,`amount2`=`amount2`- 3,`updatedAt`='2021-05-11 14:53:53' WHERE `id` = 2
+8:23:53 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 2;
+8:24:16 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = '3';
+8:24:16 PM
+Executing (default): UPDATE `Products` SET `amount`=`amount`+ 2,`amount2`=`amount2`+ 3,`updatedAt`='2021-05-11 14:54:16' WHERE `id` = 3
+8:24:16 PM
+Executing (default): SELECT `id`, `name`, `amount`, `amount2`, `createdAt`, `updatedAt` FROM `Products` AS `Product` WHERE `Product`.`id` = 3;

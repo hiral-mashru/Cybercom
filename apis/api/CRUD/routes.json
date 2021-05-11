@@ -70,14 +70,14 @@
   "root": false
  },
  {
-  "path": "/increment",
+  "path": "/increment/:id",
   "method": "get",
   "action": "FindData.increment",
   "public": true,
   "root": false
  },
  {
-  "path": "/decrement",
+  "path": "/decrement/:id",
   "method": "get",
   "action": "FindData.decrement",
   "public": true,
