@@ -1,0 +1,1 @@
+Today, I learnt and implemented sequelize association basics, one to one relation,one to many and many many relation, raw queries
