@@ -1,0 +1,1 @@
+Today, I learnt about scopes and implemented login, logout using password credentials in a demo project and used bulkCreate, bulkUpdate and other crud operations.. 
