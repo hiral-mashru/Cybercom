@@ -6,25 +6,12 @@ const UserModel = require('./models')['user']
 const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
-const oAuthConfig = require('./auth/accessTokenConfig')
-const oAuth2Server=require('node-oauth2-server');
-
-app.oauth = oAuth2Server({
-    model: oAuthConfig,
-    grants: ['password'],
-    debug: true
-})
+// const oAuthConfig = require('./auth/accessTokenConfig')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.use(app.oauth.errorHandler())
+// app.use(app.oauth.errorHandler())
 
-// in postman - req body - x-www-form-urlencoded
-// username : hiralmashru
-// password : hiral
-// grant_type : password
-// client_id : null
-// client_secret : null
 app.post('/register',async (req,res)=>{
 	const user = await UserModel.findOne({ where: { username: req.body.username }})
 	if(!user){
@@ -43,22 +30,36 @@ app.post('/register',async (req,res)=>{
 	}
 })
 
-
-// in postman - req body - x-www-form-urlencoded
-// username : hiralmashru
-// password : hiral
-// grant_type : password
-// client_id : null
-// client_secret : null
-app.post('/login', app.oauth.grant())
-
-
-// in postman - req headers 
-// Content-Type : application/x-www-form-urlencoded
-// Authorization : Bearer d140c3ad1c6cfb4d0c9533e3b678475fe3a3577f
-app.post('/enter',app.oauth.authorise(),(req, res) => {
-    res.send('You have gained access to the restricted area')
+app.post('/login',(req,res)=>{
+    UserModel.findOne({
+        where:{
+            username:req.body.username,
+            password:req.body.password
+        }
+    }).then( user => {
+		const accessToken = Math.random().toString(36).slice(2)
+		accessTokenModel.create({
+			accessToken:accessToken,
+			userId:user.id
+		}).then(token=>{
+			res.status(200).json({
+				token : token
+			})
+		})
+		.catch(error=>{
+			res.status(500).json({
+				status: 0,
+				error: error
+			})
+		})
+    })
+    .catch(error=>res.status(500).json({
+        status: 0,
+        error: error
+    }))
 })
+
+app.post('/profile',(req,res)=>{})
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`)

@@ -38,7 +38,7 @@ require('../core/connection').getSequelize()
       app.use(cookieParser())
       app.use('/docs',require('../core/migrations').express.static(path.join(__dirname,'..','docs')));
       
-////////////////////// google //////////////////////////////////
+////////////////////// google - authorization grant //////////////////////////////////
 
 const passport = require('passport')
 const googleStrategy = require('passport-google-oauth20')
@@ -58,7 +58,7 @@ app.get("/auth/google/authorised",passport.authenticate('google'),(req,res,next)
   res.send("Authenticated")
 })
 
-//////////////////////////// github //////////////////////////////////////////////
+//////////////////////////// github - authorization grant //////////////////////////////////////////////
 
 const axios = require('axios');
 
