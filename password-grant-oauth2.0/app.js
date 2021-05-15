@@ -2,6 +2,7 @@ const port = 8000
 
 require('./core/connection')
 const UserModel = require('./models')['user']
+const accessTokenModel = require('./models')['accessToken']
 
 const express=require('express');
 const app=express();
@@ -42,6 +43,8 @@ app.post('/login',(req,res)=>{
 			accessToken:accessToken,
 			userId:user.id
 		}).then(token=>{
+			res.setHeader('Content-Type','application/x-www-form-urlencoded')
+			res.setHeader('Authorization','Bearer '+token)
 			res.status(200).json({
 				token : token
 			})
@@ -59,7 +62,54 @@ app.post('/login',(req,res)=>{
     }))
 })
 
-app.post('/profile',(req,res)=>{})
+app.post('/profile',(req,res)=>{
+	const bearerToken = req.headers.authorization.split(' ')[1]
+	accessTokenModel.findOne({
+		attributes:['userId'],
+		where:{
+			accessToken: bearerToken
+		}
+	}).then((token)=>{
+		const accessToken={
+			id:token['userId'],
+			expires:null
+		}
+		const userID=token['userId']
+		if(token){
+			res.json({
+				token: bearerToken,
+				accessToken,
+				userID
+			})
+		} else {
+			res.json({
+				err: error
+			})
+		}
+	}).catch(error=>res.status(500).json({
+        status: 0,
+        error: error
+    }))
+})
+
+app.post('/logout',(req,res)=>{
+	const bearerToken = req.headers.authorization.split(' ')[1]
+	accessTokenModel.findOne({
+		attributes:['userId'],
+		where:{
+			accessToken: bearerToken
+		}
+	}).then((token)=>{
+		accessTokenModel.destroy({
+			where:{
+				userId: token['userId'],
+				accessToken: bearerToken
+			}
+		}).then(token => {
+			res.send("deleted")
+		})
+	})
+})
 
 app.listen(port, () => {
     console.log(`listening on port ${port}`)

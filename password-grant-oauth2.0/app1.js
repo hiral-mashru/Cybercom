@@ -6,7 +6,7 @@ const UserModel = require('./models')['user']
 const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
-const oAuthConfig = require('./auth/accessTokenConfig1')
+const oAuthConfig = require('./auth/accessTokenConfig')
 const oAuth2Server=require('node-oauth2-server');
 
 app.oauth = oAuth2Server({

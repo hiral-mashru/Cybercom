@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'accessToken',
-    timestamps: false
+    timestamps: true,
+    paranoid: true
   });
   return accessToken;
 };
