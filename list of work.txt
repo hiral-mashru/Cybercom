@@ -1,0 +1,44 @@
+-> Directory must have api,config,core,db,src folders.
+
+-> All the database related folders like models,migrations,seeders should be in db folder.
+
+-> In core folder, there should be files of connection.js (for database connection),migrations.js(for migrations),routes.js(for defining the routes),services.js(for defining the services).
+
+-> database.json file should be in config folder.
+
+-> main file (app.js) should be in src folder.
+
+-> In api folder, there will be many folders for different tasks and in those folders, there should be controllers,services folders and routes.json file. In controllers folder, there could be many files for apis, and apis must be declared as key-value pair, and value is a function.
+e.g. , module.exports = { login: ()=>{} }
+
+-> In routes.json, we need to define routes of api like [{ "path":"/","method":"get","action":"fileName.functionName","public": true,"root":true }]
+fileName is the name of file of controllers folder, functionName is the name of key of that file.
+
+-> if root is true then the given path of that api should be called from the folder of that routes.json file. e.g. if HM/routes.json and root is true then path should be called like HM/{pathName}, if root is false then without that folder name, only path will be called.
+
+-> We need to call these apis with path,method,action,public in app.js and need to do configurations of that in core/routes.js file.
+
+-> if any api is public then without authentication, it should be called.
+
+-> how to change the color of output in cli.
+
+-> Now, work on database: need one library, which runs sequelize migrations without cli-command. And when migrations are pending, it should ask user if he wants to migrate or not, if yes do migrations. Otherwise, write 'No migrations are pending.'
+
+-> We need to do connection in core/connection.js
+
+-> Work on middlewares: in api folder, in whichever task, middleware is needed, there we need to create one folder named middleware, and as controllers, there may be multiple middleware files and in that multiple middleware finctions in key-value pair, value is a function. And in routes.json, whichever api needs middleware, we need define there : "middleware": ["fileName.functionName"] same like "action" key.
+
+-> Global middleware -> in root directory, middleware folder we need to create and in that multiple middleware files could be there with multiple middleware functions. and to call it, in routes.json file, we need to write, "globalMiddleware": ["fileName.functionName"]
+
+-> functions -> functions should be called via global object named 'setup'. Functions folder may have multiple function file with multiple functions. And when in api any function is needed to call then we should be to call it via setup.functions["fileName"]["functionName"](param1,..paramn).
+
+-> services-> services should be called via global object named 'setup'. Services folder may have multiple service file with multiple services. And when in api any service is needed to call then we should be to call it via setup.services["fileName"]["servicName"](param1,..paramn).
+
+-> error handling : server should not get crashed. when in api, any error comes, it should be handled by one error handling function, and need to show line number from where error is coming and what error is coming.
+
+-> Do file upload solution, do its configuration in config folder and keep storage dynamic.
+
+-> learn crons, it should run automatically.
+
+-> The whole setup should be downloaded from git repository when we type "framework init" in cli, It should create the folder containing controllers,services, middlewares,routes.json when we type 'framework create-module {anyName}'.
+

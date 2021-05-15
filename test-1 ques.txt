@@ -1,0 +1,13 @@
+1) how to iterate foreach loop with using multidimenstional array - ratan
+
+2) how to edit and delete operation from the table - anjali, vanshika
+
+3) how to show the data of age based on the birthyear - vanshika
+
+4) how to show that today is birthday or not? -  
+
+5) mysql_connect isn't working, so please provide a solution - ratan
+
+6) how to show values from multidimensional array - ratan
+
+7) how to maintain the session of logout? 
