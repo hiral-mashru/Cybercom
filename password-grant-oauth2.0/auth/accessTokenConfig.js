@@ -1,5 +1,6 @@
 require('../core/connection');
 const User=require('../models')['user'];
+require('dotenv').config()
 const accessTokenModel=require('../models')['accessToken']
 
 module.exports={
@@ -9,13 +10,19 @@ module.exports={
         console.log("id",clientID)
         console.log("secret",clientSecret)
         const client = {
-            clientID,
-            clientSecret,
-            grants: null,
-            redirectUris: null
+            clientID: process.env.CLIENT_ID,
+            clientSecret: process.env.CLIENT_SECRET,
+            grants: [
+                'password',
+                'client_credentials'
+            ],
+            redirectUris: []
         }
-    
-        callback(false, client);
+        if(client.clientId === clientId && client.clientSecret === clientSecret){
+            callback(false, client);
+        } else{
+            callback(false, null);
+        }
     },
 
     // this is not for password grant, it's for client-credentials

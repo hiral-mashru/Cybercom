@@ -11,7 +11,7 @@ const oAuth2Server=require('node-oauth2-server');
 
 app.oauth = oAuth2Server({
     model: oAuthConfig,
-    grants: ['password'],
+    grants: ['password','client_credentials'],
     debug: true
 })
 
