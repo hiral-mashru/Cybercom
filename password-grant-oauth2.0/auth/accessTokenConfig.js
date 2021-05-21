@@ -1,5 +1,8 @@
+const client = require('../models/client');
+
 require('../core/connection');
 const User=require('../models')['user'];
+const Client = require('../models')['Client'];
 require('dotenv').config()
 const accessTokenModel=require('../models')['accessToken']
 
@@ -10,25 +13,53 @@ module.exports={
         console.log("id",clientID)
         console.log("secret",clientSecret)
         const client = {
-            clientID: process.env.CLIENT_ID,
-            clientSecret: process.env.CLIENT_SECRET,
+            clientID: clientID,
+            clientSecret: clientSecret,
             grants: [
                 'password',
                 'client_credentials'
             ],
             redirectUris: []
         }
-        if(client.clientId === clientId && client.clientSecret === clientSecret){
-            callback(false, client);
-        } else{
-            callback(false, null);
-        }
+        Client.findOne({
+            where: {
+                clientID: client.clientID,
+                clientSecret: client.clientSecret
+            }
+        }).then(clnt => {
+            callback(false, clnt);
+        }).catch(err => { callback(false, err); })
     },
 
     // this is not for password grant, it's for client-credentials
     grantTypeAllowed:(clientID,grantType,callback)=>{
+        console.log(clientID)
+        console.log(grantType)
         console.log("allowed");
         callback(false, true);
+    },
+
+    // client_credentials
+    getUserFromClient:(clientID,clientSecret,callback)=>{
+        console.log("id",clientID)
+        console.log("secret",clientSecret)
+        const client = {
+            clientID: clientID,
+            clientSecret: clientSecret,
+            grants: [
+                'password',
+                'client_credentials'
+            ],
+            redirectUris: []
+        }
+        Client.findOne({
+            where: {
+                clientID: client.clientID,
+                clientSecret: client.clientSecret
+            }
+        }).then(clnt => {
+            callback(false, clnt);
+        }).catch(err => { callback(false, err); })
     },
 
     getUser:(username,password,callback)=>{
@@ -39,32 +70,38 @@ module.exports={
                 password:password
             }
         }).then(
-            user=>{callback(false,user); console.log("user->"+JSON.stringify(user))}
+            user=>{ console.log("user->"+JSON.stringify(user));callback(false,user); }
         )
         .catch(error=>callback(error,null))
     },
 
     saveAccessToken:async(accessToken,clientID,expires,user,callback)=>{
-        console.log("save the token "+accessToken)
-        accessTokenModel.create({
-           accessToken:accessToken,
-           userId:user.id
-       }).then(token=>{callback(false,token); console.log("token->"+JSON.stringify(token))})
-       .catch(error=>callback(error,null))
+        console.log("save the token "+accessToken+", clientID: "+clientID+", userid: "+user.id+", expires: "+expires)
+        Client.findOne({
+            where: { clientID }
+        }).then(client => {
+            accessTokenModel.create({
+                accessToken:accessToken,
+                userId:user.id,
+                clientId: client.id,
+                expires
+            }).then(token=>{
+                callback(false,token); 
+                console.log("token->"+JSON.stringify(token))
+            }).catch(error=>callback(error,null))
+        }).catch(error=>callback(error,null))
     },
 
     getAccessToken:async(bearerToken,callback)=>{
         console.log("get token")
         console.log(bearerToken);
         const token=await accessTokenModel.findOne({
-            attributes:['userId'],
+            attributes:['userId','clientId'],
             where:{
                 accessToken:bearerToken
             }
         });
-
         console.log(JSON.stringify(token));
-
         const accessToken={
             user:{
                 id:token['userId']

@@ -1,23 +1,27 @@
 const port = 8000
 
-require('dotenv').config()
 require('./core/connection')
 const UserModel = require('./models')['user']
 const accessTokenModel = require('./models')['accessToken']
-
+const Client = require('./models')['Client'];
 const express=require('express');
 const app=express();
 const bodyParser=require('body-parser');
-// const oAuthConfig = require('./auth/accessTokenConfig')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-// app.use(app.oauth.errorHandler())
 
 app.get('/',(req,res)=>{
 	res.send("Go ahead...")
 })
 
+
+// in postman - req body - x-www-form-urlencoded
+// username : hiralmashru
+// password : hiral
+// grant_type : password
+// client_id : null
+// client_secret : null
 app.post('/register',async (req,res)=>{
 	const user = await UserModel.findOne({ where: { username: req.body.username }})
 	if(!user){
@@ -36,16 +40,29 @@ app.post('/register',async (req,res)=>{
 	}
 })
 
+// in postman - req body - x-www-form-urlencoded
+// username : hiralmashru
+// password : hiral
+// grant_type : password
+// client_id : null
+// client_secret : null
 app.post('/login',(req,res)=>{
-	if(req.body.grant_type === 'client_credentials'){
-		if(req.body.client_id===process.env.CLIENT_ID && req.body.client_secret === process.env.CLIENT_SECRET){
-			login(req,res)
-		}
-	}
-	login(req,res)
+	// if(req.body.grant_type === 'client_credentials'){
+		Client.findOne({
+            where: {
+                clientID: req.body.client_id,
+                clientSecret: req.body.client_secret
+            }
+        }).then(clnt => {
+			login(req,res,clnt)
+		})
+	// }
+	// let client = null
+	// login(req,res,client)
 })
 
-function login(req,res){
+function login(req,res,client){
+	console.log(client.id)
 	UserModel.findOne({
         where:{
             username:req.body.username,
@@ -53,9 +70,12 @@ function login(req,res){
         }
     }).then( user => {
 		const accessToken = Math.random().toString(36).slice(2)
+		console.log(accessToken)
 		accessTokenModel.create({
 			accessToken:accessToken,
-			userId:user.id
+			userId:user.id,
+			clientId: client.id,
+            expires: 3600
 		}).then(token=>{
 			res.setHeader('Content-Type','application/x-www-form-urlencoded')
 			res.setHeader('Authorization','Bearer '+token)
@@ -64,6 +84,7 @@ function login(req,res){
 			})
 		})
 		.catch(error=>{
+			console.log("e")
 			res.status(500).json({
 				status: 0,
 				error: error
@@ -76,6 +97,9 @@ function login(req,res){
     }))
 }
 
+// in postman - req headers 
+// Content-Type : application/x-www-form-urlencoded
+// Authorization : Bearer d140c3ad1c6cfb4d0c9533e3b678475fe3a3577f
 app.post('/profile',(req,res)=>{
 	const bearerToken = req.headers.authorization.split(' ')[1]
 	accessTokenModel.findOne({

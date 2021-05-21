@@ -38,7 +38,7 @@ function obtainToken(req, res) {
 		});
 }
 
-function authenticateRequest(req, res, next) {
+function authenticateRequest(req, res, next) { //getAccessToken
 
 	var request = new Request(req);
 	var response = new Response(res);

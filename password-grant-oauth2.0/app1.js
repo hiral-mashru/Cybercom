@@ -8,6 +8,7 @@ const app=express();
 const bodyParser=require('body-parser');
 const oAuthConfig = require('./auth/accessTokenConfig')
 const oAuth2Server=require('node-oauth2-server');
+const accessTokenModel=require('./models')['accessToken']
 
 app.oauth = oAuth2Server({
     model: oAuthConfig,
@@ -58,6 +59,25 @@ app.post('/login', app.oauth.grant())
 // Authorization : Bearer d140c3ad1c6cfb4d0c9533e3b678475fe3a3577f
 app.post('/profile',app.oauth.authorise(),(req, res) => {
 	res.status(200).send('You have gained access to the restricted area')
+})
+
+app.post('/logout',(req,res)=>{
+	const bearerToken = req.headers.authorization.split(' ')[1]
+	accessTokenModel.findOne({
+		attributes:['userId'],
+		where:{
+			accessToken: bearerToken
+		}
+	}).then((token)=>{
+		accessTokenModel.destroy({
+			where:{
+				userId: token['userId'],
+				accessToken: bearerToken
+			}
+		}).then(token => {
+			res.send("logged out")
+		})
+	})
 })
 
 app.listen(port, () => {
