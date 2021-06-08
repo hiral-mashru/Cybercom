@@ -1,0 +1,1 @@
+Today I explored Nodemailer package and trying to implement that. 
