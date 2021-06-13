@@ -1,0 +1,42 @@
+[
+ {
+  "path": "technology/",
+  "method": "get",
+  "action": "technologyMaster.getAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "technology/:id",
+  "method": "get",
+  "action": "technologyMaster.getByIdAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "technology/",
+  "method": "post",
+  "action": "technologyMaster.addAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/technology/:id",
+  "method": "put",
+  "action": "technologyMaster.putAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/technology/:id",
+  "method": "delete",
+  "action": "technologyMaster.deleteAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ }
+]

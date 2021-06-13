@@ -1,0 +1,42 @@
+[
+	{
+		"path": "skill/",
+		"method": "get",
+		"action": "SkillMaster.getAction",
+		"globalMiddlewares": [],
+		"middlewares": [ "SkillMaster.middlewareName" ],
+		"pathFromRoot": false
+	},
+	{
+		"path": "skill/:id",
+		"method": "get",
+		"action": "SkillMaster.getByIdAction",
+		"globalMiddlewares": [],
+		"middlewares": [],
+		"pathFromRoot": false
+	},
+	{
+		"path": "skill/",
+		"method": "post",
+		"action": "SkillMaster.postAction",
+		"globalMiddlewares": [],
+		"middlewares": [],
+		"pathFromRoot": false
+	},
+	{
+		"path": "skill/:id",
+		"method": "put",
+		"action": "SkillMaster.putAction",
+		"globalMiddlewares": [],
+		"middlewares": [],
+		"pathFromRoot": false
+	},
+	{
+		"path": "skill/:id",
+		"method": "delete",
+		"action": "SkillMaster.deleteAction",
+		"globalMiddlewares": [],
+		"middlewares": [],
+		"pathFromRoot": false
+	}
+]

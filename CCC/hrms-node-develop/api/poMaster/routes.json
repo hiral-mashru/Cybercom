@@ -1,0 +1,44 @@
+[
+ {
+  "path": "/pomaster",
+  "method": "get",
+  "action": "poMaster.getAction",
+  "globalMiddlewares": [],
+  "middlewares": [
+   "poMaster.middlewareName"
+  ],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/pomaster/:id",
+  "method": "get",
+  "action": "poMaster.getByIdAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/pomaster",
+  "method": "post",
+  "action": "poMaster.addAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/pomaster/:id",
+  "method": "put",
+  "action": "poMaster.putAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ },
+ {
+  "path": "/pomaster/:id",
+  "method": "delete",
+  "action": "poMaster.deleteAction",
+  "globalMiddlewares": [],
+  "middlewares": [],
+  "pathFromRoot": false
+ }
+]
